@@ -1,11 +1,13 @@
 import { Button, Layout } from '@ui-kitten/components'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
+import { useTheme } from '@react-navigation/native'
 import { ThemeContext } from '../../stores/theme-context'
 
 export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext)
-
+  const { colors, ...p } = useTheme()
+  console.log(colors, p)
   const navigateDetails = () => {
     navigation.navigate('Details')
   }
