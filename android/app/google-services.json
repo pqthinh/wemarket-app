@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "670210428924",
+    "project_id": "wemarket-a8540",
+    "storage_bucket": "wemarket-a8540.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670210428924:android:a3b54adb807090504cec79",
+        "android_client_info": {
+          "package_name": "com.wemarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "670210428924-pk8592mt5mi4505etga8ohmt17pdm51f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wemarket",
+            "certificate_hash": "81ef85c608a55748ce71f9f248bc2d1f1758da14"
+          }
+        },
+        {
+          "client_id": "670210428924-isp5fvffbuf11ltrc80v7an9ran5pvic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZarldfQecJIwIn2L-1uvCIRahBo4b1IQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670210428924-isp5fvffbuf11ltrc80v7an9ran5pvic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

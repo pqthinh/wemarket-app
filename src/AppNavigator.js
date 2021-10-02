@@ -1,9 +1,10 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { TransitionPresets } from '@react-navigation/stack'
-import { HomeScreen } from '../views/HomeScreen'
-import { DetailsScreen } from '../views/DetailsScreen'
-import { TabNavigator } from '../tab'
+import { HomeScreen } from './views/HomeScreen'
+import { DetailsScreen } from './views/DetailsScreen'
+import { TabNavigator } from './tab'
+import { HOME_SCREEN, CHATS_SCREEN } from './helper/ScreenName'
 
 const { Navigator, Screen } = createStackNavigator()
 
@@ -11,13 +12,13 @@ const HomeNavigator = () => (
   <Navigator
     screenOptions={({ route, navigation }) => ({
       headerShown: false,
-      gestureEnabled: true,
-      ...TransitionPresets.ModalPresentationIOS
+      gestureEnabled: true
+      // ...TransitionPresets.ModalPresentationIOS
     })}
   >
-    <Screen name='Home' component={HomeScreen} />
+    <Screen name={HOME_SCREEN} component={HomeScreen} />
     <Screen name='Details' component={DetailsScreen} />
-    <Screen name='Chats' component={TabNavigator} />
+    <Screen name={CHATS_SCREEN} component={TabNavigator} />
   </Navigator>
 )
 
