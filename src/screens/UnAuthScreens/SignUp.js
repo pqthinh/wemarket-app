@@ -36,13 +36,13 @@ export default function SignUp({ navigation }) {
   )
 
   const signUp = () => {
-    const { email, password, name, retypePassword } = data
+    const { email, password, name, rePassword } = data
 
     if (!validateEmail(email)) {
       setError('email ko chính xác')
       return
     }
-    if (retypePassword !== password) {
+    if (rePassword !== password) {
       setError('Mật khẩu nhập lại ko chính xác')
       return
     }
