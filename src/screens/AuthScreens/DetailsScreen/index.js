@@ -9,6 +9,7 @@ import {
   TopNavigationAction
 } from '@ui-kitten/components'
 import { useNavigation } from '@react-navigation/native'
+import { CHAT_SCREEN } from '../../../utils/ScreenName'
 
 const BackIcon = props => <Icon {...props} name='arrow-back' />
 
@@ -33,7 +34,7 @@ export const DetailsScreen = ({ navigation }) => {
         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       >
         <Text category='h1'>DETAILS</Text>
-        <Text onPress={() => navigation.navigate('Chats')}>Go to chat</Text>
+        <Text onPress={() => navigation.navigate(CHAT_SCREEN)}>Go to chat</Text>
       </Layout>
     </SafeAreaView>
   )
