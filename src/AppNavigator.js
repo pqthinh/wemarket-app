@@ -1,27 +1,27 @@
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
-import { TransitionPresets } from '@react-navigation/stack'
-import { HomeScreen } from './views/HomeScreen'
-import { DetailsScreen } from './views/DetailsScreen'
-import { TabNavigator } from './tab'
-import { HOME_SCREEN, CHATS_SCREEN } from './helper/ScreenName'
-
-const { Navigator, Screen } = createStackNavigator()
-
-const HomeNavigator = () => (
-  <Navigator
-    screenOptions={({ route, navigation }) => ({
-      headerShown: false,
-      gestureEnabled: true
-      // ...TransitionPresets.ModalPresentationIOS
-    })}
-  >
-    <Screen name={HOME_SCREEN} component={HomeScreen} />
-    <Screen name='Details' component={DetailsScreen} />
-    <Screen name={CHATS_SCREEN} component={TabNavigator} />
-  </Navigator>
-)
+import React, { useState, useEffect } from 'react'
+import AuthScreens from './screens/AuthScreens'
+import UnAuthScreens from './screens/UnAuthScreens'
+import { ThemeContext } from './stores/theme-context'
+import { firebase } from './configs/firebaseConfig'
 
 export const AppNavigator = () => {
-  return <HomeNavigator />
+  const themeContext = React.useContext(ThemeContext)
+  const [isLogin, setIsLogin] = useState(false)
+
+  const { onShowRealApp } = themeContext
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        setIsLogin(true)
+        onShowRealApp(true)
+      } else {
+        setIsLogin(false)
+        onShowRealApp(true)
+      }
+    })
+  }, [])
+
+  if (!isLogin) return <UnAuthScreens />
+  return <AuthScreens />
 }

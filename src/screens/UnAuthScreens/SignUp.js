@@ -1,125 +1,114 @@
-import React from "react";
-import { useState } from "react";
+import { useTheme } from '@react-navigation/native'
+import { firebase } from '../../configs/firebaseConfig'
+import React, { useState, useCallback } from 'react'
 import {
-  View,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  Platform,
   Image,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
+  StyleSheet,
   TouchableOpacity,
-} from "react-native";
-import firebase from "firebase";
-import "firebase/firestore";
-
-import logo from "../../../assets/icon.png";
-import ButtonBox from "../../components/common/ButtonBox";
-import InputBox from "../../components/common/InputBox";
-import { color } from "../../config/appConfig";
-import { validateEmail } from "../../utils/validateEmail";
-import { SIGN_IN_SCREEN } from "../ScreenName";
+  View
+} from 'react-native'
+import { Input, Button, Text } from '@ui-kitten/components'
+import { IMAGES } from '../../assets'
+import { validateEmail } from '../../utils/helper'
+import { SIGN_IN_SCREEN } from '../../utils/ScreenName'
 
 export default function SignUp({ navigation }) {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null)
   const [data, setData] = useState({
-    email: "",
-    password: "",
-    retypePassword: "",
-    name: "",
-  });
+    email: '',
+    password: '',
+    rePassword: '',
+    name: ''
+  })
 
-  const emailChange = (email) => {
-    setError(null);
-    setData({ ...data, email });
-  };
-  const passwordChange = (password) => {
-    setError(null);
-    setData({ ...data, password });
-  };
-  const retypeChange = (retypePassword) => {
-    setError(null);
-    setData({ ...data, retypePassword });
-  };
-  const nameChange = (name) => {
-    setError(null);
-    setData({ ...data, name });
-  };
+  const { colors } = useTheme()
+  const styles = makeStyles(colors)
+
+  const handleChange = useCallback(
+    (name, value) => {
+      setError(null)
+      setData(data => ({ ...data, [name]: value }))
+    },
+    [data]
+  )
 
   const signUp = () => {
-    const { email, password, name, retypePassword } = data;
+    const { email, password, name, retypePassword } = data
 
     if (!validateEmail(email)) {
-      setError("email ko chính xác");
-      return;
+      setError('email ko chính xác')
+      return
     }
     if (retypePassword !== password) {
-      setError("Mật khẩu nhập lại ko chính xác");
-      return;
+      setError('Mật khẩu nhập lại ko chính xác')
+      return
     }
     if (password.length < 6) {
-      setError("Mật khẩu không < 6 ký tự");
-      return;
+      setError('Mật khẩu không < 6 ký tự')
+      return
     }
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then(result => {
         //save new user into user collection
         firebase
           .firestore()
-          .collection("users")
+          .collection('users')
           .doc(firebase.auth().currentUser.uid)
           .set({
             email,
-            name,
-          });
+            name
+          })
       })
-      .catch((error) => {
-        setError("tài khoản đã đc đăng ký ");
-      });
-  };
+      .catch(error => {
+        setError('tài khoản đã đc đăng ký ')
+      })
+  }
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
       <ScrollView>
         <View>
-          <Image style={styles.image} source={logo} />
+          <Image style={styles.image} source={IMAGES.LOGO} />
         </View>
         <Text style={styles.error}>{error}</Text>
 
         <View style={styles.infor}>
-          <InputBox
-            title="Email"
-            placeholder="test1@gmail"
+          <Input
+            title='Email'
+            placeholder='test1@gmail'
             value={data.email}
-            onChangeText={emailChange}
+            onChangeText={v => handleChange('email', v)}
           />
-          <InputBox
-            title="Tên"
-            placeholder="Quang Trung"
+          <Input
+            title='Tên'
+            placeholder='Tên'
             value={data.name}
-            onChangeText={nameChange}
+            onChangeText={v => handleChange('name', v)}
           />
-          <InputBox
-            title="Mật khẩu"
-            placeholder="6ký tự trở lên"
+          <Input
+            title='Mật khẩu'
+            placeholder='6 ký tự trở lên'
             secureTextEntry={true}
             value={data.password}
-            onChangeText={passwordChange}
+            onChangeText={v => handleChange('password', v)}
           />
-          <InputBox
-            title="Nhập lại mật khẩu "
-            placeholder="6ký tự trở lên"
+          <Input
+            title='Nhập lại mật khẩu '
+            placeholder='6 ký tự trở lên'
             secureTextEntry={true}
-            value={data.retypePassword}
-            onChangeText={retypeChange}
+            value={data.rePassword}
+            onChangeText={v => handleChange('rePassword', v)}
           />
         </View>
-        <ButtonBox title="Đăng ký" onPress={signUp} />
+        <Button title='Đăng ký' onPress={signUp} />
 
         <TouchableOpacity
           style={styles.back}
@@ -129,38 +118,39 @@ export default function SignUp({ navigation }) {
         </TouchableOpacity>
       </ScrollView>
     </KeyboardAvoidingView>
-  );
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 30,
-    paddingHorizontal: 10,
-  },
-  image: {
-    alignSelf: "center",
-    height: 197,
-    width: 236,
-  },
-  infor: {
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  error: {
-    paddingTop: 20,
-    alignSelf: "center",
-    color: color.pink,
-    fontWeight: "700",
-  },
-  back: {
-    marginTop: 5,
-    alignItems: "center",
-  },
-  backText: {
-    color: color.green,
-    fontWeight: "900",
-  },
-});
+const makeStyles = colors =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingVertical: 30,
+      paddingHorizontal: 10
+    },
+    image: {
+      alignSelf: 'center',
+      height: 197,
+      width: 236
+    },
+    infor: {
+      marginTop: 10,
+      marginBottom: 20
+    },
+    error: {
+      paddingTop: 20,
+      alignSelf: 'center',
+      color: colors.red[1],
+      fontWeight: '700'
+    },
+    back: {
+      marginTop: 5,
+      alignItems: 'center'
+    },
+    backText: {
+      color: colors.primary,
+      fontWeight: '900'
+    }
+  })

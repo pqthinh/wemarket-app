@@ -1,34 +1,35 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
+import { LogBox } from 'react-native'
 import * as eva from '@eva-design/eva'
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
 import { AppNavigator } from './src/AppNavigator'
-import { ThemeContext } from './src/stores/theme-context'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import LightTheme from './src/configs/theme/LightTheme'
+import LoadingProvider from './src/provider/LoadingProvider'
+import ThemeProvider from './src/provider/ThemeProvider'
+import { ThemeContext } from './src/stores/theme-context'
 
-export default () => {
-  const [theme, setTheme] = React.useState('light')
+LogBox.ignoreLogs([`Setting a timer for a long period`])
+LogBox.ignoreAllLogs()
 
-  const toggleTheme = useCallback(() => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light'
-    setTheme(nextTheme)
-  }, [theme])
-
+const App = props => {
+  const themeContext = React.useContext(ThemeContext)
   const themeColors = useMemo(() => {
     return { ...DefaultTheme, ...LightTheme }
-  }, [theme])
+  }, [themeContext.theme])
 
   return (
-    <>
+    <LoadingProvider>
       <IconRegistry icons={EvaIconsPack} />
-      <ThemeContext.Provider value={{ theme, toggleTheme }}>
-        <ApplicationProvider {...eva} theme={eva[theme]}>
+      <ThemeProvider>
+        <ApplicationProvider {...eva} theme={eva[themeContext.theme]}>
           <NavigationContainer theme={themeColors}>
             <AppNavigator />
           </NavigationContainer>
         </ApplicationProvider>
-      </ThemeContext.Provider>
-    </>
+      </ThemeProvider>
+    </LoadingProvider>
   )
 }
+export default App
