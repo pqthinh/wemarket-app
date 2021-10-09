@@ -1,5 +1,4 @@
 import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { TransitionPresets } from '@react-navigation/stack'
 import { HomeScreen } from '../views/HomeScreen'
@@ -22,4 +21,6 @@ const HomeNavigator = () => (
   </Navigator>
 )
 
-export const AppNavigator = () => <HomeNavigator />
+export const AppNavigator = () => {
+  return <HomeNavigator />
+}

@@ -10,9 +10,8 @@ import { useTheme } from '@react-navigation/native'
 import { useCardAnimation } from '@react-navigation/stack'
 
 function ModalScreen({ navigation }) {
-  const { colors, p } = useTheme()
+  const { colors } = useTheme()
   const { current } = useCardAnimation()
-  console.log(colors, p)
   return (
     <View
       style={{
