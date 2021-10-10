@@ -14,8 +14,10 @@ import { Input, Button, Text } from '@ui-kitten/components'
 import { IMAGES } from 'assets'
 import { SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { validateEmail } from 'utils/helper'
+import { useLoading } from 'stores/loading-context'
 
 export default function SignIn({ navigation }) {
+  const { show, hide } = useLoading()
   const [error, setError] = useState(null)
   const [data, setData] = useState({
     email: '',
@@ -36,18 +38,19 @@ export default function SignIn({ navigation }) {
     const { email, password } = data
     if (!validateEmail(email)) {
       setError('Email không đúng định dạng')
+      return
     }
     if (password.length < 6) {
       setError('Mật khẩu ít nhất 6 ký tự')
+      return
     }
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(result => {
-        console.log(result)
-      })
-      .catch(error => {
-        switch (error.code) {
+    async function execute() {
+      show()
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password)
+        // if (res) console.log(res, 'result')
+      } catch (error) {
+        switch (error?.code) {
           case 'auth/user-not-found':
             setError('Tài khoản không tồn tại')
             break
@@ -61,8 +64,10 @@ export default function SignIn({ navigation }) {
             setError(error.toString() || 'Lỗi mạng ')
             break
         }
-        console.log(error)
-      })
+      }
+      hide()
+    }
+    execute()
   }
   return (
     <KeyboardAvoidingView
@@ -97,14 +102,13 @@ export default function SignIn({ navigation }) {
             Bạn đã có tài khoản chưa ?
             <TouchableOpacity
               onPress={() => navigation.navigate(SIGN_UP_SCREEN)}
-              style={styles.signUpButton}
             >
               <Text style={styles.signUpText}> Đăng ký</Text>
             </TouchableOpacity>
           </Text>
 
           <View style={styles.button}>
-            <Button title='Đăng nhập ' onPress={signIn} />
+            <Button onPress={signIn}>Đăng nhập</Button>
           </View>
         </View>
       </ScrollView>
@@ -140,15 +144,16 @@ const makeStyles = colors =>
       fontWeight: '700'
     },
     signUp: {
-      marginTop: 20,
-      marginBottom: 20
-    },
-    signUpButton: {
-      paddingTop: 3
+      marginVertical: 20,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     signUpText: {
-      color: colors.gray[1],
-      fontWeight: '900'
+      color: colors.primary,
+      fontWeight: '900',
+      padding: 0,
+      margin: 0
     },
     input: {
       height: 100

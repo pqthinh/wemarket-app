@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useCache from 'hooks/useCache'
-import { ThemeContext } from 'stores/theme-context'
+import { AppContext } from 'stores/app-context'
 
-export default function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('light')
+export default function AppProvider({ children }) {
   const [showRealApp, setShowRealApp] = useState(false)
   const { set, get } = useCache
 
@@ -13,25 +12,23 @@ export default function ThemeProvider({ children }) {
     await set('show_introduce_app', true)
   }, [showRealApp])
 
-  const toggleTheme = useCallback(() => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light'
-    setTheme(nextTheme)
-  }, [theme])
-
   useEffect(async () => {
     const show_introduce_app = await get('show_introduce_app')
     setShowRealApp(!!show_introduce_app)
-  }, [])
+  }, [showRealApp])
 
   return (
-    <ThemeContext.Provider
-      value={{ theme, showRealApp, toggleTheme, onShowRealApp }}
+    <AppContext.Provider
+      value={{
+        showRealApp: showRealApp,
+        onShowRealApp: () => onShowRealApp()
+      }}
     >
       {children}
-    </ThemeContext.Provider>
+    </AppContext.Provider>
   )
 }
 
-ThemeProvider.propTypes = {
+AppProvider.propTypes = {
   children: PropTypes.node
 }

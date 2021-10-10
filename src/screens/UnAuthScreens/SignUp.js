@@ -15,8 +15,10 @@ import { IMAGES } from 'assets'
 import { validateEmail } from 'utils/helper'
 import { SIGN_IN_SCREEN } from 'utils/ScreenName'
 import { withEmpty } from 'exp-value'
+import { useLoading } from 'stores/loading-context'
 
 export default function SignUp({ navigation }) {
+  const { show, hide } = useLoading()
   const [error, setError] = useState(null)
   const [data, setData] = useState({
     email: '',
@@ -51,7 +53,7 @@ export default function SignUp({ navigation }) {
       setError('Mật khẩu ít nhất 6 ký tự')
       return
     }
-    console.log(email, password, name, rePassword)
+    show()
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -78,7 +80,9 @@ export default function SignUp({ navigation }) {
           return
         }
         setError(withEmpty('message', error))
+        hide()
       })
+    hide()
   }
 
   return (
@@ -120,7 +124,7 @@ export default function SignUp({ navigation }) {
             onChangeText={v => handleChange('rePassword', v)}
           />
         </View>
-        <Button title='Đăng ký' onPress={signUp} />
+        <Button onPress={signUp}>Đăng ký</Button>
 
         <TouchableOpacity
           style={styles.back}

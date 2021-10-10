@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { LoadingContext } from '../stores/loading-context'
+import Loading from 'components/Loading'
 
-function Loading() {
-  return <div>Loading...</div>
-}
-
-export default function LoadingProvider(props) {
+export default function LoadingProvider({ children }) {
   const [loading, setLoading] = useState(false)
 
   return (
@@ -18,8 +15,8 @@ export default function LoadingProvider(props) {
       }}
     >
       <>
-        {loading && <Loading />}
-        {props.children}
+        {loading && <Loading loading={loading} />}
+        {children}
       </>
     </LoadingContext.Provider>
   )
