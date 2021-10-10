@@ -2,11 +2,22 @@ import { Button, Layout } from '@ui-kitten/components'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
 import { ThemeContext } from 'stores/theme-context'
+import { firebase } from 'configs/firebaseConfig'
 
 export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext)
   const navigateDetails = () => {
     navigation.navigate('Details')
+  }
+
+  const signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        dispatch(userInforChange({}))
+      })
+      .catch(error => console.log(error))
   }
 
   return (
@@ -22,6 +33,9 @@ export const HomeScreen = ({ navigation }) => {
           onPress={themeContext.toggleTheme}
         >
           TOGGLE THEME
+        </Button>
+        <Button style={{ marginVertical: 4 }} onPress={signOut}>
+          Sign out
         </Button>
       </Layout>
     </SafeAreaView>
