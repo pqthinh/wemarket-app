@@ -9,7 +9,7 @@ import {
   TopNavigationAction
 } from '@ui-kitten/components'
 import { useNavigation } from '@react-navigation/native'
-import { CHAT_SCREEN } from '../../../utils/ScreenName'
+import { CHAT_SCREEN } from 'utils/ScreenName'
 
 const BackIcon = props => <Icon {...props} name='arrow-back' />
 

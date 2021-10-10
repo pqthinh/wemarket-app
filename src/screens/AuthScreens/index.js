@@ -2,8 +2,8 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { HomeScreen } from './HomeScreen'
 import { DetailsScreen } from './DetailsScreen'
-import { TabNavigator } from '../../tab'
-import { HOME_SCREEN, CHAT_SCREEN } from '../../utils/ScreenName'
+import { TabNavigator } from 'tab'
+import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 
 const { Navigator, Screen } = createStackNavigator()
 
