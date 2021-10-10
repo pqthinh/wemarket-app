@@ -1,5 +1,5 @@
 import { useTheme } from '@react-navigation/native'
-import { firebase } from '../../configs/firebaseConfig'
+import { firebase } from 'configs/firebaseConfig'
 import React, { useState, useCallback } from 'react'
 import {
   Image,
@@ -11,9 +11,9 @@ import {
   View
 } from 'react-native'
 import { Input, Button, Text } from '@ui-kitten/components'
-import { IMAGES } from '../../assets'
-import { SIGN_UP_SCREEN } from '../../utils/ScreenName'
-import { validateEmail } from '../../utils/helper'
+import { IMAGES } from 'assets'
+import { SIGN_UP_SCREEN } from 'utils/ScreenName'
+import { validateEmail } from 'utils/helper'
 
 export default function SignIn({ navigation }) {
   const [error, setError] = useState(null)
@@ -35,10 +35,10 @@ export default function SignIn({ navigation }) {
   const signIn = () => {
     const { email, password } = data
     if (!validateEmail(email)) {
-      setError('email ko chính xác')
+      setError('Email không đúng định dạng')
     }
     if (password.length < 6) {
-      setError('Mật khẩu không < 6 ký tự')
+      setError('Mật khẩu ít nhất 6 ký tự')
     }
     firebase
       .auth()
@@ -74,7 +74,7 @@ export default function SignIn({ navigation }) {
           <Image style={styles.image} source={IMAGES.LOGO} />
         </View>
         <Text style={styles.error}>{error}</Text>
-        <View style={styles.infor}>
+        <View style={styles.info}>
           <View style={styles.input}>
             <Input
               title='Email'
@@ -129,7 +129,7 @@ const makeStyles = colors =>
     button: {
       height: 100
     },
-    infor: {
+    info: {
       flex: 1,
       marginTop: 10
     },
@@ -147,11 +147,10 @@ const makeStyles = colors =>
       paddingTop: 3
     },
     signUpText: {
-      color: colors.primary,
+      color: colors.gray[1],
       fontWeight: '900'
     },
     input: {
-      height: 100,
-      marginVertical: 5
+      height: 100
     }
   })
