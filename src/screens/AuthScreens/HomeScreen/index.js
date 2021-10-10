@@ -1,7 +1,7 @@
 import { Button, Layout } from '@ui-kitten/components'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
-import { ThemeContext } from '../../../stores/theme-context'
+import { ThemeContext } from 'stores/theme-context'
 
 export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext)
