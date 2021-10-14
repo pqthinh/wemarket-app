@@ -2,7 +2,7 @@ import { Button, Layout } from '@ui-kitten/components'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
 import { ThemeContext } from '../../../stores/theme-context'
-
+import { firebase } from '../../../configs/firebaseConfig'
 export const HomeScreen = ({ navigation }) => {
   const themeContext = React.useContext(ThemeContext)
   const navigateDetails = () => {
@@ -22,6 +22,12 @@ export const HomeScreen = ({ navigation }) => {
           onPress={themeContext.toggleTheme}
         >
           TOGGLE THEME
+        </Button>
+        <Button
+          style={{ marginVertical: 4 }}
+          onPress={()=> firebase.auth().signOut()}
+        >
+          LOG OUT 
         </Button>
       </Layout>
     </SafeAreaView>
