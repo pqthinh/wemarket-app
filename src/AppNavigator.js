@@ -8,7 +8,6 @@ import { useLoading } from './stores/loading-context'
 export const AppNavigator = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [currentUser, setCurrentUser] = useState()
-  // const [load, setLoad] = useState(true)
   const { show, hide } = useLoading()
 
   useEffect(() => {
