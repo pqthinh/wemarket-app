@@ -1,5 +1,7 @@
 import React, { useMemo, useCallback } from 'react'
-import { LogBox, Text } from 'react-native'
+import { LogBox } from 'react-native'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 import * as eva from '@eva-design/eva'
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
@@ -9,6 +11,8 @@ import LightTheme from 'configs/theme/LightTheme'
 import LoadingProvider from 'provider/LoadingProvider'
 import AppProvider from 'provider/AppProvider'
 import { ThemeContext } from 'stores/theme-context'
+import { store, persistor } from 'stores/store'
+import Loading from 'components/Loading'
 
 LogBox.ignoreLogs([`Setting a timer for a long period`])
 LogBox.ignoreAllLogs()
@@ -26,22 +30,24 @@ const App = props => {
   }, [theme])
 
   return (
-    <>
-      <IconRegistry icons={EvaIconsPack} />
-      <AppProvider>
-        <ThemeContext.Provider
-          value={{ theme: theme, toggleTheme: () => toggleTheme() }}
-        >
-          <LoadingProvider>
-            <ApplicationProvider {...eva} theme={eva[theme]}>
-              <NavigationContainer theme={themeColors}>
-                <AppNavigator {...props} />
-              </NavigationContainer>
-            </ApplicationProvider>
-          </LoadingProvider>
-        </ThemeContext.Provider>
-      </AppProvider>
-    </>
+    <Provider store={store}>
+      <PersistGate loading={<Loading />} persistor={persistor}>
+        <IconRegistry icons={EvaIconsPack} />
+        <AppProvider>
+          <ThemeContext.Provider
+            value={{ theme: theme, toggleTheme: () => toggleTheme() }}
+          >
+            <LoadingProvider>
+              <ApplicationProvider {...eva} theme={eva[theme]}>
+                <NavigationContainer theme={themeColors}>
+                  <AppNavigator {...props} />
+                </NavigationContainer>
+              </ApplicationProvider>
+            </LoadingProvider>
+          </ThemeContext.Provider>
+        </AppProvider>
+      </PersistGate>
+    </Provider>
   )
 }
 export default App
