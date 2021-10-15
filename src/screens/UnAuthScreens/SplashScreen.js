@@ -3,30 +3,28 @@ import { StyleSheet, View, Text, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PropTypes from 'prop-types'
 import AppIntroSlider from 'react-native-app-intro-slider'
+import { IMAGES } from 'assets'
 
 const slides = [
   {
     key: 1,
     title: 'Title 1',
     text: 'Description.\nSay something cool',
-    image:
-      'https://media.istockphoto.com/vectors/big-phone-is-like-store-metaphor-for-247-online-shopping-contactless-vector-id1272725999',
+    image: IMAGES.SPLASH1_IMAGE,
     backgroundColor: '#59b2ab'
   },
   {
     key: 2,
     title: 'Title 2',
     text: 'Other cool stuff',
-    image:
-      'https://media.istockphoto.com/vectors/man-buys-set-stylish-clothes-in-store-vector-concept-happy-male-out-vector-id1287561812?s=612x612',
+    image: IMAGES.SPLASH2_IMAGE,
     backgroundColor: '#febe29'
   },
   {
     key: 3,
     title: 'Rocket guy',
     text: "I'm already out of descriptions\n\nLorem ipsum bla bla bla",
-    image:
-      'https://media.istockphoto.com/vectors/smartphone-application-design-vector-id462707975',
+    image: IMAGES.SPLASH3_IMAGE,
     backgroundColor: '#22bcb5'
   }
 ]
@@ -66,6 +64,7 @@ export default function SplashScreen({ onDone }) {
       data={slides}
       onDone={onDone}
       showSkipButton={true}
+      style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
     />
   )
 }
