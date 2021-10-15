@@ -11,10 +11,12 @@ import {
   View
 } from 'react-native'
 import { Input, Button, Text } from '@ui-kitten/components'
+import { useDispatch } from 'react-redux'
 import { IMAGES } from 'assets'
 import { SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { validateEmail } from 'utils/helper'
 import { useLoading } from 'stores/loading-context'
+import { login } from 'actions/userActions'
 
 export default function SignIn({ navigation }) {
   const { show, hide } = useLoading()
@@ -25,6 +27,7 @@ export default function SignIn({ navigation }) {
   })
   const { colors } = useTheme()
   const styles = makeStyles(colors)
+  const dispatch = useDispatch()
 
   const handleChange = useCallback(
     (name, value) => {
@@ -44,30 +47,7 @@ export default function SignIn({ navigation }) {
       setError('Mật khẩu ít nhất 6 ký tự')
       return
     }
-    async function execute() {
-      show()
-      try {
-        await firebase.auth().signInWithEmailAndPassword(email, password)
-        // if (res) console.log(res, 'result')
-      } catch (error) {
-        switch (error?.code) {
-          case 'auth/user-not-found':
-            setError('Tài khoản không tồn tại')
-            break
-          case 'auth/wrong-password':
-            setError('Mật khẩu ko chính xác ')
-            break
-          case 'auth/too-many-requests':
-            setError('Tài khoản tạm thời bị khoá do đăng nhập quá nhiều ')
-            break
-          default:
-            setError(error.toString() || 'Lỗi mạng ')
-            break
-        }
-      }
-      hide()
-    }
-    execute()
+    dispatch(login(data))
   }
   return (
     <KeyboardAvoidingView
