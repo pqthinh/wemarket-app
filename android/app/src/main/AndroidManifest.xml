@@ -3,6 +3,8 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
   <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="false" android:theme="@style/AppTheme">
     <activity android:name=".MainActivity" android:label="@string/app_name" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize">
@@ -12,9 +14,8 @@
       </intent-filter>
     </activity>
     <meta-data
-     android:name="com.google.android.geo.API_KEY"
-     android:value="AIzaSyAiCisBG6_JNLqGm70teMl0m5TAluy89xs"/>
-     <!-- You will also only need to add this uses-library tag -->
+      android:name="com.google.android.geo.API_KEY"
+      android:value = "AIzaSyDZarldfQecJIwIn2L-1uvCIRahBo4b1IQ" />
    <uses-library android:name="org.apache.http.legacy" android:required="false"/>
   </application>
 </manifest>
