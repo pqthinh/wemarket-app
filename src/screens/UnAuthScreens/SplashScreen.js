@@ -33,6 +33,7 @@ const slides = [
 
 export default function SplashScreen({ onDone }) {
   _renderItem = ({ item }) => {
+    if (!item) return null
     return (
       <View style={styles.slide}>
         <Text style={styles.title}>{item.title}</Text>

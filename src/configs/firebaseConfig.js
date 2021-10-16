@@ -5,6 +5,8 @@ import '@firebase/firestore'
 const firebaseConfig = {
   apiKey: 'AIzaSyBy0pcwK5wIlDKON7-Kq_llIUc2anYruvc',
   authDomain: 'wemarket-a8540.firebaseapp.com',
+  databaseURL:
+    'https://wemarket-a8540-default-rtdb.asia-southeast1.firebasedatabase.app',
   projectId: 'wemarket-a8540',
   storageBucket: 'wemarket-a8540.appspot.com',
   messagingSenderId: '670210428924',

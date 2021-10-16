@@ -5,3 +5,5 @@ export const LoadingContext = React.createContext({
   show: () => {},
   hide: () => {}
 })
+
+export const useLoading = () => React.useContext(LoadingContext)
