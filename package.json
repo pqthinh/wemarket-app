@@ -38,6 +38,7 @@
     "react-native-screens": "^3.7.2",
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^3.1.1",
+    "react-native-toast-message": "^1.6.0",
     "react-native-vector-icons": "^8.1.0",
     "react-redux": "^7.2.5",
     "react-ui-kit-native": "^0.0.25",

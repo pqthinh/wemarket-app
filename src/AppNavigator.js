@@ -2,32 +2,28 @@ import React, { useState, useEffect } from 'react'
 import AuthScreens from 'screens/AuthScreens'
 import UnAuthScreens from 'screens/UnAuthScreens'
 import { firebase } from 'configs/firebaseConfig'
-// import Loading from 'components/Loading'
-import { useLoading } from './stores/loading-context'
+import Loading from 'components/Loading'
 
 export const AppNavigator = () => {
   const [isLogin, setIsLogin] = useState(false)
-  const [currentUser, setCurrentUser] = useState()
-  const { show, hide } = useLoading()
+  const [load, setLoad] = useState(false)
 
   useEffect(() => {
-    show()
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         setIsLogin(true)
-        setCurrentUser(user)
+        setLoad(true)
       } else {
         setIsLogin(false)
-        setCurrentUser(null)
+        setLoad(true)
       }
-      hide()
     })
-  }, [isLogin, currentUser])
-
+  })
+  if (isLogin) return <AuthScreens />
   return (
     <>
-      {/* <Loading loading={load} /> */}
-      {!isLogin ? <UnAuthScreens /> : <AuthScreens />}
+      <Loading loading={!load} />
+      <UnAuthScreens />
     </>
   )
 }

@@ -6,25 +6,23 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILED,
   LOGOUT
-} from '../actions/userActions'
+} from '../actionTypes/userActionTypes'
 
-const initializeState = {
-  userInfo: {}
-}
-
-export default function UserReducers(state = initializeState, action) {
-  console.log(action, state)
+export default (state = {}, action) => {
   switch (action.type) {
     case SIGNUP_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: true,
+        userInfo: {},
+        message: null
       }
     case SIGNUP_SUCCESS:
       return {
         ...state,
         loading: false,
-        userInfo: action.payload
+        userInfo: action.payload,
+        message: null
       }
     case SIGNUP_FAILED:
       return {
@@ -35,13 +33,15 @@ export default function UserReducers(state = initializeState, action) {
     case LOGIN_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: true,
+        message: null
       }
     case LOGIN_SUCCESS:
       return {
         ...state,
         loading: false,
-        userInfo: action.payload
+        userInfo: action.payload,
+        message: null
       }
     case LOGIN_FAILED:
       return {
@@ -54,7 +54,8 @@ export default function UserReducers(state = initializeState, action) {
         ...state,
         userInfo: {},
         loading: false,
-        type: LOGOUT
+        type: action.type,
+        message: null
       }
     default:
       return state

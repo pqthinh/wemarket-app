@@ -31,7 +31,7 @@ const App = props => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={<Loading />} persistor={persistor}>
+      <PersistGate loading={<Loading loading={true} />} persistor={persistor}>
         <IconRegistry icons={EvaIconsPack} />
         <AppProvider>
           <ThemeContext.Provider

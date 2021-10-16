@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// import AsyncStorage from '@react-native-async-storage/async-storage'
 import { firebase } from 'configs/firebaseConfig'
 import {
   SIGNUP_REQUEST,
@@ -19,8 +19,7 @@ export const signup =
       const res = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-      console.log(res)
-      if (res) dispatch({ type: SIGNUP_SUCCESS, payload: res })
+      dispatch({ type: SIGNUP_SUCCESS, payload: res })
     } catch (error) {
       let message
       if (error.code === 'auth/email-already-in-use') {
@@ -50,7 +49,7 @@ export const login =
           message = 'Mật khẩu ko chính xác '
           break
         case 'auth/too-many-requests':
-          message = 'Tài khoản tạm thời bị khoá do đăng nhập quá nhiều '
+          message = 'Đăng nhập quá số lần quy định'
           break
         default:
           message = error.toString() || 'Lỗi mạng '
@@ -60,15 +59,14 @@ export const login =
     }
   }
 
-export const logOut = () => {
-  return dispatch => {
-    firebase
-      .auth()
-      .signOut()
-      .then(res => {
-        AsyncStorage.clear()
-        dispatch({ type: LOGOUT, payload: res })
-      })
-      .catch(error => console.log(error))
+export const logout = () => {
+  async dispatch => {
+    try {
+      const res = await firebase.auth().signOut()
+      dispatch({ type: LOGOUT, payload: res })
+    } catch (error) {
+      console.log(error)
+      dispatch({ type: LOGOUT, payload: 'Logout failed' || error.toString() })
+    }
   }
 }
