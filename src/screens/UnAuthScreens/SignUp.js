@@ -1,5 +1,5 @@
 import { useTheme } from '@react-navigation/native'
-import { firebase } from '../../configs/firebaseConfig'
+import { firebase } from 'configs/firebaseConfig'
 import React, { useState, useCallback } from 'react'
 import {
   Image,
@@ -11,11 +11,14 @@ import {
   View
 } from 'react-native'
 import { Input, Button, Text } from '@ui-kitten/components'
-import { IMAGES } from '../../assets'
-import { validateEmail } from '../../utils/helper'
-import { SIGN_IN_SCREEN } from '../../utils/ScreenName'
+import { IMAGES } from 'assets'
+import { validateEmail } from 'utils/helper'
+import { SIGN_IN_SCREEN } from 'utils/ScreenName'
+import { withEmpty } from 'exp-value'
+import { useLoading } from 'stores/loading-context'
 
 export default function SignUp({ navigation }) {
+  const { show, hide } = useLoading()
   const [error, setError] = useState(null)
   const [data, setData] = useState({
     email: '',
@@ -39,22 +42,24 @@ export default function SignUp({ navigation }) {
     const { email, password, name, rePassword } = data
 
     if (!validateEmail(email)) {
-      setError('email ko chính xác')
+      setError('Email không đúng định dạng')
       return
     }
     if (rePassword !== password) {
-      setError('Mật khẩu nhập lại ko chính xác')
+      setError('Mật khẩu nhập lại không đúng')
       return
     }
     if (password.length < 6) {
-      setError('Mật khẩu không < 6 ký tự')
+      setError('Mật khẩu ít nhất 6 ký tự')
       return
     }
+    show()
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(result => {
         //save new user into user collection
+        console.log(result, 'result sign up')
         firebase
           .firestore()
           .collection('users')
@@ -65,8 +70,19 @@ export default function SignUp({ navigation }) {
           })
       })
       .catch(error => {
-        setError('tài khoản đã đc đăng ký ')
+        if (error.code === 'auth/email-already-in-use') {
+          setError('That email address is already in use!')
+          return
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          setError.log('That email address is invalid!')
+          return
+        }
+        setError(withEmpty('message', error))
+        hide()
       })
+    hide()
   }
 
   return (
@@ -108,7 +124,7 @@ export default function SignUp({ navigation }) {
             onChangeText={v => handleChange('rePassword', v)}
           />
         </View>
-        <Button title='Đăng ký' onPress={signUp} />
+        <Button onPress={signUp}>Đăng ký</Button>
 
         <TouchableOpacity
           style={styles.back}

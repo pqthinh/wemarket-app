@@ -1,5 +1,5 @@
 import { useTheme } from '@react-navigation/native'
-import { firebase } from '../../configs/firebaseConfig'
+import { firebase } from 'configs/firebaseConfig'
 import React, { useState, useCallback } from 'react'
 import {
   Image,
@@ -11,11 +11,15 @@ import {
   View
 } from 'react-native'
 import { Input, Button, Text } from '@ui-kitten/components'
-import { IMAGES } from '../../assets'
-import { SIGN_UP_SCREEN } from '../../utils/ScreenName'
-import { validateEmail } from '../../utils/helper'
+import { useDispatch } from 'react-redux'
+import { IMAGES } from 'assets'
+import { SIGN_UP_SCREEN } from 'utils/ScreenName'
+import { validateEmail } from 'utils/helper'
+import { useLoading } from 'stores/loading-context'
+import { login } from 'actions/userActions'
 
 export default function SignIn({ navigation }) {
+  const { show, hide } = useLoading()
   const [error, setError] = useState(null)
   const [data, setData] = useState({
     email: '',
@@ -23,6 +27,7 @@ export default function SignIn({ navigation }) {
   })
   const { colors } = useTheme()
   const styles = makeStyles(colors)
+  const dispatch = useDispatch()
 
   const handleChange = useCallback(
     (name, value) => {
@@ -35,34 +40,14 @@ export default function SignIn({ navigation }) {
   const signIn = () => {
     const { email, password } = data
     if (!validateEmail(email)) {
-      setError('email ko chính xác')
+      setError('Email không đúng định dạng')
+      return
     }
     if (password.length < 6) {
-      setError('Mật khẩu không < 6 ký tự')
+      setError('Mật khẩu ít nhất 6 ký tự')
+      return
     }
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(result => {
-        console.log(result)
-      })
-      .catch(error => {
-        switch (error.code) {
-          case 'auth/user-not-found':
-            setError('Tài khoản không tồn tại')
-            break
-          case 'auth/wrong-password':
-            setError('Mật khẩu ko chính xác ')
-            break
-          case 'auth/too-many-requests':
-            setError('Tài khoản tạm thời bị khoá do đăng nhập quá nhiều ')
-            break
-          default:
-            setError(error.toString() || 'Lỗi mạng ')
-            break
-        }
-        console.log(error)
-      })
+    dispatch(login(data))
   }
   return (
     <KeyboardAvoidingView
@@ -74,7 +59,7 @@ export default function SignIn({ navigation }) {
           <Image style={styles.image} source={IMAGES.LOGO} />
         </View>
         <Text style={styles.error}>{error}</Text>
-        <View style={styles.infor}>
+        <View style={styles.info}>
           <View style={styles.input}>
             <Input
               title='Email'
@@ -97,14 +82,13 @@ export default function SignIn({ navigation }) {
             Bạn đã có tài khoản chưa ?
             <TouchableOpacity
               onPress={() => navigation.navigate(SIGN_UP_SCREEN)}
-              style={styles.signUpButton}
             >
               <Text style={styles.signUpText}> Đăng ký</Text>
             </TouchableOpacity>
           </Text>
 
           <View style={styles.button}>
-            <Button title='Đăng nhập ' onPress={signIn} />
+            <Button onPress={signIn}>Đăng nhập</Button>
           </View>
         </View>
       </ScrollView>
@@ -129,7 +113,7 @@ const makeStyles = colors =>
     button: {
       height: 100
     },
-    infor: {
+    info: {
       flex: 1,
       marginTop: 10
     },
@@ -140,18 +124,18 @@ const makeStyles = colors =>
       fontWeight: '700'
     },
     signUp: {
-      marginTop: 20,
-      marginBottom: 20
-    },
-    signUpButton: {
-      paddingTop: 3
+      marginVertical: 20,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
     },
     signUpText: {
       color: colors.primary,
-      fontWeight: '900'
+      fontWeight: '900',
+      padding: 0,
+      margin: 0
     },
     input: {
-      height: 100,
-      marginVertical: 5
+      height: 100
     }
   })
