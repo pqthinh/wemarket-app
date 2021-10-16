@@ -38,6 +38,12 @@ export const HomeScreen = ({ navigation }) => {
         <Button style={{ marginVertical: 4 }} onPress={toggleTheme}>
           TOGGLE THEME
         </Button>
+        <Button
+          style={{ marginVertical: 4 }}
+          onPress={() => navigation.navigate('Maps')}
+        >
+          MAPS
+        </Button>
         <Button style={{ marginVertical: 4 }} onPress={signOut}>
           Sign out
         </Button>

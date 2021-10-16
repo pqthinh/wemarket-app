@@ -7,5 +7,8 @@ export default {
   NOTFOUND_IMAGE: require('./error-404.png'),
   NO_CONTENT: require('./seo.png'),
   FAIL_IMAGE: require('./time.png'),
-  LOADING: LOADING
+  LOADING: LOADING,
+  SPLASH1_IMAGE: require('./splash1.jpg'),
+  SPLASH2_IMAGE: require('./splash2.jpg'),
+  SPLASH3_IMAGE: require('./splash3.jpg')
 }
