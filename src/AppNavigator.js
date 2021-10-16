@@ -20,7 +20,6 @@ export const AppNavigator = () => {
         setIsLogin(false)
         setCurrentUser(null)
       }
-      // setLoad(false)
       hide()
     })
   }, [isLogin, currentUser])
