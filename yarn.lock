@@ -8852,6 +8852,13 @@ react-native-tab-view@^3.1.1:
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
   integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
+react-native-toast-message@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-1.6.0.tgz#863466ff78429902c7182bc08dd8d879476c0a3b"
+  integrity sha512-EDXSGyuhRdy5/S4bDlfJ/fkKXM7Gxz6OTx0obBS5kyGq+ci8rvrrOVJkYhgYyjdppYdzCMIvNuIxkUkCjk80fw==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-vector-icons@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-8.1.0.tgz#e8ee2b17bc4d9f636da1c6f67feee8e2a850c3d8"

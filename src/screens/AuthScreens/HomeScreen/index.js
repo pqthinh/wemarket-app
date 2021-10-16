@@ -2,28 +2,20 @@ import { Button, Layout } from '@ui-kitten/components'
 import React from 'react'
 import { SafeAreaView, Text } from 'react-native'
 import { useTheme } from 'stores/theme-context'
-import { useLoading } from 'stores/loading-context'
-import { firebase } from 'configs/firebaseConfig'
+import { logout } from 'actions/userActions'
+import { useDispatch } from 'react-redux'
 
 export const HomeScreen = ({ navigation }) => {
   const { toggleTheme, theme } = useTheme()
-  const { show, hide } = useLoading()
+  const dispatch = useDispatch()
   const navigateDetails = () => {
     navigation.navigate('Details')
   }
- const toggleMap = () => {
-   navigation.navigate('Map')
- }
+  const toggleMap = () => {
+    navigation.navigate('Maps')
+  }
   const signOut = () => {
-    show()
-    firebase
-      .auth()
-      .signOut()
-      .then(res => {
-        console.log(res)
-      })
-      .catch(error => console.log(error))
-    hide()
+    dispatch(logout())
   }
 
   return (
@@ -38,17 +30,11 @@ export const HomeScreen = ({ navigation }) => {
         <Button style={{ marginVertical: 4 }} onPress={toggleTheme}>
           TOGGLE THEME
         </Button>
+        <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
+          MAP
+        </Button>
         <Button style={{ marginVertical: 4 }} onPress={signOut}>
           Sign out
-        </Button>
-        <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
-          Map
-        </Button>
-        <Button
-          style={{ marginVertical: 4 }}
-          onPress={()=> firebase.auth().signOut()}
-        >
-          LOG OUT 
         </Button>
       </Layout>
     </SafeAreaView>

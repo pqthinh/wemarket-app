@@ -2,7 +2,6 @@ import { useTheme } from '@react-navigation/native'
 import React, { useState, useCallback } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -15,13 +14,16 @@ import { Input, Button, Text } from '@ui-kitten/components'
 import { IMAGES } from 'assets'
 import { signup } from 'actions/userActions'
 import { SIGN_IN_SCREEN } from 'utils/ScreenName'
-import { withEmpty } from 'exp-value'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import Toast from 'react-native-toast-message'
 
 export default function SignUp({ navigation }) {
   const { colors } = useTheme()
   const styles = makeStyles(colors)
   const dispatch = useDispatch()
+  const userInfo = useSelector(state => {
+    return state.userState
+  })
 
   const {
     control,
@@ -42,12 +44,27 @@ export default function SignUp({ navigation }) {
     dispatch(signup(data))
   }
 
+  React.useEffect(() => {
+    if (userInfo.message) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: userInfo?.message + '👋'
+      })
+    }
+  }, [userInfo])
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <ScrollView>
+      <Toast ref={ref => Toast.setRef(ref)} />
+      <ScrollView
+        style={styles.scroll}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
         <View>
           <Image style={styles.image} source={IMAGES.LOGO} />
         </View>
@@ -66,6 +83,7 @@ export default function SignUp({ navigation }) {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              style={styles.input}
               title='Họ và tên'
               type='text'
               placeholder='Họ và tên'
@@ -91,6 +109,7 @@ export default function SignUp({ navigation }) {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              style={styles.input}
               title='Số điện thoại'
               type='tel'
               placeholder='Số điện thoại'
@@ -112,6 +131,7 @@ export default function SignUp({ navigation }) {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              style={styles.input}
               title='Địa chỉ'
               type='text'
               placeholder='Địa chỉ'
@@ -138,6 +158,7 @@ export default function SignUp({ navigation }) {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              style={styles.input}
               title='Email'
               type='email'
               placeholder='test1@gmail'
@@ -166,6 +187,7 @@ export default function SignUp({ navigation }) {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              style={styles.input}
               title='Mật khẩu'
               type='text'
               secureTextEntry={true}
@@ -189,6 +211,7 @@ export default function SignUp({ navigation }) {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              style={styles.input}
               title='Nhập lại mật khẩu'
               type='text'
               secureTextEntry={true}
@@ -201,9 +224,7 @@ export default function SignUp({ navigation }) {
           name='rePassword'
           defaultValue=''
         />
-
-        <Button title='Đăng ký' onPress={handleSubmit(signUp)} />
-
+        <Button onPress={handleSubmit(signUp)}>Đăng ký</Button>
         <TouchableOpacity
           style={styles.back}
           onPress={() => navigation.navigate(SIGN_IN_SCREEN)}
@@ -224,14 +245,14 @@ const makeStyles = colors =>
       paddingVertical: 30,
       paddingHorizontal: 10
     },
+    scroll: {
+      width: '90%',
+      height: '100%'
+    },
     image: {
       alignSelf: 'center',
       height: 197,
       width: 236
-    },
-    infor: {
-      marginTop: 10,
-      marginBottom: 20
     },
     error: {
       paddingTop: 20,
@@ -246,5 +267,8 @@ const makeStyles = colors =>
     backText: {
       color: colors.primary,
       fontWeight: '900'
+    },
+    input: {
+      marginVertical: 10
     }
   })

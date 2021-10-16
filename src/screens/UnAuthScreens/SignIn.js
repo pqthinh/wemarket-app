@@ -10,17 +10,20 @@ import {
   View
 } from 'react-native'
 import { Input, Button, Text } from '@ui-kitten/components'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { IMAGES } from 'assets'
 import { SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { login } from 'actions/userActions'
 import { useForm, Controller } from 'react-hook-form'
+import Toast from 'react-native-toast-message'
 
 export default function SignIn({ navigation }) {
   const { colors } = useTheme()
   const styles = makeStyles(colors)
   const dispatch = useDispatch()
-
+  const userInfo = useSelector(state => {
+    return state.userState
+  })
   const {
     control,
     handleSubmit,
@@ -36,12 +39,23 @@ export default function SignIn({ navigation }) {
     dispatch(login({ email, password }))
   }
 
+  React.useEffect(() => {
+    if (userInfo.message) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: userInfo?.message + '👋'
+      })
+    }
+  }, [userInfo])
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
-      <ScrollView>
+      <Toast ref={ref => Toast.setRef(ref)} />
+      <ScrollView style={styles.scroll}>
         <View>
           <Image style={styles.image} source={IMAGES.LOGO} />
         </View>
@@ -87,8 +101,7 @@ export default function SignIn({ navigation }) {
             <Controller
               control={control}
               rules={{
-                required: true,
-                pattern: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/
+                required: true
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
@@ -116,7 +129,7 @@ export default function SignIn({ navigation }) {
           </Text>
 
           <View style={styles.button}>
-            <Button title='Đăng nhập ' onPress={handleSubmit(signIn)} />
+            <Button onPress={handleSubmit(signIn)}>Đăng nhập</Button>
           </View>
         </View>
       </ScrollView>
@@ -132,6 +145,10 @@ const makeStyles = colors =>
       alignItems: 'center',
       paddingVertical: 35,
       paddingHorizontal: 10
+    },
+    scroll: {
+      width: '90%',
+      height: '100%'
     },
     image: {
       alignSelf: 'center',
