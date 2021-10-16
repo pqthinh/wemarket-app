@@ -38,17 +38,17 @@ export const HomeScreen = ({ navigation }) => {
         <Button style={{ marginVertical: 4 }} onPress={toggleTheme}>
           TOGGLE THEME
         </Button>
-        <Button
-          style={{ marginVertical: 4 }}
-          onPress={() => navigation.navigate('Maps')}
-        >
-          MAPS
-        </Button>
         <Button style={{ marginVertical: 4 }} onPress={signOut}>
           Sign out
         </Button>
         <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
           Map
+        </Button>
+        <Button
+          style={{ marginVertical: 4 }}
+          onPress={()=> firebase.auth().signOut()}
+        >
+          LOG OUT 
         </Button>
       </Layout>
     </SafeAreaView>
