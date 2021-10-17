@@ -11,9 +11,14 @@ export const HomeScreen = ({ navigation }) => {
   const navigateDetails = () => {
     navigation.navigate('Details')
   }
- const toggleMap = () => {
-   navigation.navigate('Map')
- }
+  const toggleMap = () => {
+    navigation.navigate('Map')
+  }
+
+  const toggleMapGeo = () => {
+    navigation.navigate('MapScreen')
+  }
+
   const signOut = () => {
     show()
     firebase
@@ -43,6 +48,9 @@ export const HomeScreen = ({ navigation }) => {
         </Button>
         <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
           Map
+        </Button>
+        <Button style={{ marginVertical: 4 }} onPress={toggleMapGeo}>
+          MapScreen
         </Button>
       </Layout>
     </SafeAreaView>
