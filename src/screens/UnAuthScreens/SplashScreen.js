@@ -35,7 +35,7 @@ export default function SplashScreen({ onDone }) {
     return (
       <View style={styles.slide}>
         <Text style={styles.title}>{item.title}</Text>
-        <Image source={item.image} />
+        <Image source={item.image} style={styles.image} />
         <Text style={styles.text}>{item.text}</Text>
       </View>
     )
@@ -81,6 +81,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  image: {
+    objectFit: 'contain'
   }
-  //[...]
 })
