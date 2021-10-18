@@ -15,14 +15,14 @@ export default (state = {}, action) => {
         ...state,
         loading: true,
         userInfo: {},
-        message: null
+        message: ''
       }
     case SIGNUP_SUCCESS:
       return {
         ...state,
         loading: false,
         userInfo: action.payload,
-        message: null
+        message: ''
       }
     case SIGNUP_FAILED:
       return {
@@ -34,14 +34,14 @@ export default (state = {}, action) => {
       return {
         ...state,
         loading: true,
-        message: null
+        message: ''
       }
     case LOGIN_SUCCESS:
       return {
         ...state,
         loading: false,
         userInfo: action.payload,
-        message: null
+        message: ''
       }
     case LOGIN_FAILED:
       return {
@@ -55,7 +55,7 @@ export default (state = {}, action) => {
         userInfo: {},
         loading: false,
         type: action.type,
-        message: null
+        message: ''
       }
     default:
       return state

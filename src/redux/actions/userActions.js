@@ -1,4 +1,5 @@
 // import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { firebase } from 'configs/firebaseConfig'
 import {
   SIGNUP_REQUEST,
@@ -11,7 +12,7 @@ import {
 } from '../actionTypes/userActionTypes'
 
 export const signup =
-  ({ data }) =>
+  ({ data, handleCheck }) =>
   async dispatch => {
     try {
       const { email, password } = data
@@ -20,6 +21,7 @@ export const signup =
         .auth()
         .createUserWithEmailAndPassword(email, password)
       dispatch({ type: SIGNUP_SUCCESS, payload: res })
+      handleCheck(SIGNUP_SUCCESS, true, 'Success')
     } catch (error) {
       let message
       if (error.code === 'auth/email-already-in-use') {
@@ -28,17 +30,22 @@ export const signup =
         message = 'Email không đúng định dạng'
       } else message = withEmpty('message', error)
       dispatch({ type: SIGNUP_FAILED, payload: message })
+      handleCheck(SIGNUP_FAILED, false, message)
     }
   }
 export const login =
-  ({ email, password }) =>
+  ({ email, password, handleCheck }) =>
   async dispatch => {
     try {
       dispatch({ type: LOGIN_REQUEST })
       const res = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-      if (res) dispatch({ type: LOGIN_SUCCESS, payload: res })
+      if (res) {
+        dispatch({ type: LOGIN_SUCCESS, payload: res })
+        handleCheck(LOGIN_SUCCESS, true, 'Success')
+        // call api cua hoan
+      }
     } catch (error) {
       let message
       switch (error?.code) {
@@ -56,17 +63,17 @@ export const login =
           break
       }
       dispatch({ type: LOGIN_FAILED, payload: message })
+      handleCheck(LOGIN_FAILED, false, message)
     }
   }
 
-export const logout = () => {
-  async dispatch => {
-    try {
-      const res = await firebase.auth().signOut()
-      dispatch({ type: LOGOUT, payload: res })
-    } catch (error) {
-      console.log(error)
-      dispatch({ type: LOGOUT, payload: 'Logout failed' || error.toString() })
-    }
+export const logout = () => async dispatch => {
+  try {
+    const res = await firebase.auth().signOut()
+    dispatch({ type: LOGOUT, payload: res })
+    await AsyncStorage.removeItem('@root')
+  } catch (error) {
+    console.log(error)
+    dispatch({ type: LOGOUT, payload: 'Logout failed' || error.toString() })
   }
 }
