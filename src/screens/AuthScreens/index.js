@@ -2,9 +2,9 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { HomeScreen } from './HomeScreen'
 import { DetailsScreen } from './DetailsScreen'
-import { MapScreen } from './MapScreen'
 import { TabNavigator } from 'tab'
-import Map from './Map'
+import Map from './Map/index'
+
 import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 
 const { Navigator, Screen } = createStackNavigator()
@@ -20,8 +20,6 @@ export default function AuthScreens() {
       <Screen name='Details' component={DetailsScreen} />
       <Screen name='Map' component={Map} />
       <Screen name={CHAT_SCREEN} component={TabNavigator} />
-      <Screen name='MapScreen' component={MapScreen} />
-      
     </Navigator>
   )
 }
