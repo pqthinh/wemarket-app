@@ -1,4 +1,3 @@
-// import AsyncStorage from '@react-native-async-storage/async-storage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { firebase } from 'configs/firebaseConfig'
 import {

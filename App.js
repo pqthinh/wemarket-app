@@ -10,9 +10,10 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import LightTheme from 'configs/theme/LightTheme'
 import LoadingProvider from 'provider/LoadingProvider'
 import AppProvider from 'provider/AppProvider'
+import { ThemeProvider } from 'styled-components'
 import { ThemeContext } from 'stores/theme-context'
 import { store, persistor } from 'stores/store'
-import Loading from 'components/Loading'
+import LoadingAtoms from 'components/LoadingAtoms'
 
 LogBox.ignoreLogs([`Setting a timer for a long period`])
 LogBox.ignoreAllLogs()
@@ -31,22 +32,24 @@ const App = props => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={<Loading loading={true} />} persistor={persistor}>
-        <IconRegistry icons={EvaIconsPack} />
-        <AppProvider>
-          <ThemeContext.Provider
-            value={{ theme: theme, toggleTheme: () => toggleTheme() }}
-          >
-            <LoadingProvider>
-              <ApplicationProvider {...eva} theme={eva[theme]}>
-                <NavigationContainer theme={themeColors}>
-                  <AppNavigator {...props} />
-                </NavigationContainer>
-              </ApplicationProvider>
-            </LoadingProvider>
-          </ThemeContext.Provider>
-        </AppProvider>
-      </PersistGate>
+      <ThemeProvider theme={themeColors}>
+        <PersistGate loading={<LoadingAtoms />} persistor={persistor}>
+          <IconRegistry icons={EvaIconsPack} />
+          <AppProvider>
+            <ThemeContext.Provider
+              value={{ theme: theme, toggleTheme: () => toggleTheme() }}
+            >
+              <LoadingProvider>
+                <ApplicationProvider {...eva} theme={eva[theme]}>
+                  <NavigationContainer theme={themeColors}>
+                    <AppNavigator {...props} />
+                  </NavigationContainer>
+                </ApplicationProvider>
+              </LoadingProvider>
+            </ThemeContext.Provider>
+          </AppProvider>
+        </PersistGate>
+      </ThemeProvider>
     </Provider>
   )
 }
