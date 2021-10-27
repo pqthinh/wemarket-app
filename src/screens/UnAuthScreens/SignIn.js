@@ -39,7 +39,6 @@ export default function SignIn({ navigation }) {
 
   const handleCheck = (type, error, message) => {
     setError(!error)
-    console.log(type, error, message)
   }
 
   const signIn = data => {
@@ -48,11 +47,11 @@ export default function SignIn({ navigation }) {
   }
 
   React.useEffect(() => {
-    if (error) {
+    if (error && userInfo?.message) {
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: userInfo?.message + '👋'
+        text2: userInfo.message + '👋'
       })
     } else Toast.hide()
   }, [error, userInfo])

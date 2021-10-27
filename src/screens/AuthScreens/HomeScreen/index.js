@@ -4,6 +4,7 @@ import { SafeAreaView, Text } from 'react-native'
 import { useTheme } from 'stores/theme-context'
 import { logout } from 'actions/userActions'
 import { useDispatch } from 'react-redux'
+import { SelectInput } from 'components/SelectInput'
 
 export const HomeScreen = ({ navigation }) => {
   const { toggleTheme, theme } = useTheme()
@@ -23,6 +24,7 @@ export const HomeScreen = ({ navigation }) => {
       <Layout
         style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       >
+        <SelectInput />
         <Text>{theme}</Text>
         <Button style={{ marginVertical: 4 }} onPress={navigateDetails}>
           OPEN DETAILS
