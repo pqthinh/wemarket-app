@@ -1,16 +1,19 @@
-import React, { useEffect, useState, useMemo } from "react"
-import { Alert, SafeAreaView, StatusBar, StyleSheet, TouchableOpacity} from "react-native"
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps"
-import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions"
+import useCache from 'hooks/useCache'
+import React, { useEffect, useMemo, useState } from "react"
+import { SafeAreaView, StatusBar, StyleSheet, TouchableOpacity } from "react-native"
 import Geolocation from "react-native-geolocation-service"
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
+import MapViewDirections from "react-native-maps-directions"
+import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions"
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import products from "./data"
 import ic_phone from '../../../assets/images/ic_phone.png'
 import MapModal from "../../../components/MapModal"
 import SettingModal from "../../../components/SettingModal"
-// import { customStyleMap} from "./styled"
+import { GOOGLE_MAPS_API_KEY } from "../../../utils/map/constants"
+import products from "./data"
 const MapScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null)
+  const { set, get } = useCache
   // const [zoom, setZoom] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
@@ -22,7 +25,9 @@ const MapScreen = ({ navigation }) => {
     latitudeDelta: Math.PI*radius/ 111.045,
     longitudeDelta: 0.01
   });
-  const handleLocationPermission = async () => { // 👈
+  const [coordinate,setCoordinate] = useState({latitude: null, longitude: null})
+  const [openDirection, setOpenDirection]= useState(false)
+  const handleLocationPermission = async () => { 
     let permissionCheck = '';
     if (Platform.OS === 'ios') {
       permissionCheck = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
@@ -62,6 +67,10 @@ const MapScreen = ({ navigation }) => {
   const close_2 = ()=> {
     setModalVisible2(false)
   }
+  useEffect(async () => {
+    setRadius(await get('save_radius'))
+    
+  },[])
   useEffect(() => {
     handleLocationPermission()
   }, [])
@@ -91,7 +100,8 @@ const MapScreen = ({ navigation }) => {
           style={styles.map}
           provider={PROVIDER_GOOGLE}
           region={region}
-          // onRegionChange={region => setRegion(region)}
+          //region={region}
+          //onRegionChangeComplete={region => setRegion(region)}
        
         showsIndoors={true}
         zoomControlEnabled={true}
@@ -126,10 +136,25 @@ const MapScreen = ({ navigation }) => {
                   setModalVisible(true);
                   setProduct({place: host.place.name, name:host.name_product,image:host.product_images[0],name_user:host.name_user,star:host.star, price:host.price})
                   setModalVisible2(false)
+                  setCoordinate({latitude: host.place.latitude, longitude: host.place.longitude})
+                  setRegion(prevState=>({...prevState, latitude:host.place.latitude, longitude:host.place.longitude}))
+                  setOpenDirection(false)
                 }}
               />)
             }
           })}
+          {openDirection && (
+            <MapViewDirections 
+            origin={location}
+            destination={coordinate}
+            apikey={GOOGLE_MAPS_API_KEY}
+            strokeWidth={4}
+            strokeColor='#197CFF'
+            />
+          )}
+         {coordinate.latitude!== null && (<Marker
+                coordinate={coordinate}/>)
+              }
           <MapView.Circle
         center={{
           latitude: location?.latitude || 21.0541883,
@@ -144,7 +169,7 @@ const MapScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.Button} onPress={()=>{setModalVisible2(true); setModalVisible(false)}}>
           <Ionicons name="options" size={24} color="black" />
           </TouchableOpacity>
-          <MapModal modalVisible={modalVisible} close={close} product={product}/>
+          <MapModal modalVisible={modalVisible} close={close} product={product} setOpenDirection={setOpenDirection}/>
           <SettingModal modalVisible={modalVisible2} close={close_2} sliderValue={radius} setSliderValue={setRadius}/>
       {/* )} */}
     </SafeAreaView>

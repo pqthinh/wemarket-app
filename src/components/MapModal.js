@@ -54,7 +54,8 @@ export default MapModal =(props)=> {
             
             <View style={styles.BookNow}>
             <TouchableOpacity style={styles.DirectButton}
-            onPress={props.close}>
+            // onPress={props.close}
+            onPress={()=>props.setOpenDirection(true)}>
                     <Icon name="directions" size={20} color="white" />
                 <Text style={styles.ButtonText}>Đường đi</Text>
             </TouchableOpacity>
