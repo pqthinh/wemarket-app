@@ -1,8 +1,18 @@
-import React from "react"
-import { Platform, View, StyleSheet, Text, TouchableOpacity} from "react-native"
 import Slider from '@react-native-community/slider';
+import useCache from 'hooks/useCache';
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from 'react-native-modal';
 export default SettingModal=(props)=> {
+  const { set, get } = useCache
+  const saveRadius = async () => {
+    await set('save_radius', props.sliderValue);
+    props.close();
+  }
+  const getRadius = async () => {
+    props.setSliderValue(await get('save_radius'))
+     props.close();
+  }
     return (
       <Modal
           isVisible={props.modalVisible}
@@ -11,12 +21,11 @@ export default SettingModal=(props)=> {
           hasBackdrop={false}
           useNativeDriverForBackdrop
           swipeDirection={['down']}
-          onSwipeComplete={props.close}
+          onSwipeComplete={getRadius}
           >
       <View style={styles.Container}>
       <TouchableOpacity  style={styles.ButtonCancel} 
-          onPress={()=>props.setSliderValue(prevState=>({...prevState}))}
-          onPress={props.close}>
+          onPress={getRadius}>
           <Text style={styles.ButtonCancelText}>Huỷ</Text>
         </TouchableOpacity>
         <View style={styles.Row}>
@@ -37,7 +46,7 @@ export default SettingModal=(props)=> {
         </View>
         <View style={styles.BookNow}>
         <TouchableOpacity style={styles.BookNowButton}  
-          onPress={props.close}>
+          onPress={saveRadius}>
           <Text style={styles.ButtonText}>Áp dụng</Text>
         </TouchableOpacity>
       </View>

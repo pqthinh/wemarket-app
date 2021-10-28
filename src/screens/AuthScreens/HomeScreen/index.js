@@ -14,7 +14,9 @@ export const HomeScreen = ({ navigation }) => {
   const toggleMap = () => {
     navigation.navigate('Map')
   }
-
+  const toggleUserMap = () => {
+    navigation.navigate('MapSelect')
+  }
 
   const signOut = () => {
     show()
@@ -45,6 +47,9 @@ export const HomeScreen = ({ navigation }) => {
         </Button>
         <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
           Map
+        </Button>
+        <Button style={{ marginVertical: 4 }} onPress={toggleUserMap}>
+          User Map Screen
         </Button>
       </Layout>
     </SafeAreaView>
