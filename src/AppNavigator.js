@@ -1,50 +1,80 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {
-  BottomNavigation,
-  BottomNavigationTab,
-  Layout,
-  Text,
-  Icon
-} from '@ui-kitten/components'
+// import React from 'react'
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+// import {
+//   BottomNavigation,
+//   BottomNavigationTab,
+//   Layout,
+//   Text,
+//   Icon
+// } from '@ui-kitten/components'
 
-const { Navigator, Screen } = createBottomTabNavigator()
+// const { Navigator, Screen } = createBottomTabNavigator()
 
-const UsersScreen = () => (
-  <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text category='h3'>USERS</Text>
-  </Layout>
-)
+// const UsersScreen = () => (
+//   <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//     <Text category='h3'>USERS</Text>
+//   </Layout>
+// )
 
-const OrdersScreen = () => (
-  <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text category='h4'>ORDERS</Text>
-  </Layout>
-)
+// const OrdersScreen = () => (
+//   <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//     <Text category='h4'>ORDERS</Text>
+//   </Layout>
+// )
 
-const MapsScreen = () => (
-  <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text category='h4'>MapsScreen</Text>
-  </Layout>
-)
+// const MapsScreen = () => (
+//   <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//     <Text category='h4'>MapsScreen</Text>
+//   </Layout>
+// )
 
-const BottomTabBar = ({ navigation, state }) => (
-  <BottomNavigation
-    selectedIndex={state.index}
-    onSelect={index => navigation.navigate(state.routeNames[index])}
-  >
-    <BottomNavigationTab title='home' icon={<Icon name='home-outline' />} />
-    <BottomNavigationTab title='orders' icon={<Icon name='gift-outline' />} />
-    <BottomNavigationTab title='maps' icon={<Icon name='map-outline' />} />
-  </BottomNavigation>
-)
+// const BottomTabBar = ({ navigation, state }) => (
+//   <BottomNavigation
+//     selectedIndex={state.index}
+//     onSelect={index => navigation.navigate(state.routeNames[index])}
+//   >
+//     <BottomNavigationTab title='home' icon={<Icon name='home-outline' />} />
+//     <BottomNavigationTab title='orders' icon={<Icon name='gift-outline' />} />
+//     <BottomNavigationTab title='maps' icon={<Icon name='map-outline' />} />
+//   </BottomNavigation>
+// )
 
-const TabNavigator = () => (
-  <Navigator tabBar={props => <BottomTabBar {...props} />}>
-    <Screen name='Home' component={UsersScreen} />
-    <Screen name='Orders' component={OrdersScreen} />
-    <Screen name='Maps' component={MapsScreen} />
-  </Navigator>
-)
+// const TabNavigator = () => (
+//   <Navigator tabBar={props => <BottomTabBar {...props} />}>
+//     <Screen name='Home' component={UsersScreen} />
+//     <Screen name='Orders' component={OrdersScreen} />
+//     <Screen name='Maps' component={MapsScreen} />
+//   </Navigator>
+// )
 
-export const AppNavigator = () => <TabNavigator />
+// export const AppNavigator = () => <TabNavigator />
+
+import Loading from 'components/Loading'
+import { firebase } from 'configs/firebaseConfig'
+import React, { useEffect, useState } from 'react'
+import AuthScreens from 'screens/AuthScreens'
+import UnAuthScreens from 'screens/UnAuthScreens'
+
+export const AppNavigator = () => {
+  const [isLogin, setIsLogin] = useState(false)
+  const [load, setLoad] = useState(false)
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        setIsLogin(true)
+        setLoad(true)
+      } else {
+        setIsLogin(false)
+        setLoad(true)
+      }
+    })
+  })
+  if (isLogin) return <AuthScreens />
+  return (
+    <>
+      <Loading loading={!load} />
+      <UnAuthScreens />
+    </>
+  )
+}

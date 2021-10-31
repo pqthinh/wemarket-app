@@ -60,6 +60,7 @@ export default function BottomTab(props) {
   return (
     <Tab.Navigator
       initialRouteName='Home'
+      appearance='noIndicator'
       tabBarOptions={{
         activeTintColor: '#E26740'
       }}

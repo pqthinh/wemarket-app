@@ -1,15 +1,10 @@
-import IconAtoms from '../IconAtoms'
+import moment from 'moment'
 import React from 'react'
 import { Image, Platform, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import TimeAgo from 'react-native-timeago'
+import NumberFormatComponent from '../NumberFormatComponent'
+import IconAtoms from '../IconAtoms'
 import styles from './style'
-
-const currencyFormatter = require('currency-formatter')
-
-const heightImage =
-  Platform.OS == 'android' ? 150 : Platform.OS == 'ios' ? 120 : 180
-
 const fakeNews = {
   anh: [
     'https://picsum.photos/700',
@@ -27,7 +22,7 @@ const fakeNews = {
   }
 }
 
-export default function ProductItem({ navigation, newsPost, category }) {
+const ProductItem = ({ navigation, newsPost, category }) => {
   const news = fakeNews
   const handleImage = anh => {
     let imgs = anh
@@ -65,7 +60,7 @@ export default function ProductItem({ navigation, newsPost, category }) {
               : news.ten}
           </Text>
           <Text style={{ fontSize: 16, color: 'red' }}>
-            {currencyFormatter.format(news.giaban, { code: 'VND' })}
+            <NumberFormatComponent value={news.giaban} />
           </Text>
           <Text style={{ fontSize: 12, marginVertical: 2 }}>
             <IconAtoms name='user' size={16} />
@@ -80,10 +75,12 @@ export default function ProductItem({ navigation, newsPost, category }) {
           <Text style={{ fontSize: 12 }}>
             <IconAtoms name='calendar' size={16} />
             {'  '}
-            <TimeAgo time={news.ngaycapnhat} />
+            {moment(news.ngaycapnhat).fromNow()}
           </Text>
         </View>
       </View>
     </TouchableOpacity>
   )
 }
+
+export default ProductItem

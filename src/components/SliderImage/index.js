@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { SliderBox } from 'react-native-image-slider-box'
 
 export default function SliderImage({ images, styleBanner }) {
-  const [banner, setBanner] = useState(null)
+  const [banner, setBanner] = useState(images)
 
   const fake = useMemo(() => {
     return [
@@ -19,7 +19,7 @@ export default function SliderImage({ images, styleBanner }) {
   const _renderBanner = useCallback(() => {
     return (
       <SliderBox
-        images={banner}
+        images={banner || fake}
         autoplay
         circleLoop
         sliderBoxHeight={200}
