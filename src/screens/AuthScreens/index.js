@@ -9,6 +9,10 @@ import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BottomNavigation, BottomNavigationTab } from '@ui-kitten/components'
 import { View, Text } from 'react-native'
+import Map from './Map/index'
+
+import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
+import MapSelect from './MapSelect/index'
 
 const { Navigator, Screen } = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -22,6 +26,8 @@ function AuthScreens() {
     >
       <Screen name={HOME_SCREEN} component={HomeScreen} />
       <Screen name='Details' component={DetailsScreen} />
+      <Screen name='Map' component={Map} />
+      <Screen name='MapSelect' component={MapSelect} />
       <Screen name={CHAT_SCREEN} component={TabNavigator} />
       <Screen name='Maps' component={MapScreen} />
     </Navigator>

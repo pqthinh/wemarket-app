@@ -1,31 +1,19 @@
 import React from 'react'
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import { createStackNavigator } from '@react-navigation/stack'
+import MapModal from '../../../components/MapModal'
+import MapScreen from './MapScreen'
 
-export const MapScreen = () => {
+const { Navigator, Screen } = createStackNavigator()
+
+export default function Map() {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle='dark-content' />
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={{
-          latitude: 57.709127,
-          longitude: 11.934746,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        }}
-      />
-    </SafeAreaView>
+    <Navigator
+      screenOptions={({ route, navigation }) => ({
+        headerShown: false
+      })}
+    >
+      <Screen name='MapScreen' component={MapScreen} />
+      <Screen name='MapModal' component={MapModal} />
+    </Navigator>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: 'center'
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject
-  }
-})
