@@ -9,10 +9,8 @@ import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { BottomNavigation, BottomNavigationTab } from '@ui-kitten/components'
 import { View, Text } from 'react-native'
-import Map from './Map/index'
-
-import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
-import MapSelect from './MapSelect/index'
+import Map from './MapScreen'
+import MapSelect from './MapSelect'
 
 const { Navigator, Screen } = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -67,7 +65,7 @@ export default function BottomTab(props) {
     <Tab.Navigator
       initialRouteName='Home'
       appearance='noIndicator'
-      tabBarOptions={{
+      options={{
         activeTintColor: '#E26740'
       }}
     >

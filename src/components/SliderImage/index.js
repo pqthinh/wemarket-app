@@ -34,16 +34,18 @@ export default function SliderImage({ images, styleBanner }) {
           justifyContent: 'center',
           paddingVertical: 10
         }}
+        dotColor='#E26740'
+        inactiveDotColor='#F2F3F7'
       />
     )
   }, [fake])
 
   useEffect(() => {
     if (!images) {
-      setBanner(images)
+      setBanner(fake)
       return
     }
-    setBanner(fake)
+    setBanner(images)
   }, [images])
 
   return (
