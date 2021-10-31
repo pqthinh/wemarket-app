@@ -8805,6 +8805,11 @@ react-native-eva-icons@^1.3.1:
   resolved "https://registry.yarnpkg.com/react-native-eva-icons/-/react-native-eva-icons-1.3.1.tgz#1e6e019b0fd3cb1669db50bd6bbdaa6d89327593"
   integrity sha512-emd/aYXuOacuDVTx0SJoLi+xsOdCNdljQB3PTNCM9AQ3m/smG0X1TN0+ihelPO7MqoHzaH0h6lbANtwxGUy8Fw==
 
+react-native-geolocation-service@^5.3.0-beta.3:
+  version "5.3.0-beta.3"
+  resolved "https://registry.yarnpkg.com/react-native-geolocation-service/-/react-native-geolocation-service-5.3.0-beta.3.tgz#6afd291e886ecb5fdf8c096ea0a694ccb0975330"
+  integrity sha512-TRIrkD1CV6yAOUNAqFsHiYuTyzBXJ8bttk84r4dCSKLJbYzKkvGyKoqtIIydAVlHRyZhU6u6U4Uz1bkdXPlT3g==
+
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"
@@ -8841,6 +8846,11 @@ react-native-pager-view@^5.4.4:
   version "5.4.4"
   resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.4.tgz#83a873a82748440696ca0e0fd07a77477b854a78"
   integrity sha512-5zyol+FZ9X4N4OEz92IyaFFROR3KtgAgTmgqlUvG59Eigf+f6aWs5fvcbWwzuz/AlLZbrxIDrnLmSpMUOK57ww==
+
+react-native-permissions@^3.0.1:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.0.6.tgz#0cb146cecb8b883c3770f8072196ad1a081b20b8"
+  integrity sha512-vnR13M7uqr1ZDsK3Edloo1+m6PdIRQPOontGFIjUqUOSFzF8LIm7pkF9fv+dY1hsCtTGGG6GnyOS8KDJ/uLyjg==
 
 react-native-reanimated@^2.2.2:
   version "2.2.2"
