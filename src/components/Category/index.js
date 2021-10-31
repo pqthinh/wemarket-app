@@ -15,11 +15,11 @@ const heightImage =
 const widthCate = 90
 const DEVICE_WIDTH = Dimensions.get('window').width
 
-export default function Category(props) {
-  const { navigation } = props
+export default function Category({ navigation }) {
   const [categories, setCategories] = useState([])
+
   useEffect(() => {
-    let newsList = require('../assets/category/category.json')
+    let newsList = require('constants/category.json')
     setCategories(newsList)
   }, [])
 

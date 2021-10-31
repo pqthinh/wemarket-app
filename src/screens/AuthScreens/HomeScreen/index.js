@@ -1,10 +1,14 @@
 import { Button, Layout } from '@ui-kitten/components'
 import React from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import { SafeAreaView, Text, ScrollView } from 'react-native'
 import { useTheme } from 'stores/theme-context'
 import { logout } from 'actions/userActions'
 import { useDispatch } from 'react-redux'
 import { SelectInput } from 'components/SelectInput'
+import ProductItem from 'components/ProductItem'
+import SliderImage from 'components/SliderImage'
+import Category from 'components/Category'
+import { ProductContainer } from './styled'
 
 export const HomeScreen = ({ navigation }) => {
   const { toggleTheme, theme } = useTheme()
@@ -21,24 +25,52 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Layout
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-      >
-        <SelectInput />
-        <Text>{theme}</Text>
-        <Button style={{ marginVertical: 4 }} onPress={navigateDetails}>
-          OPEN DETAILS
-        </Button>
-        <Button style={{ marginVertical: 4 }} onPress={toggleTheme}>
-          TOGGLE THEME
-        </Button>
-        <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
-          MAP
-        </Button>
-        <Button style={{ marginVertical: 4 }} onPress={signOut}>
-          Sign out
-        </Button>
-      </Layout>
+      <ScrollView>
+        <SliderImage />
+
+        <Category />
+
+        <Text>Sản phẩm mới </Text>
+        <ProductContainer>
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+        </ProductContainer>
+
+        <Text>Sản đáng chú ý </Text>
+        <ProductContainer>
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+        </ProductContainer>
+
+        <Layout
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <SelectInput />
+          <Text>{theme}</Text>
+          <Button style={{ marginVertical: 4 }} onPress={navigateDetails}>
+            OPEN DETAILS
+          </Button>
+          <Button style={{ marginVertical: 4 }} onPress={toggleTheme}>
+            TOGGLE THEME
+          </Button>
+          <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
+            MAP
+          </Button>
+          <Button style={{ marginVertical: 4 }} onPress={signOut}>
+            Sign out
+          </Button>
+        </Layout>
+      </ScrollView>
     </SafeAreaView>
   )
 }
