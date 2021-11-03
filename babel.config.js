@@ -22,7 +22,8 @@ module.exports = {
           theme: './src/configs/theme',
           api: './src/configs/api',
           tab: './src/tab',
-          drawer: './src/drawer'
+          drawer: './src/drawer',
+          context: './src/context'
         }
       }
     ]

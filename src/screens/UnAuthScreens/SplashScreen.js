@@ -57,7 +57,7 @@ export default function SplashScreen({ onDone }) {
     return (
       <DoneButton>
         <WrapperText style={{ padding: 4 }}>Bỏ qua</WrapperText>
-        <Icon name='external-link' color={colors.primary} size={24} />
+        {/* <Icon name='external-link' color={colors.primary} size={24} /> */}
       </DoneButton>
     )
   }

@@ -1,109 +1,124 @@
-import { createStackNavigator } from '@react-navigation/stack'
-import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Feather } from 'react-native-vector-icons'
-import SearchComponent from '/component/SearchComponent'
-import MapScreen from '/screens/AuthScreens/MapScreen'
-import HomeScreen from '/screens/AuthScreens/HomeScreen'
-import DetailsScreen from '/screens/AuthScreens/DetailsScreen'
+// import React from 'react'
+// import { createStackNavigator } from '@react-navigation/stack'
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+// import { HomeScreen } from './HomeScreen'
+// import { DetailsScreen } from './DetailsScreen'
+// import { MapScreen } from './MapScreen'
+// import { TabNavigator } from 'tab'
+// import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+// import { BottomNavigation, BottomNavigationTab } from '@ui-kitten/components'
+// import { View, Text } from 'react-native'
+// import Map from './MapScreen'
+// import MapSelect from '../MapSelect'
 
-const Stack = createStackNavigator()
+// const { Navigator, Screen } = createStackNavigator()
+// const Tab = createBottomTabNavigator()
 
-export default function HomeStack(props) {
-  const { navigation } = props
-  const [search, setSearch] = useState('')
-  return (
-    <SafeAreaProvider>
-      <Stack.Navigator>
-        <Stack.Screen
-          name='Home'
-          component={HomeScreen}
-          options={{
-            headerTitle: () => (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('News', {
-                    screen: 'Search',
-                    params: { search: search }
-                  })
-                  setSearch('')
-                }}
-              >
-                <SearchComponent
-                  value={search}
-                  onChangeData={setSearch}
-                  navigation={navigation}
-                />
-              </TouchableOpacity>
-            ),
-            headerRight: () => (
-              <View style={styles.IconWrapper}>
-                <Feather
-                  name='shopping-cart'
-                  size={24}
-                  style={styles.IconWrapper}
-                  onPress={() => {
-                    navigation.navigate('Card')
-                  }}
-                />
-                <Feather
-                  name='message-circle'
-                  size={24}
-                  style={styles.IconWrapper}
-                  onPress={() => {
-                    navigation.navigate('ChatStack', { screen: 'ListContact' })
-                  }}
-                />
-              </View>
-            ),
-            headerLeft: () => (
-              <View style={styles.IconWrapper}>
-                <Feather
-                  name='menu'
-                  size={24}
-                  color='#fff'
-                  onPress={() => {
-                    navigation.openDrawer()
-                  }}
-                  style={{ marginRight: 0 }}
-                />
-              </View>
-            ),
-            headerStyle: {
-              backgroundColor: '#aed581'
-            },
-            headerTintColor: 'white',
-            headerTitleStyle: {
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }
-          }}
-        />
+// function AuthScreens() {
+//   return (
+//     <Navigator
+//       screenOptions={({ route, navigation }) => ({
+//         headerShown: false
+//       })}
+//     >
+//       <Screen name={HOME_SCREEN} component={HomeScreen} />
+//       <Screen name='Details' component={DetailsScreen} />
+//       <Screen name='Map' component={Map} />
+//       <Screen name='MapSelect' component={MapSelect} />
+//       <Screen name={CHAT_SCREEN} component={TabNavigator} />
+//       <Screen name='Maps' component={MapScreen} />
+//     </Navigator>
+//   )
+// }
 
-        <Stack.Screen
-          name='MapScreen'
-          component={MapScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name='DetailsScreen'
-          component={DetailsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name='PostNews'
-          component={() => {
-            return null
-          }}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </SafeAreaProvider>
-  )
-}
+// const IconPostNews = ({ color }) => {
+//   return (
+//     <View
+//       style={{
+//         position: 'absolute',
+//         bottom: -10,
+//         height: 60,
+//         width: 60,
+//         borderRadius: 60,
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         backgroundColor: '#e0e0e0'
+//       }}
+//     >
+//       <MaterialCommunityIcons
+//         name='dolly'
+//         color={color || '#000'}
+//         size={50}
+//         style={{ flex: 1, alignItems: 'center' }}
+//       />
+//     </View>
+//   )
+// }
 
-const styles = StyleSheet.create({
-  IconWrapper: { flexDirection: 'row', marginHorizontal: 5, color: '#fff' }
-})
+// function Test() {
+//   return <Text>Test</Text>
+// }
+
+// export default function BottomTab(props) {
+//   return (
+//     <Tab.Navigator
+//       initialRouteName='Home'
+//       appearance='noIndicator'
+//       options={{
+//         activeTintColor: '#E26740'
+//       }}
+//     >
+//       <Tab.Screen
+//         name='Home'
+//         component={AuthScreens}
+//         options={{
+//           tabBarLabel: 'Trang chủ',
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name='home' color={color} size={26} />
+//           )
+//         }}
+//       />
+//       <Tab.Screen
+//         name='Notify'
+//         component={MapScreen}
+//         options={{
+//           tabBarLabel: 'Bản đồ',
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name='bell' color={color} size={26} />
+//           ),
+//           tabBarBadge: 3
+//         }}
+//       />
+//       <Tab.Screen
+//         name='Post'
+//         component={Test}
+//         options={{
+//           tabBarLabel: '',
+//           tabBarIcon: ({ color }) => <IconPostNews color={color} />
+//         }}
+//       />
+//       <Tab.Screen
+//         name='Card'
+//         component={Test}
+//         options={{
+//           tabBarLabel: 'Giỏ hàng',
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name='shopping' color={color} size={26} />
+//           ),
+//           tabBarBadge: 3
+//         }}
+//       />
+//       <Tab.Screen
+//         name='Profile'
+//         component={Test}
+//         options={{
+//           tabBarLabel: 'Trang cá nhân',
+//           tabBarIcon: ({ color }) => (
+//             <MaterialCommunityIcons name='account' color={color} size={26} />
+//           )
+//         }}
+//       />
+//     </Tab.Navigator>
+//   )
+// }
