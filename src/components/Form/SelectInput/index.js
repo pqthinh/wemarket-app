@@ -1,5 +1,4 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import {
   IndexPath,
   Layout,
@@ -7,8 +6,9 @@ import {
   SelectGroup,
   SelectItem
 } from '@ui-kitten/components'
+import { ContainerSelect, SelectWrapper } from './styled'
 
-export const SelectInput = ({
+const SelectInput = ({
   multiSelect = false,
   data = ['Developer', 'Designer', 'Product Manager'],
   groupedData = {
@@ -43,10 +43,9 @@ export const SelectInput = ({
   )
 
   return (
-    <Layout style={styles.container} level='1'>
+    <ContainerSelect level='1'>
       {!multiSelect && (
-        <Select
-          style={styles.select}
+        <SelectWrapper
           placeholder='Default'
           value={displayValue}
           selectedIndex={selectedIndex}
@@ -56,12 +55,11 @@ export const SelectInput = ({
           }}
         >
           {data.map(renderOption)}
-        </Select>
+        </SelectWrapper>
       )}
 
       {multiSelect && (
-        <Select
-          style={styles.select}
+        <SelectWrapper
           multiSelect={true}
           placeholder='Multi'
           value={groupDisplayValues.join(', ')}
@@ -72,20 +70,9 @@ export const SelectInput = ({
           }}
         >
           {Object.keys(groupedData).map(renderGroup)}
-        </Select>
+        </SelectWrapper>
       )}
-    </Layout>
+    </ContainerSelect>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: 192
-  },
-  select: {
-    flex: 1,
-    margin: 2
-  }
-})
+export default React.memo(SelectInput)

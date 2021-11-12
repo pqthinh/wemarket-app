@@ -9,7 +9,7 @@ import {
   TextInput
 } from './styled'
 
-export default function Input({
+const Input = ({
   label,
   errorText,
   required,
@@ -19,7 +19,7 @@ export default function Input({
   component,
   control,
   ...others
-}) {
+}) => {
   return (
     <Wrapper>
       <WrapperLabel>
@@ -44,3 +44,4 @@ export default function Input({
     </Wrapper>
   )
 }
+export default Input

@@ -1,31 +1,14 @@
-import { Button, Layout } from '@ui-kitten/components'
-import React from 'react'
-import { SafeAreaView, Text, ScrollView } from 'react-native'
-import { useTheme } from 'stores/theme-context'
-import { logout } from 'actions/userActions'
-import { useDispatch } from 'react-redux'
-import { SelectInput } from 'components/Form/SelectInput'
+import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
 import SliderImage from 'components/SliderImage'
-import Category from 'components/Category'
+import WrapperContent from 'components/WrapperContent'
+import React from 'react'
+import { SafeAreaView, ScrollView } from 'react-native'
+import { useDispatch } from 'react-redux'
 import { ProductContainer } from './styled'
 
 export const HomeScreen = ({ navigation }) => {
-  const { toggleTheme, theme } = useTheme()
   const dispatch = useDispatch()
-  const navigateDetails = () => {
-    navigation.navigate('Details')
-  }
-  const toggleMap = () => {
-    navigation.navigate('Map')
-  }
-  const toggleUserMap = () => {
-    navigation.navigate('MapSelect')
-  }
-
-  const signOut = () => {
-    dispatch(logout())
-  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -34,8 +17,7 @@ export const HomeScreen = ({ navigation }) => {
 
         <Category />
 
-        <Text>Sản phẩm mới </Text>
-        <ProductContainer>
+        <WrapperContent name={'Sản phẩm mới'} horizontal={true}>
           <ProductItem />
           <ProductItem />
           <ProductItem />
@@ -43,10 +25,9 @@ export const HomeScreen = ({ navigation }) => {
           <ProductItem />
           <ProductItem />
           <ProductItem />
-        </ProductContainer>
+        </WrapperContent>
 
-        <Text>Sản đáng chú ý </Text>
-        <ProductContainer>
+        <WrapperContent name={'Top tìm kiếm'} horizontal={true}>
           <ProductItem />
           <ProductItem />
           <ProductItem />
@@ -54,29 +35,32 @@ export const HomeScreen = ({ navigation }) => {
           <ProductItem />
           <ProductItem />
           <ProductItem />
-        </ProductContainer>
+        </WrapperContent>
 
-        <Layout
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        <WrapperContent name={'Sản phẩm được yêu thích'} horizontal={true}>
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+          <ProductItem />
+        </WrapperContent>
+
+        <WrapperContent
+          name={'Gợi ý hôm nay'}
+          stickyHeaderHiddenOnScroll={true}
         >
-          <SelectInput />
-          <Text>{theme}</Text>
-          <Button style={{ marginVertical: 4 }} onPress={navigateDetails}>
-            OPEN DETAILS
-          </Button>
-          <Button style={{ marginVertical: 4 }} onPress={toggleTheme}>
-            TOGGLE THEME
-          </Button>
-          <Button style={{ marginVertical: 4 }} onPress={toggleMap}>
-            MAP
-          </Button>
-          <Button style={{ marginVertical: 4 }} onPress={toggleUserMap}>
-            User Map Screen
-          </Button>
-          <Button style={{ marginVertical: 4 }} onPress={signOut}>
-            Sign out
-          </Button>
-        </Layout>
+          <ProductContainer>
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+            <ProductItem />
+          </ProductContainer>
+        </WrapperContent>
       </ScrollView>
     </SafeAreaView>
   )

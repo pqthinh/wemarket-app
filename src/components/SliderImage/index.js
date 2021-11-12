@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { View } from 'react-native'
 import { SliderBox } from 'react-native-image-slider-box'
 
-export default function SliderImage({ images, styleBanner }) {
+const SliderImage = ({ images, style, ...rest }) => {
   const [banner, setBanner] = useState(images)
 
   const fake = useMemo(() => {
@@ -36,6 +36,7 @@ export default function SliderImage({ images, styleBanner }) {
         }}
         dotColor='#E26740'
         inactiveDotColor='#F2F3F7'
+        {...rest}
       />
     )
   }, [fake])
@@ -49,8 +50,9 @@ export default function SliderImage({ images, styleBanner }) {
   }, [images])
 
   return (
-    <View style={styleBanner || { width: '100%', height: 160 }}>
+    <View style={style || { width: '100%', height: 160 }}>
       {_renderBanner()}
     </View>
   )
 }
+export default React.memo(SliderImage)
