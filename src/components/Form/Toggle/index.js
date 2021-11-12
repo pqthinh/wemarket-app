@@ -1,13 +1,13 @@
 import React from 'react'
 import { WrapperToggle, Label } from './styled'
 
-export default function Toggle({
+const Toggle = ({
   label,
   activeChecked,
   onActiveCheckedChange,
   status = 'primary',
   ...other
-}) {
+}) => {
   return (
     <WrapperToggle
       style={styles.toggle}
@@ -20,3 +20,4 @@ export default function Toggle({
     </WrapperToggle>
   )
 }
+export default Toggle

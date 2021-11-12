@@ -7,6 +7,8 @@ const NumberFormatComponent = ({
   displayType = 'text',
   suffix = ' đ',
   thousandSeparator = true,
+  highlight = false,
+  style,
   ...others
 }) => {
   return (
@@ -16,7 +18,7 @@ const NumberFormatComponent = ({
       thousandSeparator={thousandSeparator}
       suffix={suffix}
       {...others}
-      renderText={formattedValue => <Text>{formattedValue}</Text>}
+      renderText={formattedValue => <Text style={style}>{formattedValue}</Text>}
     />
   )
 }
