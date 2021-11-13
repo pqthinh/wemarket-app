@@ -75,3 +75,7 @@ export const logout = () => async dispatch => {
     dispatch({ type: LOGOUT, payload: 'Logout failed' || error.toString() })
   }
 }
+
+export const showAlert = () => async dispatch => {
+  dispatch({ type: SHOW_ALERT, payload: 'Không có quyền truy cập' })
+}

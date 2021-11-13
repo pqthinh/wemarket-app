@@ -12,6 +12,7 @@ export const Container = styled(Layout)`
   border: 1px solid ${props => props.theme.colors.primary};
   border-radius: 4px;
   position: relative;
+  padding: 1px;
 `
 
 export const WrapperContentProduct = styled.View`
@@ -24,6 +25,7 @@ export const ImageProduct = styled.Image`
   resize-mode: cover;
   margin: 0 0 5px 0;
   border-radius: 4px;
+  padding: 2px;
 `
 export const NameProduct = styled(Text)`
   font-size: 16px;
