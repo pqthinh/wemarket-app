@@ -1,12 +1,11 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { HomeScreen } from 'screens/HomeScreen'
+import HomeStack from './HomeStack'
 import { DetailsScreen } from 'screens/DetailsScreen'
 import StackMap from 'screens/MapScreen'
 import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { BottomNavigation, BottomNavigationTab } from '@ui-kitten/components'
 import { View, Text } from 'react-native'
 import MapSelect from 'screens/MapSelect'
 
@@ -20,7 +19,7 @@ function AuthScreens() {
         headerShown: false
       })}
     >
-      <Screen name={HOME_SCREEN} component={HomeScreen} />
+      <Screen name={HOME_SCREEN} component={HomeStack} />
       <Screen name='Details' component={DetailsScreen} />
       <Screen name='Map' component={MapSelect} />
       <Screen name='MapSelect' component={MapSelect} />
@@ -40,12 +39,12 @@ const IconPostNews = ({ color }) => {
         borderRadius: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#e0e0e0'
+        backgroundColor: '#F2F3F7'
       }}
     >
       <MaterialCommunityIcons
         name='dolly'
-        color={color || '#000'}
+        color='#E26740'
         size={50}
         style={{ flex: 1, alignItems: 'center' }}
       />
@@ -62,8 +61,13 @@ export default function BottomTab({}) {
     <Tab.Navigator
       initialRouteName='Home'
       appearance='noIndicator'
-      options={{
-        activeTintColor: '#E26740'
+      screenOptions={{
+        tabBarActiveTintColor: '#E26740',
+        tabBarBadgeStyle: {
+          backgroundColor: '#EB5757',
+          color: '#FFFFFF',
+          fontSize: 12
+        }
       }}
     >
       <Tab.Screen
@@ -91,7 +95,7 @@ export default function BottomTab({}) {
         name='Post'
         component={Test}
         options={{
-          tabBarLabel: '',
+          tabBarLabel: 'Đăng bài',
           tabBarIcon: ({ color }) => <IconPostNews color={color} />
         }}
       />

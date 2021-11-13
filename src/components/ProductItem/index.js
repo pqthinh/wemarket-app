@@ -22,35 +22,36 @@ moment.locale('vi')
 
 const ProductItem = ({
   navigation,
-  product,
+  product = fakeProduct,
+  style,
   isTopProduct = true,
   isTopLike = true,
   isReputation = true
 }) => {
-  const news = fakeNews
-
   const handleNavigateToDetail = () => {
-    navigation.navigate('Detail', { news })
+    navigation.navigate('Detail', { product })
   }
 
   return (
     <TouchableOpacity onPress={() => handleNavigateToDetail()}>
-      <Container>
-        <ImageProduct source={{ uri: withRandomImage('image', news) }} />
+      <Container style={style}>
+        <ImageProduct source={{ uri: withRandomImage('image', product) }} />
         <WrapperContentProduct>
           <NameProduct ellipsizeMode='tail' numberOfLines={2}>
-            {withEmpty('name', news)}
+            {withEmpty('name', product)}
           </NameProduct>
-          <Price value={withEmpty('price', news)} />
+          <Price value={withEmpty('price', product)} />
 
           <WrapperIcon style={{ fontSize: 12 }}>
             <Icon name='map-pin' size={16} />
-            <Place numberOfLines={1}>{withEmpty('address', news)}</Place>
+            <Place numberOfLines={1}>{withEmpty('address', product)}</Place>
           </WrapperIcon>
 
           <WrapperIcon style={{ fontSize: 12 }}>
             <Icon name='calendar' size={16} />
-            <PostTime>{moment(withNull('updatedAt', news)).fromNow()}</PostTime>
+            <PostTime>
+              {moment(withNull('updatedAt', product)).fromNow()}
+            </PostTime>
           </WrapperIcon>
         </WrapperContentProduct>
         {isTopProduct ? (
@@ -59,7 +60,7 @@ const ProductItem = ({
         {isTopLike ? (
           <TopLikeProduct source={require('assets/images/like.png')} />
         ) : null}
-        {isReputation ? <TrustTag>Được đảm bảo</TrustTag> : null}
+        {isReputation ? <TrustTag>Tài trợ</TrustTag> : null}
       </Container>
     </TouchableOpacity>
   )
@@ -67,7 +68,7 @@ const ProductItem = ({
 
 export default React.memo(ProductItem)
 
-const fakeNews = {
+const fakeProduct = {
   id: 1,
   code: '1',
   name: 'Samsung Galaxy Note 10 Plus 5G 256GB Korea | Ship',
