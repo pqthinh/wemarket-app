@@ -1,80 +1,130 @@
-import Geolocation from '@react-native-community/geolocation'
-import React from 'react'
-import { ActivityIndicator, Button, Text, View } from 'react-native'
+import Geolocation from 'react-native-geolocation-service'
+import React, { useEffect, useState } from 'react'
+import {
+  ActivityIndicator,
+  Button,
+  Text,
+  TouchableOpacity,
+  View,
+  SafeAreaView
+} from 'react-native'
+import FeatherIcon from 'react-native-vector-icons/Feather'
 import MapView from 'react-native-maps'
-import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
-import styles from './styles'
+import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
+import styles from './styled'
+import SearchAddressModal from '../../components/SearchAddressModal'
+import { useShowState } from '../../core/hooks'
+import { usePlace } from '../../context/PlacesManager'
+import Geocoder from 'react-native-geocoding'
 
-export default class UserScreen extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      loading: true,
-      region: {
-        latitude: 21.0369,
-        longitude: 105.7823,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001
-      },
-      isMapReady: false,
-      marginTop: 1,
-      userLocation: '',
-      regionChangeProgress: false
-    }
-  }
-
-  componentWillMount() {
+Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'vi' })
+const UserScreen = () => {
+  const [loading, setLoading] = useState(true)
+  const [region, setRegion] = useState(null)
+  const { place, dispatchPlace } = usePlace()
+  const {
+    place: { currentPlace }
+  } = usePlace()
+  const [isMapReady, setIsMapReady] = useState(false)
+  const [marginTop, setMarginTop] = useState(1)
+  const [userLocation, setUserLocation] = useState('')
+  const [regionChangeProgress, setRegionChangeProgress] = useState(false)
+  const [error, setError] = useState(null)
+  const [isModalVisible, togglePlaceModal] = useShowState()
+  const [newAddress, setNewAddress] = useState(null)
+  const mapRef = React.createRef()
+  useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
         const region = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005
         }
-        this.setState({
-          region: region,
-          loading: false,
-          error: null
-        })
+        setRegion(region)
+        fetchAddress(region.latitude, region.longitude)
+
+        setLoading(false)
+        setError(null)
       },
       error => {
-        alert(error)
-        this.setState({
-          error: error.message,
-          loading: false
-        })
+        console.log(error)
+        setError(error.message)
+        setLoading(false)
       },
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 }
+      {
+        enableHighAccuracy: true,
+        showLocationDialog: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
     )
-  }
+  }, [dispatchPlace])
 
-  onMapReady = () => {
-    this.setState({ isMapReady: true, marginTop: 0 })
+  const onMapReady = () => {
+    setIsMapReady(true)
+    // setTimeout(() => map.Mapview.animateToRegion(region), 10)
+    setMarginTop(0)
+    mapRef.current.animateToRegion({
+      latitude: currentPlace.latitude,
+      longitude: currentPlace.longitude,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005
+    })
   }
+  const onPressMap = e => {
+    const { latitude, longitude } = e.nativeEvent.coordinate
+    Geocoder.from({
+      latitude,
+      longitude
+    }).then(res => {
+      const {
+        formatted_address,
+        place_id,
+        geometry: {
+          location: { lat, lng }
+        }
+      } = res.results[0]
+      //setUserLocation(formatted_address)
 
-  // Fetch location details as a JOSN from google map API
-  fetchAddress = () => {
-    fetch(
-      'https://maps.googleapis.com/maps/api/geocode/json?address=' +
-        this.state.region.latitude +
-        ',' +
-        this.state.region.longitude +
-        '&key=' +
-        `${GOOGLE_MAPS_API_KEY}`
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        const userLocation = responseJson.results[0].formatted_address
-        this.setState({
-          userLocation: userLocation,
-          regionChangeProgress: false
-        })
+      dispatchPlace({
+        type: 'SET_CURRENT_PLACE',
+        description: formatted_address,
+        placeId: place_id,
+        latitude: lat,
+        longitude: lng
       })
-    // fetch(`https://geocode.xyz/${this.state.region.latitude},${this.state.region.longitude}?geoit=json`
+    })
+  }
+  // Fetch location details as a JSON from google map API
+  const fetchAddress = (latitude, longitude) => {
+    Geocoder.from({
+      latitude,
+      longitude
+    }).then(res => {
+      const {
+        formatted_address,
+        place_id,
+        geometry: {
+          location: { lat, lng }
+        }
+      } = res.results[0]
+      //setUserLocation(formatted_address)
+
+      dispatchPlace({
+        type: 'SET_CURRENT_PLACE',
+        description: formatted_address,
+        placeId: place_id,
+        latitude: lat,
+        longitude: lng
+      })
+      setRegionChangeProgress(false)
+    })
+    // fetch(`https://geocode.xyz/${region.latitude},${region.longitude}?geoit=json`
     // )
-    //   .then((response) => response.json())
-    //   .then((responseJson) => {
+    // .then((response) => response.json())
+    // .then((responseJson) => {
     //     console.log(responseJson)
     //     let userLocation;
     //     if(responseJson.poi.addr_housenumber !== undefined) {
@@ -91,57 +141,65 @@ export default class UserScreen extends React.Component {
     //       regionChangeProgress: false
     //     });
 
-    //   });
+    // });
   }
 
   // Update state on region change
-  onRegionChange = region => {
-    this.setState(
-      {
-        region,
-        regionChangeProgress: true
-      },
-      () => this.fetchAddress()
-    )
-  }
 
   // Action to be taken after select location button click
-  onLocationSelect = () => alert(this.state.userLocation)
+  const onLocationSelect = () => alert(currentPlace.description)
 
-  render() {
-    if (this.state.loading) {
-      return (
-        <View style={styles.spinnerView}>
-          <ActivityIndicator size='large' color='#0000ff' />
-        </View>
-      )
-    } else {
-      return (
-        <View style={styles.container}>
-          <View style={{ flex: 2 }}>
-            {!!this.state.region.latitude && !!this.state.region.longitude && (
-              <MapView
-                style={{ ...styles.map, marginTop: this.state.marginTop }}
-                initialRegion={this.state.region}
-                showsUserLocation={true}
-                onMapReady={this.onMapReady}
-                onRegionChangeComplete={this.onRegionChange}
-              >
-                <MapView.Marker
-                  coordinate={{
-                    latitude: this.state.region.latitude,
-                    longitude: this.state.region.longitude
-                  }}
-                  title={'Your Location'}
-                  draggable
-                  onPress={() => {
-                    console.log(this.state.region)
-                  }}
-                />
-              </MapView>
-            )}
-          </View>
-          <View style={styles.deatilSection}>
+  if (loading) {
+    return (
+      <View style={styles.spinnerView}>
+        <ActivityIndicator size='large' color='#0000ff' />
+      </View>
+    )
+  } else {
+    return (
+      <View style={styles.container}>
+        <SafeAreaView style={{ flex: 2 }}>
+          {!!region.latitude && !!region.longitude && (
+            <MapView
+              style={{
+                ...styles.map,
+                marginTop: marginTop
+              }}
+              ref={mapRef}
+              // region={{
+              //   latitude: currentPlace?.latitude || region.latitude,
+              //   longitude: currentPlace?.longitude || region.longitude,
+              //   latitudeDelta: 0.01,
+              //   longitudeDelta: 0.01
+              // }}
+              region={{
+                latitude: currentPlace?.latitude || 21.0369,
+                longitude: currentPlace?.longitude || 105.7823,
+                latitudeDelta: 0.005,
+                longitudeDelta: 0.005
+              }}
+              showsUserLocation={true}
+              onMapReady={onMapReady}
+              //onRegionChangeComplete={onRegionChange}
+              onPress={onPressMap}
+              onPoiClick={onPressMap}
+            >
+              <MapView.Marker
+                coordinate={{
+                  latitude: currentPlace?.latitude || 21.0369,
+                  longitude: currentPlace?.longitude || 105.7823
+                }}
+                title={'Vị trí của bạn'}
+                draggable
+                // onPress={() => {
+                //   console.log(region)
+                // }}
+              />
+            </MapView>
+          )}
+        </SafeAreaView>
+        <View style={styles.detailSection}>
+          <View style={{ flexDirection: 'row' }}>
             <Text
               style={{
                 fontSize: 16,
@@ -150,32 +208,53 @@ export default class UserScreen extends React.Component {
                 marginBottom: 20
               }}
             >
-              Move map for location
+              Chọn vị trí trên bản đồ
             </Text>
-            <Text style={{ fontSize: 10, color: '#999' }}>LOCATION</Text>
-            <Text
-              numberOfLines={2}
-              style={{
-                fontSize: 14,
-                paddingVertical: 10,
-                borderBottomColor: 'silver',
-                borderBottomWidth: 0.5
-              }}
+            <TouchableOpacity
+              style={{ marginLeft: 'auto' }}
+              onPress={togglePlaceModal}
             >
-              {!this.state.regionChangeProgress
-                ? this.state.userLocation
-                : 'Identifying Location...'}
-            </Text>
-            <View style={styles.btnContainer}>
-              <Button
-                title='PICK THIS LOCATION'
-                disabled={this.state.regionChangeProgress}
-                onPress={this.onLocationSelect}
-              ></Button>
-            </View>
+              <FeatherIcon name='search' size={20} color='#000' />
+            </TouchableOpacity>
+          </View>
+          <Text
+            style={{
+              fontSize: 10,
+              color: '#999'
+            }}
+          >
+            VỊ TRÍ
+          </Text>
+          <Text
+            numberOfLines={2}
+            style={{
+              fontSize: 14,
+              paddingVertical: 10,
+              borderBottomColor: 'silver',
+              borderBottomWidth: 0.5
+            }}
+          >
+            {!regionChangeProgress
+              ? currentPlace.description
+              : 'Đang lấy vị trí...'}
+          </Text>
+          <View style={styles.btnContainer}>
+            <Button
+              title='Lấy vị trí tại đây'
+              disabled={regionChangeProgress}
+              onPress={onLocationSelect}
+            ></Button>
           </View>
         </View>
-      )
-    }
+        <SearchAddressModal
+          isModalVisible={isModalVisible}
+          toggleModal={togglePlaceModal}
+          newAddress={newAddress}
+          setNewAddress={setNewAddress}
+          currentPlace={userLocation}
+        />
+      </View>
+    )
   }
 }
+export default UserScreen

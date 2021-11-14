@@ -1,19 +1,11 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
-import MapModal from 'components/MapModal'
 import MapScreen from './MapScreen'
+import { PlaceProvider } from '../../context/PlacesManager'
 
-const { Navigator, Screen } = createStackNavigator()
-
-export default function StackMap() {
+export default function Map() {
   return (
-    <Navigator
-      screenOptions={({ route, navigation }) => ({
-        headerShown: false
-      })}
-    >
-      <Screen name='MapScreen' component={MapScreen} />
-      <Screen name='MapModal' component={MapModal} />
-    </Navigator>
+    <PlaceProvider>
+      <MapScreen />
+    </PlaceProvider>
   )
 }

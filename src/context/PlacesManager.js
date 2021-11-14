@@ -1,17 +1,13 @@
-import React from 'react';
+import React from 'react'
 
 export const initialState = {
   currentPlace: {
     description: '',
     placeId: '',
     latitude: '',
-    longitude: '',
-  },
-  destinationPlace: {
-    description: '',
-    placeId: '',
-  },
-};
+    longitude: ''
+  }
+}
 
 export const placeReducer = (prevState, action) => {
   switch (action.type) {
@@ -22,22 +18,22 @@ export const placeReducer = (prevState, action) => {
           description: action.description,
           placeId: action.placeId,
           latitude: action.latitude,
-          longitude: action.longitude,
-        },
-      };
+          longitude: action.longitude
+        }
+      }
   }
-};
+}
 
-export const PlaceContext = React.createContext();
+export const PlaceContext = React.createContext()
 
-export const PlaceProvider = ({children}) => {
-  const [place, dispatchPlace] = React.useReducer(placeReducer, initialState);
+export const PlaceProvider = ({ children }) => {
+  const [place, dispatchPlace] = React.useReducer(placeReducer, initialState)
 
   return (
-    <PlaceContext.Provider value={{place, dispatchPlace}}>
+    <PlaceContext.Provider value={{ place, dispatchPlace }}>
       {children}
     </PlaceContext.Provider>
-  );
-};
+  )
+}
 
-export const usePlace = () => React.useContext(PlaceContext);
+export const usePlace = () => React.useContext(PlaceContext)
