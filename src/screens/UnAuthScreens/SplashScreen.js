@@ -4,7 +4,7 @@ import { IMAGES } from 'assets'
 import PropTypes from 'prop-types'
 import React from 'react'
 import AppIntroSlider from 'react-native-app-intro-slider'
-import { Background, DoneButton, Icon, NextButton, WrapperText } from './styled'
+import { Background, DoneButton, Icon, WrapperText } from './styled'
 
 const slides = [
   {
@@ -47,19 +47,17 @@ export default function SplashScreen({ onDone }) {
   }
   _renderNextButton = () => {
     return (
-      <NextButton
-        accessoryRight={
-          <Icon name='arrow-right' color={colors.primary} size={24} />
-        }
-      >
-        <Text>Tiếp</Text>
-      </NextButton>
+      <DoneButton>
+        <WrapperText style={{ padding: 4 }}>Tiếp</WrapperText>
+        <Icon name='arrow-right' color={colors.primary} size={24} />
+      </DoneButton>
     )
   }
   _renderSkipButton = () => {
     return (
       <DoneButton>
-        <Icon name='external-link' color={colors.primary} size={24} />
+        <WrapperText style={{ padding: 4 }}>Bỏ qua</WrapperText>
+        {/* <Icon name='external-link' color={colors.primary} size={24} /> */}
       </DoneButton>
     )
   }
@@ -79,6 +77,7 @@ export default function SplashScreen({ onDone }) {
       renderDoneButton={_renderDoneButton}
       renderNextButton={_renderNextButton}
       renderSkipButton={_renderSkipButton}
+      showSkipButton={true}
       onDone={onDone}
     />
   )

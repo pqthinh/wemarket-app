@@ -14,6 +14,8 @@ import { ThemeProvider } from 'styled-components'
 import { ThemeContext } from 'stores/theme-context'
 import { store, persistor } from 'stores/store'
 import LoadingAtoms from 'components/LoadingAtoms'
+import { default as themeEva } from 'configs/theme/theme.json'
+import { default as mapping } from 'configs/theme/mapping.json'
 
 LogBox.ignoreLogs([`Setting a timer for a long period`])
 LogBox.ignoreAllLogs()
@@ -40,8 +42,12 @@ const App = props => {
               value={{ theme: theme, toggleTheme: () => toggleTheme() }}
             >
               <LoadingProvider>
-                <ApplicationProvider {...eva} theme={eva[theme]}>
-                  <NavigationContainer theme={themeColors}>
+                <ApplicationProvider
+                  {...eva}
+                  theme={{ ...eva[theme], ...themeEva }}
+                  customMapping={mapping}
+                >
+                  <NavigationContainer>
                     <AppNavigator {...props} />
                   </NavigationContainer>
                 </ApplicationProvider>
