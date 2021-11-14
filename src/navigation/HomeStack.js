@@ -6,13 +6,17 @@ import ProductScreen from 'screens/ProductScreen'
 const { Navigator, Screen } = createStackNavigator()
 
 const HomeStack = () => (
-  <Navigator
-    screenOptions={{
-      headerShown: false
-    }}
-  >
-    <Screen name='HOME' component={HomeScreen} />
-    <Screen name='DETAIL_PRODUCT' component={ProductScreen} />
+  <Navigator>
+    <Screen
+      name='HOME'
+      options={{ title: 'Trang chủ' }}
+      component={HomeScreen}
+    />
+    <Screen
+      name='DETAIL_PRODUCT'
+      options={{ title: 'Chi tiết' }}
+      component={ProductScreen}
+    />
   </Navigator>
 )
 export default HomeStack

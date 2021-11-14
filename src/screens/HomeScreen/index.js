@@ -35,7 +35,7 @@ const HomeScreen = ({}) => {
         }}
       >
         {loadingLoadMore ? (
-          <ActivityIndicator color='black' style={{ margin: 15 }} />
+          <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
         ) : null}
       </View>
     )
@@ -64,15 +64,14 @@ const HomeScreen = ({}) => {
         <WrapperContent
           name={'Sản phẩm mới'}
           horizontal={true}
-          loadMore={true}
           loadMoreAction={() => console.log('Hello world ')}
         >
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
             data={[...Array(10).keys()]}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => <ProductItem style={{ width: 150 }} />}
+            keyExtractor={(_, index) => index.toString()}
+            renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
             ListFooterComponent={renderFooter}
             onEndReached={handleLoadMoreInListProduct}
             onEndReachedThreshold={0.5}
@@ -94,10 +93,19 @@ const HomeScreen = ({}) => {
           />
         </WrapperContent>
 
-        <WrapperContent name={'Sản phẩm được yêu thích'} horizontal={true}>
-          {[...Array(10).keys()].map(_ => {
-            return <ProductItem style={{ width: 150 }} key={_} />
-          })}
+        <WrapperContent name={'Sản phẩm được yêu thích'}>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={listProduct}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <ProductItem style={{ width: 150 }} product={item} />
+            )}
+            ListFooterComponent={renderFooter}
+            onEndReached={handleLoadMoreInListProduct}
+            onEndReachedThreshold={0.5}
+          />
         </WrapperContent>
 
         {/* Get all product */}

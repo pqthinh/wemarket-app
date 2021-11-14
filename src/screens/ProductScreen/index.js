@@ -10,12 +10,7 @@ import {
   View
 } from 'react-native'
 import { SliderBox } from 'react-native-image-slider-box'
-import {
-  AntDesign,
-  Feather,
-  FontAwesome5,
-  Ionicons
-} from 'react-native-vector-icons'
+import { Icon } from './styled'
 
 const ProductScreen = ({ navigation, route }) => {
   const [news, setNews] = useState([])
@@ -36,7 +31,7 @@ const ProductScreen = ({ navigation, route }) => {
       title: <Text style={styles.title}>{news.ten}</Text>,
       headerRight: () => (
         <View style={styles.IconWrapper}>
-          <Feather
+          <Icon
             name='phone-call'
             size={24}
             style={styles.IconWrapper}
@@ -46,7 +41,7 @@ const ProductScreen = ({ navigation, route }) => {
               )
             }
           />
-          <Feather
+          <Icon
             name='more-vertical'
             size={24}
             style={styles.IconWrapper}
@@ -80,15 +75,6 @@ const ProductScreen = ({ navigation, route }) => {
               paddingVertical: 10
             }}
           />
-          <Feather
-            name={'arrow-left'}
-            size={30}
-            color={'#000'}
-            style={{ position: 'absolute', top: 20, left: 5 }}
-            onPress={() => {
-              navigation.goBack()
-            }}
-          />
         </View>
 
         <View style={styles.blockName}>
@@ -103,7 +89,7 @@ const ProductScreen = ({ navigation, route }) => {
           <Text> Địa chỉ: {' ' + withEmpty('diadiem', news)}</Text>
           <View style={styles.function}>
             <View style={styles.IconWrapper}>
-              <Feather
+              <Icon
                 name='shopping-cart'
                 size={24}
                 style={styles.IconWrapper}
@@ -113,7 +99,7 @@ const ProductScreen = ({ navigation, route }) => {
               />
             </View>
             <View>
-              <Feather
+              <Icon
                 name='heart'
                 size={24}
                 style={styles.IconWrapper}
@@ -156,12 +142,6 @@ const ProductScreen = ({ navigation, route }) => {
           }}
           onPress={() => Linking.openURL(`tel: ${news.user.phone}`)}
         >
-          <Ionicons
-            name='ios-call'
-            style={{ paddingRight: 10 }}
-            size={24}
-            color='#000'
-          />
           <Text style={{ color: '#000' }}>Gọi điện</Text>
         </TouchableOpacity>
 
@@ -175,12 +155,6 @@ const ProductScreen = ({ navigation, route }) => {
           }}
           onPress={() => Linking.openURL(`sms: ${news.user.phone}`)}
         >
-          <FontAwesome5
-            name='sms'
-            size={24}
-            color='#aed581'
-            style={{ paddingRight: 10 }}
-          />
           <Text style={{ color: 'black' }}>Nhắn tin</Text>
         </TouchableOpacity>
 
@@ -217,12 +191,6 @@ const ProductScreen = ({ navigation, route }) => {
             ])
           }}
         >
-          <AntDesign
-            name='wechat'
-            style={{ paddingRight: 10 }}
-            size={24}
-            color='#000'
-          />
           <Text style={{ color: '#000' }}>Chat online</Text>
         </TouchableOpacity>
       </View>

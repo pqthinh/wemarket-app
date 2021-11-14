@@ -17,19 +17,21 @@ import {
   TopLikeProduct,
   TrustTag
 } from './styled'
+import { useNavigation } from '@react-navigation/native'
 import 'moment/locale/vi'
 moment.locale('vi')
 
 const ProductItem = ({
-  navigation,
   product = fakeProduct,
   style,
   isTopProduct = true,
   isTopLike = true,
   isReputation = true
 }) => {
+  const navigation = useNavigation()
+
   const handleNavigateToDetail = () => {
-    navigation.navigate('Detail', { product })
+    navigation.navigate('DETAIL_PRODUCT', { product })
   }
 
   return (
