@@ -72,7 +72,10 @@ export const logout = () => async dispatch => {
     dispatch({ type: LOGOUT, payload: res })
     await AsyncStorage.removeItem('@root')
   } catch (error) {
-    console.log(error)
     dispatch({ type: LOGOUT, payload: 'Logout failed' || error.toString() })
   }
+}
+
+export const showAlert = () => async dispatch => {
+  dispatch({ type: SHOW_ALERT, payload: 'Không có quyền truy cập' })
 }

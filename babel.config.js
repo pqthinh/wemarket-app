@@ -7,6 +7,7 @@ module.exports = {
         root: ['./'],
         alias: {
           assets: './src/assets',
+          images: './src/assets/images',
           components: './src/components',
           core: './src/core',
           screens: './src/screens',
@@ -22,7 +23,8 @@ module.exports = {
           theme: './src/configs/theme',
           api: './src/configs/api',
           tab: './src/tab',
-          drawer: './src/drawer'
+          drawer: './src/drawer',
+          context: './src/context'
         }
       }
     ]
