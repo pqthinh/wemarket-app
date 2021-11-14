@@ -67,7 +67,8 @@ export default function BottomTab({}) {
           backgroundColor: '#EB5757',
           color: '#FFFFFF',
           fontSize: 12
-        }
+        },
+        headerShown: false
       }}
     >
       <Tab.Screen
