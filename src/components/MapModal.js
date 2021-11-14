@@ -26,7 +26,9 @@ export default MapModal = props => {
     >
       <View style={styles.Container}>
         <View style={styles.Row}>
-          <Text style={styles.TextBold}>{props.product.name}</Text>
+          <Text numberOfLines={1} style={styles.TextBold}>
+            {props.product.name}
+          </Text>
         </View>
         <View style={styles.Row}>
           <Image
@@ -54,7 +56,9 @@ export default MapModal = props => {
             </View>
             <View style={styles.info_row}>
               <FeatherIcon name='user' size={20} color='gray' />
-              <Text style={styles.text_name}>{props.product.name_user}</Text>
+              <Text numberOfLines={1} style={styles.text_name}>
+                {props.product.name_user}
+              </Text>
             </View>
             <View style={styles.info_row}>
               <FeatherIcon name='star' size={20} color='gray' />
