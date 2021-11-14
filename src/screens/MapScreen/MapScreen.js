@@ -9,17 +9,18 @@ import {
 import Geolocation from 'react-native-geolocation-service'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import ic_phone from 'assets/images/ic_phone.png'
-import MapModal from 'components/MapModal'
-import SettingModal from 'components/SettingModal'
-import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
+import MapModal from '../../components/MapModal'
+import SettingModal from '../../components/SettingModal'
+import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
 import products from './data'
-const MapScreen = ({ navigation }) => {
-  const [location, setLocation] = useState(null)
+const MapScreen = () => {
+  const [location, setLocation] = useState({
+    latitude: 21.0369,
+    longitude: 105.7823
+  })
   const { set, get } = useCache
-  // const [zoom, setZoom] = useState('')
+
   const [modalVisible, setModalVisible] = useState(false)
   const [modalVisible2, setModalVisible2] = useState(false)
   const [product, setProduct] = useState({
@@ -32,8 +33,8 @@ const MapScreen = ({ navigation }) => {
   })
   const [radius, setRadius] = useState(1)
   const [region, setRegion] = useState({
-    latitude: location?.latitude || 21.0369,
-    longitude: location?.longitude || 105.7823,
+    latitude: location.latitude,
+    longitude: location.longitude,
     latitudeDelta: (Math.PI * radius) / 111.045,
     longitudeDelta: 0.01
   })
@@ -42,40 +43,7 @@ const MapScreen = ({ navigation }) => {
     longitude: null
   })
   const [openDirection, setOpenDirection] = useState(false)
-  const handleLocationPermission = async () => {
-    let permissionCheck = ''
-    if (Platform.OS === 'ios') {
-      permissionCheck = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
 
-      if (
-        permissionCheck === RESULTS.BLOCKED ||
-        permissionCheck === RESULTS.DENIED
-      ) {
-        const permissionRequest = await request(
-          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
-        )
-        permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
-      }
-    }
-
-    if (Platform.OS === 'android') {
-      permissionCheck = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
-
-      if (
-        permissionCheck === RESULTS.BLOCKED ||
-        permissionCheck === RESULTS.DENIED
-      ) {
-        const permissionRequest = await request(
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
-        )
-        permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
-      }
-    }
-  }
   const close = () => {
     setModalVisible(false)
   }
@@ -85,9 +53,7 @@ const MapScreen = ({ navigation }) => {
   useEffect(async () => {
     setRadius(await get('save_radius'))
   }, [])
-  useEffect(() => {
-    handleLocationPermission()
-  }, [])
+
   useMemo(() => {
     setRegion(prevState => ({
       ...prevState,
@@ -100,6 +66,11 @@ const MapScreen = ({ navigation }) => {
         console.log(position)
         const { latitude, longitude } = position.coords
         setLocation({ latitude, longitude })
+        setRegion(prevState => ({
+          ...prevState,
+          latitude: latitude,
+          longitude: longitude
+        }))
       },
       error => {
         console.log(error.code, error.message)
@@ -133,8 +104,6 @@ const MapScreen = ({ navigation }) => {
         showsBuildings={true}
         maxZoomLevel={17.5}
         loadingEnabled={true}
-        loadingIndicatorColor='#fcb103'
-        loadingBackgroundColor='#242f3e'
       >
         {products.map((host, i) => {
           if (host.place.latitude && host.place.longitude) {
@@ -145,7 +114,9 @@ const MapScreen = ({ navigation }) => {
                   latitude: host.place.latitude,
                   longitude: host.place.longitude
                 }}
-                image={ic_phone}
+                image={{
+                  uri: 'https://i.ibb.co/6DxQH3t/ic-phone.png'
+                }}
                 title={host.name_product}
                 pinColor={'#ffd1dc'}
                 onPress={() => {
