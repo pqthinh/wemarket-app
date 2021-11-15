@@ -135,12 +135,13 @@ const MapScreen = () => {
           style={styles.map}
           provider={PROVIDER_GOOGLE}
           region={region}
-          // zoomControlEnabled={true}
-          // zoomEnabled={true}
-          // zoomTapEnabled={true}
+          zoomControlEnabled={true}
+          zoomEnabled={true}
+          zoomTapEnabled={true}
           showsUserLocation={true}
           // customMapStyle={customStyleMap}
-          //maxZoomLevel={17.5}
+          maxZoomLevel={17.5}
+          enableHighAccuracy={false}
         >
           {products.map((host, i) => {
             if (host.place.latitude && host.place.longitude) {
@@ -152,7 +153,7 @@ const MapScreen = () => {
                     longitude: host.place.longitude
                   }}
                   image={{
-                    uri: 'https://i.ibb.co/6DxQH3t/ic-phone.png'
+                    uri: host.icon
                   }}
                   title={host.name_product}
                   pinColor={'#ffd1dc'}
