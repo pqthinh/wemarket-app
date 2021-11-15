@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
+// import { useNavigation } from '@react-navigation/native'
 import Geolocation from 'react-native-geolocation-service'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
@@ -18,6 +19,9 @@ import SettingModal from '../../components/SettingModal'
 import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
 import products from './data'
 const MapScreen = () => {
+  // const navigation = useNavigation()
+  // navigation.setOptions({ tabBarVisible: false })
+
   const [loading, setLoading] = useState(true)
   const [location, setLocation] = useState({
     latitude: 21.0369,
