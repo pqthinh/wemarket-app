@@ -1,13 +1,18 @@
+import { getListProduct } from 'actions/homeActions'
 import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
-import SliderImage from 'components/SliderImage'
 import WrapperContent from 'components/WrapperContent'
-import React, { useEffect, useState, useCallback } from 'react'
-import { SafeAreaView, ScrollView } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { getListProduct } from 'actions/homeActions'
 import { withArray, withBoolean, withNumber } from 'exp-value'
-import { View, ActivityIndicator, FlatList } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text
+} from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
