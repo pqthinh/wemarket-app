@@ -57,7 +57,7 @@ const HomeScreen = ({}) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        <SliderImage />
+        {/* <SliderImage /> */}
 
         <Category />
 
