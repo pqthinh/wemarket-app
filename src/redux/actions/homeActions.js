@@ -25,11 +25,11 @@ export const getTopViewProduct = params => async dispatch => {
 export const getListProduct = params => async dispatch => {
   try {
     dispatch({ type: GET_LIST_PRODUCT_REQUEST })
-    const res = await axios.get(GET_LIST_PRODUCT, { params })
-
-    if (res && res.data && res.data.result)
+    const res = await axios.get(GET_LIST_PRODUCT, params)
+    if (res && res.data && res.data.result) {
       dispatch({ type: GET_LIST_PRODUCT_SUCCESS, payload: res.data })
-    else
+      console.log(params)
+    } else
       dispatch({ type: GET_LIST_PRODUCT_FAILED, payload: 'Có lỗi xuất hiện' })
   } catch (error) {
     console.log(error)
