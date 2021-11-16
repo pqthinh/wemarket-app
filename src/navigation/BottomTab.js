@@ -93,8 +93,8 @@ export default function BottomTab({}) {
         }}
       />
       <Tab.Screen
-        name='Post'
-        component={Test}
+        name='MapSelect'
+        component={MapSelect}
         options={{
           tabBarLabel: 'Đăng bài',
           tabBarIcon: ({ color }) => <IconPostNews color={color} />

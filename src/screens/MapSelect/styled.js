@@ -1,10 +1,10 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native'
 
 export default styles = StyleSheet.create({
   container: {
-    display: "flex",
-    height: Dimensions.get("screen").height,
-    width: Dimensions.get("screen").width
+    display: 'flex',
+    height: Dimensions.get('screen').height,
+    width: Dimensions.get('screen').width
   },
   map: {
     flex: 1
@@ -16,24 +16,24 @@ export default styles = StyleSheet.create({
   },
   mapMarker: {
     fontSize: 40,
-    color: "red"
+    color: 'red'
   },
-  deatilSection: {
+  detailSection: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 10,
-    display: "flex",
-    justifyContent: "flex-start"
+    display: 'flex',
+    justifyContent: 'flex-start'
   },
   spinnerView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   btnContainer: {
-    width: Dimensions.get("window").width - 20,
-    position: "absolute",
+    width: Dimensions.get('window').width - 20,
+    position: 'absolute',
     bottom: 100,
     left: 10
   }
-});
+})
