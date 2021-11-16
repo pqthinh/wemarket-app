@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   },
   BookNowButton: {
     alignItems: 'center',
-    backgroundColor: '#1260DB',
+    backgroundColor: '#197CFF',
     padding: 10,
     borderRadius: 20,
     marginLeft: 'auto',
