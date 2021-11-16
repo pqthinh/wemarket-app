@@ -1,5 +1,5 @@
 import useCache from 'hooks/useCache'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -20,7 +20,7 @@ import SettingModal from '../../components/SettingModal'
 import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
 
 // import products from './data'
-import { getViewProductMap } from '../../redux/actions/mapActions'
+import { getViewProductMap } from 'actions/mapActions'
 const MapScreen = () => {
   const dispatch = useDispatch()
   const listProductReducer = useSelector(state => {
@@ -134,7 +134,15 @@ const MapScreen = () => {
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     )
   }, [])
-
+  // useEffect(() => {
+  //   dispatch(
+  //     getViewProductMap({
+  //       lat: location.latitude,
+  //       lng: location.longitude,
+  //       distance: radius
+  //     })
+  //   )
+  // }, [])
   useEffect(() => {
     if (
       listProductReducer.listViewProductMap.result &&
@@ -142,21 +150,19 @@ const MapScreen = () => {
     ) {
       setListProduct(listProductReducer.listViewProductMap.result)
     }
-    console.log(
-      'list product map state',
-      listProductReducer.listViewProductMap.result
-    )
+    console.log('list product map state', listProductReducer)
   }, [listProductReducer])
-  useEffect(() => {
-    dispatch(
-      getViewProductMap({
-        lat: location.latitude,
-        lng: location.longitude,
-        distance: radius
-      })
-    )
-  }, [radius])
-
+  const dispatchSettingMap = useCallback(
+    getRadius =>
+      dispatch(
+        getViewProductMap({
+          lat: location.latitude,
+          lng: location.longitude,
+          distance: getRadius
+        })
+      ),
+    [dispatch]
+  )
   if (loading) {
     return (
       <View style={styles.spinnerView}>
@@ -261,6 +267,7 @@ const MapScreen = () => {
           close={close_2}
           sliderValue={radius}
           setSliderValue={setRadius}
+          settingMap={dispatchSettingMap}
         />
         {/* )} */}
       </SafeAreaView>
@@ -302,4 +309,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MapScreen
+export default React.memo(MapScreen)
