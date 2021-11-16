@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-// import { useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+
 import Geolocation from 'react-native-geolocation-service'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
@@ -17,10 +18,16 @@ import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import MapModal from '../../components/MapModal'
 import SettingModal from '../../components/SettingModal'
 import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
-import products from './data'
+
+// import products from './data'
+import { getViewProductMap } from '../../redux/actions/mapActions'
 const MapScreen = () => {
-  // const navigation = useNavigation()
-  // navigation.setOptions({ tabBarVisible: false })
+  const dispatch = useDispatch()
+  const listProductReducer = useSelector(state => {
+    return state.listProductMapFilter
+  })
+
+  const [listProduct, setListProduct] = useState([])
 
   const [loading, setLoading] = useState(true)
   const [location, setLocation] = useState({
@@ -91,9 +98,11 @@ const MapScreen = () => {
   const close_2 = () => {
     setModalVisible2(false)
   }
+
   useEffect(() => {
     handleLocationPermission()
   }, [])
+
   useEffect(async () => {
     setRadius((await get('save_radius')) || 1)
   }, [])
@@ -104,6 +113,7 @@ const MapScreen = () => {
       latitudeDelta: (Math.PI * radius) / 111.045
     }))
   }, [radius])
+
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
@@ -124,6 +134,29 @@ const MapScreen = () => {
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     )
   }, [])
+
+  useEffect(() => {
+    if (
+      listProductReducer.listViewProductMap.result &&
+      listProductReducer.listViewProductMap.result.length
+    ) {
+      setListProduct(listProductReducer.listViewProductMap.result)
+    }
+    console.log(
+      'list product map state',
+      listProductReducer.listViewProductMap.result
+    )
+  }, [listProductReducer])
+  useEffect(() => {
+    dispatch(
+      getViewProductMap({
+        lat: location.latitude,
+        lng: location.longitude,
+        distance: radius
+      })
+    )
+  }, [radius])
+
   if (loading) {
     return (
       <View style={styles.spinnerView}>
@@ -147,39 +180,39 @@ const MapScreen = () => {
           maxZoomLevel={17.5}
           enableHighAccuracy={false}
         >
-          {products.map((host, i) => {
-            if (host.place.latitude && host.place.longitude) {
+          {listProduct.map((host, i) => {
+            if (parseFloat(host.lat) && parseFloat(host.lng)) {
               return (
                 <Marker
                   key={i}
                   coordinate={{
-                    latitude: host.place.latitude,
-                    longitude: host.place.longitude
+                    latitude: parseFloat(host.lat),
+                    longitude: parseFloat(host.lng)
                   }}
                   image={{
-                    uri: host.icon
+                    uri: host.iconCategory
                   }}
-                  title={host.name_product}
+                  title={host.name}
                   pinColor={'#ffd1dc'}
                   onPress={() => {
                     setModalVisible(true)
                     setProduct({
-                      place: host.place.name,
-                      name: host.name_product,
-                      image: host.product_images[0],
-                      name_user: host.name_user,
-                      star: host.star,
+                      place: host.address,
+                      name: host.name,
+                      image: host.image,
+                      name_user: host.username,
+                      //star: host.star,
                       price: host.price
                     })
                     setModalVisible2(false)
                     setCoordinate({
-                      latitude: host.place.latitude,
-                      longitude: host.place.longitude
+                      latitude: parseFloat(host.lat),
+                      longitude: parseFloat(host.lng)
                     })
                     setRegion(prevState => ({
                       ...prevState,
-                      latitude: host.place.latitude,
-                      longitude: host.place.longitude
+                      latitude: parseFloat(host.lat),
+                      longitude: parseFloat(host.lng)
                     }))
                     setOpenDirection(false)
                   }}

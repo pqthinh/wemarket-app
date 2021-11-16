@@ -1,13 +1,14 @@
 import Geolocation from 'react-native-geolocation-service'
 import React, { useEffect, useState } from 'react'
 import {
+  Alert,
   ActivityIndicator,
   Button,
-  Text,
   TouchableOpacity,
   View,
   SafeAreaView
 } from 'react-native'
+import { Radio, Text } from '@ui-kitten/components'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import MapView from 'react-native-maps'
 import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
@@ -147,7 +148,7 @@ const UserScreen = () => {
   // Update state on region change
 
   // Action to be taken after select location button click
-  const onLocationSelect = () => alert(currentPlace.description)
+  const onLocationSelect = () => Alert.alert(currentPlace.description)
 
   if (loading) {
     return (

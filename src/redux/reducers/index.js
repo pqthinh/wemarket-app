@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux'
 import UserReducers from './UserReducers'
 import { listTopViewProduct, listProduct } from './HomeReducers'
+import { listProductMapFilter } from './MapReducers'
 
 const appReducer = combineReducers({
   userState: UserReducers,
   listTopViewProduct,
-  listProduct
+  listProduct,
+  listProductMapFilter
 })
 
 const rootReducer = (state, action) => {

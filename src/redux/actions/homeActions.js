@@ -26,7 +26,7 @@ export const getListProduct = params => async dispatch => {
   try {
     dispatch({ type: GET_LIST_PRODUCT_REQUEST })
     const res = await axios.get(GET_LIST_PRODUCT, { params })
-    console.log(res.data)
+
     if (res && res.data && res.data.result)
       dispatch({ type: GET_LIST_PRODUCT_SUCCESS, payload: res.data })
     else
