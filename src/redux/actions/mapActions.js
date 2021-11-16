@@ -9,8 +9,8 @@ import axios from 'configs/api/baseUrl'
 export const getViewProductMap = params => async dispatch => {
   try {
     dispatch({ type: FILTER_PRODUCT_REQUEST })
+    const res = await axios.post(FILTER_LIST_PRODUCT, params)
     console.log(params, 'params')
-    const res = await axios.post(FILTER_LIST_PRODUCT, { params })
     console.log(res.data.length)
     if (res && res.data)
       dispatch({ type: FILTER_PRODUCT_SUCCESS, payload: res.data })

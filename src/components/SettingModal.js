@@ -26,8 +26,9 @@ export default SettingModal = props => {
   const [free, setFree] = useState(false)
   const [device, setDevice] = useState(false)
   const saveRadius = async () => {
-    await set('save_radius', props?.sliderValue || 1)
+    const getRadius = await set('save_radius', props?.sliderValue || 1)
     props.close()
+    props.settingMap(props.sliderValue)
   }
   const getRadius = async () => {
     props.setSliderValue(await get('save_radius'))
