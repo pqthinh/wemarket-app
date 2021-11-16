@@ -19,7 +19,7 @@ export default styles = StyleSheet.create({
     color: 'red'
   },
   detailSection: {
-    flex: 1,
+    flex: 1.5,
     backgroundColor: '#fff',
     padding: 10,
     display: 'flex',
@@ -31,9 +31,20 @@ export default styles = StyleSheet.create({
     alignItems: 'center'
   },
   btnContainer: {
-    width: Dimensions.get('window').width - 20,
+    width: Dimensions.get('window').width - 30,
     position: 'absolute',
-    bottom: 100,
-    left: 10
+    bottom: 145,
+    borderRadius: 20,
+    backgroundColor: '#197CFF',
+    marginLeft: 'auto',
+    height: '12%',
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },
+  ButtonText: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'center'
   }
 })
