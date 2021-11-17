@@ -12,7 +12,7 @@ import axios from 'configs/api/baseUrl'
 export const getTopViewProduct = params => async dispatch => {
   try {
     dispatch({ type: GET_PRODUCT_TOP_REQUEST })
-    const res = await axios.get(GET_LIST_PRODUCT, { params })
+    const res = await axios.get(GET_LIST_PRODUCT, params)
     if (res && res.data)
       dispatch({ type: GET_PRODUCT_TOP_SUCCESS, payload: res.data })
     else dispatch({ type: GET_PRODUCT_TOP_FAILED, payload: 'Có lỗi xuất hiện' })

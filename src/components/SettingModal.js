@@ -8,27 +8,39 @@ import {
   ScrollView,
   Image
 } from 'react-native'
+import { category } from '../utils/map/category'
 import { Radio, Text } from '@ui-kitten/components'
 import Modal from 'react-native-modal'
 export default SettingModal = props => {
   const { set, get } = useCache
-  const [electric, setElectric] = useState(false)
-  const [car, setCar] = useState(false)
-  const [land, setLand] = useState(false)
-  const [fashion, setFashion] = useState(false)
-  const [book, setBook] = useState(false)
-  const [furniture, setFurniture] = useState(false)
-  const [office, setOffice] = useState(false)
-  const [pet, setPet] = useState(false)
-  const [baby, setBaby] = useState(false)
-  const [sport, setSport] = useState(false)
-  const [work, setWork] = useState(false)
-  const [free, setFree] = useState(false)
-  const [device, setDevice] = useState(false)
+
+  const [categoryId, setCategoryId] = useState({
+    electric: false,
+    device: false,
+    car: false,
+    furniture: false,
+    office: false,
+    fashion: false,
+    book: false,
+    pet: false,
+    sport: false,
+    baby: false,
+    work: false,
+    land: false,
+    free: false
+  })
+
   const saveRadius = async () => {
-    const getRadius = await set('save_radius', props?.sliderValue || 1)
+    await set('save_radius', props?.sliderValue || 1)
     props.close()
-    props.settingMap(props.sliderValue)
+    console.log(categoryId, 'categoryId')
+    const listCategory = Object.entries(categoryId)
+      .filter(e => e[1])
+      .map(e => {
+        return category.filter(c => c.type === e[0])[0].id
+      })
+    console.log(listCategory)
+    props.settingMap(props.sliderValue, listCategory)
   }
   const getRadius = async () => {
     props.setSliderValue(await get('save_radius'))
@@ -55,189 +67,29 @@ export default SettingModal = props => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
           >
-            <View style={styles.icon}>
-              <Radio
-                checked={electric}
-                onChange={nextChecked => setElectric(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/6DxQH3t/ic-phone.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Điện tử</Text>
+            {category.map((item, i) => {
+              return (
+                <View style={styles.icon} key={i}>
+                  <Radio
+                    checked={categoryId[item.type]}
+                    onChange={nextChecked =>
+                      setCategoryId(prevState => ({
+                        ...prevState,
+                        [item.type]: nextChecked
+                      }))
+                    }
+                  >
+                    <View style={{ justifyContent: 'column' }}>
+                      <Image
+                        source={{ uri: item.icon }}
+                        style={{ width: 40, height: 40 }}
+                      />
+                      <Text style={styles.categoryName}>{item.name}</Text>
+                    </View>
+                  </Radio>
                 </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={device}
-                onChange={nextChecked => setDevice(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/HnQfd2y/ic-kitchen.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Thiết bị</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={car}
-                onChange={nextChecked => setCar(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/mtTmRD0/ic-car.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Xe cộ & phụ tùng</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={furniture}
-                onChange={nextChecked => setFurniture(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/n7XZD7z/ic-seat.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Nội thất</Text>
-                </View>
-              </Radio>
-            </View>
-
-            <View style={styles.icon}>
-              <Radio
-                checked={office}
-                onChange={nextChecked => setOffice(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/fn0bKkd/ic-print.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Văn phòng</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={fashion}
-                onChange={nextChecked => setFashion(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/sFcG9mV/ic-fashion.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Quần áo & phụ kiện</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={book}
-                onChange={nextChecked => setBook(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/L6dx79J/ic-book.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Sách, phim & nhạc</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={pet}
-                onChange={nextChecked => setPet(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/XSJcjXh/ic-pet.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Thú cưng</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={sport}
-                onChange={nextChecked => setSport(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/V3q4gfg/ic-sport.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Đồ chơi & thể thao</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={baby}
-                onChange={nextChecked => setBaby(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/fXsHb7Z/ic-baby.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Mẹ & bé</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={land}
-                onChange={nextChecked => setLand(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/Kh6s34s/ic-house.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Nhà đất</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={work}
-                onChange={nextChecked => setWork(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/sPnTPDM/ic-work.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Việc làm</Text>
-                </View>
-              </Radio>
-            </View>
-            <View style={styles.icon}>
-              <Radio
-                checked={free}
-                onChange={nextChecked => setFree(nextChecked)}
-              >
-                <View style={{ justifyContent: 'column' }}>
-                  <Image
-                    source={{ uri: 'https://i.ibb.co/tzRVhCk/ic-free.png' }}
-                    style={{ width: 40, height: 40 }}
-                  />
-                  <Text style={styles.categoryName}>Cho tặng</Text>
-                </View>
-              </Radio>
-            </View>
+              )
+            })}
           </ScrollView>
         </View>
         <View style={{ flex: 1 }}>
