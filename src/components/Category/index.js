@@ -13,7 +13,7 @@ const Category = ({ navigation }) => {
   const [categories, setCategories] = useState([])
 
   useEffect(() => {
-    let newsList = require('constants/category.json')
+    let newsList = require('utils/map/category.json')
     setCategories(newsList)
   }, [])
 
