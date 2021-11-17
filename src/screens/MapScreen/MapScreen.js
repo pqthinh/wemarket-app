@@ -152,13 +152,24 @@ const MapScreen = () => {
     }
     console.log('list product map state', listProductReducer)
   }, [listProductReducer])
+  useEffect(async () => {
+    const distance = (await get('save_radius')) || 1
+    dispatch(
+      getViewProductMap({
+        lat: location.latitude,
+        lng: location.longitude,
+        distance: distance
+      })
+    )
+  }, [])
   const dispatchSettingMap = useCallback(
-    getRadius =>
+    (getRadius, categoryId) =>
       dispatch(
         getViewProductMap({
           lat: location.latitude,
           lng: location.longitude,
-          distance: getRadius
+          distance: getRadius,
+          categoryId: categoryId
         })
       ),
     [dispatch]
