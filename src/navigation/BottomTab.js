@@ -1,65 +1,68 @@
 import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import HomeStack from './HomeStack'
 import { DetailsScreen } from 'screens/DetailsScreen'
-import StackMap from 'screens/MapScreen'
+import Map from 'screens/MapScreen'
 import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import MapSelect from 'screens/MapSelect'
+import {
+  BottomNavigation,
+  BottomNavigationTab,
+  Icon,
+  Layout,
+  Text
+} from '@ui-kitten/components'
+const { Navigator, Screen } = createBottomTabNavigator()
 
-const { Navigator, Screen } = createStackNavigator()
-const Tab = createBottomTabNavigator()
-
-function AuthScreens() {
-  return (
-    <Navigator
-      screenOptions={({ route, navigation }) => ({
-        headerShown: false
-      })}
-    >
-      <Screen name={HOME_SCREEN} component={HomeStack} />
-      <Screen name='Details' component={DetailsScreen} />
-      <Screen name='Map' component={MapSelect} />
-      <Screen name='MapSelect' component={MapSelect} />
-      <Screen name='Maps' component={StackMap} />
-    </Navigator>
-  )
-}
-
-const IconPostNews = ({ color }) => {
-  return (
-    <View
-      style={{
+const HomeIcon = props => <Icon {...props} name='home' pack='material' />
+const MapIcon = props => <Icon {...props} name='map' pack='material' />
+const MessageIcon = props => (
+  <Icon {...props} name='question-answer' pack='material' />
+)
+const ProfileIcon = props => <Icon {...props} name='person' pack='material' />
+const IconPostNews = props => (
+  <Icon
+    {...props}
+    name='add-circle'
+    style={[
+      props.style,
+      {
         position: 'absolute',
-        bottom: -10,
+        bottom: -20,
         height: 60,
         width: 60,
         borderRadius: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
+        //justifyContent: 'center',
+        //alignItems: 'center',
+        alignSelf: 'center',
         backgroundColor: '#F2F3F7'
-      }}
-    >
-      <MaterialCommunityIcons
-        name='dolly'
-        color='#E26740'
-        size={50}
-        style={{ flex: 1, alignItems: 'center' }}
-      />
-    </View>
-  )
-}
+      }
+    ]}
+    pack='material'
+  />
+)
 
 function Test() {
   return <Text>Test</Text>
 }
-
+const BottomTabBar = ({ navigation, state }) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={index => navigation.navigate(state.routeNames[index])}
+  >
+    <BottomNavigationTab title='Trang chủ' icon={HomeIcon} />
+    <BottomNavigationTab title='Bản đồ' icon={MapIcon} />
+    <BottomNavigationTab icon={IconPostNews} />
+    <BottomNavigationTab title='Tin nhắn' icon={MessageIcon} />
+    <BottomNavigationTab title='Trang cá nhân' icon={ProfileIcon} />
+  </BottomNavigation>
+)
 export default function BottomTab({}) {
   return (
-    <Tab.Navigator
-      initialRouteName='Home'
+    <Navigator
+      initialRouteName={HOME_SCREEN}
       appearance='noIndicator'
       screenOptions={{
         tabBarActiveTintColor: '#E26740',
@@ -70,57 +73,13 @@ export default function BottomTab({}) {
         },
         headerShown: false
       }}
+      tabBar={props => <BottomTabBar {...props} />}
     >
-      <Tab.Screen
-        name='Home'
-        component={AuthScreens}
-        options={{
-          tabBarLabel: 'Trang chủ',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='home' color={color} size={26} />
-          )
-        }}
-      />
-      <Tab.Screen
-        name='Map'
-        component={StackMap}
-        options={{
-          tabBarLabel: 'Bản đồ',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='bell' color={color} size={26} />
-          ),
-          tabBarBadge: 3
-        }}
-      />
-      <Tab.Screen
-        name='MapSelect'
-        component={MapSelect}
-        options={{
-          tabBarLabel: 'Đăng bài',
-          tabBarIcon: ({ color }) => <IconPostNews color={color} />
-        }}
-      />
-      <Tab.Screen
-        name='Card'
-        component={Test}
-        options={{
-          tabBarLabel: 'Giỏ hàng',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='shopping' color={color} size={26} />
-          ),
-          tabBarBadge: 3
-        }}
-      />
-      <Tab.Screen
-        name='Profile'
-        component={Test}
-        options={{
-          tabBarLabel: 'Trang cá nhân',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name='account' color={color} size={26} />
-          )
-        }}
-      />
-    </Tab.Navigator>
+      <Screen name={HOME_SCREEN} component={HomeStack} />
+      <Screen name='Map' component={Map} />
+      <Screen name='MapSelect' component={MapSelect} />
+      <Screen name='Card' component={Test} />
+      <Screen name='Profile' component={Test} />
+    </Navigator>
   )
 }
