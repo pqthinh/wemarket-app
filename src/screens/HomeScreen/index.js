@@ -12,6 +12,7 @@ import {
   View,
   Text
 } from 'react-native'
+import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 
 const HomeScreen = ({}) => {
@@ -61,74 +62,79 @@ const HomeScreen = ({}) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView>
-        {/* <SliderImage /> */}
+      <Divider />
+      <Layout
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
+        <ScrollView>
+          {/* <SliderImage /> */}
 
-        <Category />
+          <Category />
 
-        <WrapperContent
-          name={'Sản phẩm mới'}
-          horizontal={true}
-          loadMoreAction={() => console.log('Hello world ')}
-        >
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={[...Array(10).keys()]}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
+          <WrapperContent
+            name={'Sản phẩm mới'}
+            horizontal={true}
+            loadMoreAction={() => console.log('Hello world ')}
+          >
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={[...Array(10).keys()]}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
 
-        <WrapperContent name={'Top tìm kiếm'}>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={listProduct}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <ProductItem style={{ width: 150 }} product={item} />
-            )}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
+          <WrapperContent name={'Top tìm kiếm'}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={listProduct}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <ProductItem style={{ width: 150 }} product={item} />
+              )}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
 
-        <WrapperContent name={'Sản phẩm được yêu thích'}>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={listProduct}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <ProductItem style={{ width: 150 }} product={item} />
-            )}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
+          <WrapperContent name={'Sản phẩm được yêu thích'}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={listProduct}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <ProductItem style={{ width: 150 }} product={item} />
+              )}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
 
-        {/* Get all product */}
-        <WrapperContent
-          name={'Gợi ý hôm nay'}
-          stickyHeaderHiddenOnScroll={true}
-        >
-          <FlatList
-            numColumns={2}
-            data={listProduct}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => <ProductItem product={item} />}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
-      </ScrollView>
+          {/* Get all product */}
+          <WrapperContent
+            name={'Gợi ý hôm nay'}
+            stickyHeaderHiddenOnScroll={true}
+          >
+            <FlatList
+              numColumns={2}
+              data={listProduct}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => <ProductItem product={item} />}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
+        </ScrollView>
+      </Layout>
     </SafeAreaView>
   )
 }
