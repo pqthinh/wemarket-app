@@ -2,6 +2,7 @@ import { getListProduct } from 'actions/homeActions'
 import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
 import WrapperContent from 'components/WrapperContent'
+import SliderImage from 'components/SliderImage'
 import { withArray, withBoolean, withNumber } from 'exp-value'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
@@ -9,11 +10,12 @@ import {
   FlatList,
   SafeAreaView,
   ScrollView,
-  View,
-  Text
+  View
 } from 'react-native'
-import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components'
+
+import { Divider } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
+import { ScreenContainer } from './styled'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
@@ -63,11 +65,11 @@ const HomeScreen = ({}) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Divider />
-      <Layout
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-      >
+      <ScreenContainer>
         <ScrollView>
-          {/* <SliderImage /> */}
+          <SafeAreaView>
+            <SliderImage />
+          </SafeAreaView>
 
           <Category />
 
@@ -93,7 +95,7 @@ const HomeScreen = ({}) => {
               horizontal
               showsHorizontalScrollIndicator={false}
               data={listProduct}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
                 <ProductItem style={{ width: 150 }} product={item} />
               )}
@@ -108,7 +110,7 @@ const HomeScreen = ({}) => {
               horizontal
               showsHorizontalScrollIndicator={false}
               data={listProduct}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
                 <ProductItem style={{ width: 150 }} product={item} />
               )}
@@ -126,7 +128,7 @@ const HomeScreen = ({}) => {
             <FlatList
               numColumns={2}
               data={listProduct}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => <ProductItem product={item} />}
               ListFooterComponent={renderFooter}
               onEndReached={handleLoadMoreInListProduct}
@@ -134,7 +136,7 @@ const HomeScreen = ({}) => {
             />
           </WrapperContent>
         </ScrollView>
-      </Layout>
+      </ScreenContainer>
     </SafeAreaView>
   )
 }

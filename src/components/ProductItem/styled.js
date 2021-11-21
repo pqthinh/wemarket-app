@@ -30,6 +30,7 @@ export const ImageProduct = styled.Image`
 export const NameProduct = styled(Text)`
   font-size: 16px;
   font-weight: 700;
+  height: 40px;
 `
 
 export const Price = styled(NumberFormatComponent)`

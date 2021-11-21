@@ -9,7 +9,7 @@ import {
 
 const Loading = ({ loading }) => {
   return (
-    <Modal animationType='slide' transparent={true} visible={loading}>
+    <Modal animationType='slide' transparent={false} visible={loading}>
       <View style={styles.modalView}>
         <ActivityIndicator size='large' color='#E26740' />
       </View>
@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
     left: Dimensions.get('screen').width / 2 - 50,
     width: 100,
     height: 100,
-    backgroundColor: 'white',
+    backgroundColor: '#F2F3F7',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: '#f0f0f0',
     shadowOffset: {
       width: 0,
       height: 2
