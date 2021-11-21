@@ -15,12 +15,12 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
-import MapModal from '../../components/MapModal'
-import SettingModal from '../../components/SettingModal'
-import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
-
-// import products from './data'
+import MapModal from 'components/MapModal'
+import SettingModal from 'components/SettingModal'
+import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
+import { withArray } from 'exp-value'
 import { getViewProductMap } from 'actions/mapActions'
+
 const MapScreen = () => {
   const dispatch = useDispatch()
   const listProductReducer = useSelector(state => {
@@ -134,24 +134,13 @@ const MapScreen = () => {
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     )
   }, [])
-  // useEffect(() => {
-  //   dispatch(
-  //     getViewProductMap({
-  //       lat: location.latitude,
-  //       lng: location.longitude,
-  //       distance: radius
-  //     })
-  //   )
-  // }, [])
+
   useEffect(() => {
-    if (
-      listProductReducer.listViewProductMap.result &&
-      listProductReducer.listViewProductMap.result.length
-    ) {
-      setListProduct(listProductReducer.listViewProductMap.result)
+    if (listProductReducer) {
+      setListProduct(withArray('listViewProductMap.result', listProductReducer))
     }
-    console.log('list product map state', listProductReducer)
   }, [listProductReducer])
+
   useEffect(async () => {
     const distance = (await get('save_radius')) || 1
     dispatch(
@@ -162,6 +151,7 @@ const MapScreen = () => {
       })
     )
   }, [])
+
   const dispatchSettingMap = useCallback(
     (getRadius, categoryId) =>
       dispatch(
@@ -180,110 +170,109 @@ const MapScreen = () => {
         <ActivityIndicator size='large' color='#E26740' />
       </View>
     )
-  } else {
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle='dark-content' />
-        {/* {location && ( */}
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          region={region}
-          zoomControlEnabled={true}
-          zoomEnabled={true}
-          zoomTapEnabled={true}
-          showsUserLocation={true}
-          // customMapStyle={customStyleMap}
-          maxZoomLevel={17.5}
-          enableHighAccuracy={false}
-        >
-          {listProduct.map((host, i) => {
-            if (parseFloat(host.lat) && parseFloat(host.lng)) {
-              return (
-                <Marker
-                  key={i}
-                  coordinate={{
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle='dark-content' />
+
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        region={region}
+        zoomControlEnabled={true}
+        zoomEnabled={true}
+        zoomTapEnabled={true}
+        showsUserLocation={true}
+        // customMapStyle={customStyleMap}
+        maxZoomLevel={17.5}
+        enableHighAccuracy={false}
+      >
+        {listProduct.map((host, i) => {
+          if (parseFloat(host.lat) && parseFloat(host.lng)) {
+            return (
+              <Marker
+                key={i}
+                coordinate={{
+                  latitude: parseFloat(host.lat),
+                  longitude: parseFloat(host.lng)
+                }}
+                image={{
+                  uri: host.iconCategory
+                }}
+                title={host.name}
+                pinColor={'#ffd1dc'}
+                onPress={() => {
+                  setModalVisible(true)
+                  setProduct({
+                    place: host.address,
+                    name: host.name,
+                    image: host.image,
+                    name_user: host.username,
+                    price: host.price
+                  })
+                  setModalVisible2(false)
+                  setCoordinate({
                     latitude: parseFloat(host.lat),
                     longitude: parseFloat(host.lng)
-                  }}
-                  image={{
-                    uri: host.iconCategory
-                  }}
-                  title={host.name}
-                  pinColor={'#ffd1dc'}
-                  onPress={() => {
-                    setModalVisible(true)
-                    setProduct({
-                      place: host.address,
-                      name: host.name,
-                      image: host.image,
-                      name_user: host.username,
-                      //star: host.star,
-                      price: host.price
-                    })
-                    setModalVisible2(false)
-                    setCoordinate({
-                      latitude: parseFloat(host.lat),
-                      longitude: parseFloat(host.lng)
-                    })
-                    setRegion(prevState => ({
-                      ...prevState,
-                      latitude: parseFloat(host.lat),
-                      longitude: parseFloat(host.lng)
-                    }))
-                    setOpenDirection(false)
-                  }}
-                />
-              )
-            }
-          })}
-          {openDirection && (
-            <MapViewDirections
-              origin={location}
-              destination={coordinate}
-              apikey={GOOGLE_MAPS_API_KEY}
-              strokeWidth={4}
-              strokeColor='#197CFF'
-            />
-          )}
-          {coordinate.latitude !== null && <Marker coordinate={coordinate} />}
-          <MapView.Circle
-            center={{
-              latitude: location?.latitude || 21.0541883,
-              longitude: location?.longitude || 105.8263367
-            }}
-            radius={radius * 1000}
-            strokeWidth={2}
-            strokeColor='#3399ff'
-            fillColor='rgba(128,191,255,0.2)'
+                  })
+                  setRegion(prevState => ({
+                    ...prevState,
+                    latitude: parseFloat(host.lat),
+                    longitude: parseFloat(host.lng)
+                  }))
+                  setOpenDirection(false)
+                }}
+              />
+            )
+          }
+        })}
+        {openDirection && (
+          <MapViewDirections
+            origin={location}
+            destination={coordinate}
+            apikey={GOOGLE_MAPS_API_KEY}
+            strokeWidth={4}
+            strokeColor='#197CFF'
           />
-        </MapView>
-        <TouchableOpacity
-          style={styles.Button}
-          onPress={() => {
-            setModalVisible2(true)
-            setModalVisible(false)
+        )}
+        {coordinate.latitude !== null && <Marker coordinate={coordinate} />}
+        <MapView.Circle
+          center={{
+            latitude: location?.latitude || 21.0541883,
+            longitude: location?.longitude || 105.8263367
           }}
-        >
-          <Ionicons name='options' size={24} color='black' />
-        </TouchableOpacity>
-        <MapModal
-          modalVisible={modalVisible}
-          close={close}
-          product={product}
-          setOpenDirection={setOpenDirection}
+          radius={radius * 1000}
+          strokeWidth={2}
+          strokeColor='#3399ff'
+          fillColor='rgba(128,191,255,0.2)'
         />
-        <SettingModal
-          modalVisible={modalVisible2}
-          close={close_2}
-          sliderValue={radius}
-          setSliderValue={setRadius}
-          settingMap={dispatchSettingMap}
-        />
-        {/* )} */}
-      </SafeAreaView>
-    )
-  }
+      </MapView>
+
+      <TouchableOpacity
+        style={styles.Button}
+        onPress={() => {
+          setModalVisible2(true)
+          setModalVisible(false)
+        }}
+      >
+        <Ionicons name='options' size={24} color='black' />
+      </TouchableOpacity>
+      <MapModal
+        modalVisible={modalVisible}
+        close={close}
+        product={product}
+        setOpenDirection={setOpenDirection}
+      />
+      <SettingModal
+        modalVisible={modalVisible2}
+        close={close_2}
+        sliderValue={radius}
+        setSliderValue={setRadius}
+        settingMap={dispatchSettingMap}
+      />
+    </SafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
