@@ -4,10 +4,12 @@ import styled from 'styled-components/native'
 import { usePlace } from '../context/PlacesManager'
 import Geocoder from 'react-native-geocoding'
 import { GOOGLE_MAPS_API_KEY } from '../utils/map/constants'
+
 Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'vi' })
 const Text = styled.Text`
   padding: 5px;
   font-size: 14px;
+  color: black;
 `
 
 export default function Prediction({ description, place_id, toggleModal }) {

@@ -1,13 +1,46 @@
 import Slider from '@react-native-community/slider'
 import useCache from 'hooks/useCache'
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  Image
+} from 'react-native'
+import { category } from '../utils/map/category'
+import { Radio, Text } from '@ui-kitten/components'
 import Modal from 'react-native-modal'
 export default SettingModal = props => {
   const { set, get } = useCache
+
+  const [categoryId, setCategoryId] = useState({
+    electric: false,
+    device: false,
+    car: false,
+    furniture: false,
+    office: false,
+    fashion: false,
+    book: false,
+    pet: false,
+    sport: false,
+    baby: false,
+    work: false,
+    land: false,
+    free: false
+  })
+
   const saveRadius = async () => {
     await set('save_radius', props?.sliderValue || 1)
     props.close()
+    console.log(categoryId, 'categoryId')
+    const listCategory = Object.entries(categoryId)
+      .filter(e => e[1])
+      .map(e => {
+        return category.filter(c => c.type === e[0])[0].id
+      })
+    console.log(listCategory)
+    props.settingMap(props.sliderValue, listCategory)
   }
   const getRadius = async () => {
     props.setSliderValue(await get('save_radius'))
@@ -27,26 +60,60 @@ export default SettingModal = props => {
         <TouchableOpacity style={styles.ButtonCancel} onPress={getRadius}>
           <Text style={styles.ButtonCancelText}>Huỷ</Text>
         </TouchableOpacity>
-        <View style={styles.Row}>
-          <View style={{ flex: 8.5 }}>
-            <Slider
-              maximumValue={100}
-              minimumValue={1}
-              minimumTrackTintColor='#307ecc'
-              maximumTrackTintColor='#000000'
-              step={1}
-              value={props.sliderValue}
-              onValueChange={sliderValue => props.setSliderValue(sliderValue)}
-            />
-          </View>
-          <View style={{ flex: 1.5 }}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.title}>Tuỳ chỉnh sản phẩm hiển thị</Text>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          >
+            {category.map((item, i) => {
+              return (
+                <View style={styles.icon} key={i}>
+                  <Radio
+                    checked={categoryId[item.type]}
+                    onChange={nextChecked =>
+                      setCategoryId(prevState => ({
+                        ...prevState,
+                        [item.type]: nextChecked
+                      }))
+                    }
+                  >
+                    <View style={{ justifyContent: 'column' }}>
+                      <Image
+                        source={{ uri: item.icon }}
+                        style={{ width: 40, height: 40 }}
+                      />
+                      <Text style={styles.categoryName}>{item.name}</Text>
+                    </View>
+                  </Radio>
+                </View>
+              )
+            })}
+          </ScrollView>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.title}>Tuỳ chỉnh bán kính</Text>
+          <View style={styles.Row}>
+            <View style={{ flex: 8.5 }}>
+              <Slider
+                maximumValue={100}
+                minimumValue={1}
+                minimumTrackTintColor='#307ecc'
+                maximumTrackTintColor='#000000'
+                step={1}
+                value={props.sliderValue}
+                onValueChange={sliderValue => props.setSliderValue(sliderValue)}
+              />
+            </View>
+
             <Text style={styles.text}>{props.sliderValue} km</Text>
           </View>
-        </View>
-        <View style={styles.BookNow}>
-          <TouchableOpacity style={styles.BookNowButton} onPress={saveRadius}>
-            <Text style={styles.ButtonText}>Áp dụng</Text>
-          </TouchableOpacity>
+          <View style={styles.BookNow}>
+            <TouchableOpacity style={styles.BookNowButton} onPress={saveRadius}>
+              <Text style={styles.ButtonText}>Áp dụng</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -54,7 +121,7 @@ export default SettingModal = props => {
 }
 const styles = StyleSheet.create({
   Container: {
-    flex: 0.3,
+    flex: 0.4,
     backgroundColor: `#ffffff`,
     paddingVertical: 20,
     paddingHorizontal: 20
@@ -65,7 +132,18 @@ const styles = StyleSheet.create({
     height: 50,
     marginTop: 10
   },
-
+  title: {
+    marginVertical: 5,
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  icon: {
+    width: 110
+  },
+  categoryName: {
+    fontSize: 12,
+    marginVertical: 3
+  },
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
@@ -96,7 +174,7 @@ const styles = StyleSheet.create({
   },
   BookNowButton: {
     alignItems: 'center',
-    backgroundColor: '#1260DB',
+    backgroundColor: '#197CFF',
     padding: 10,
     borderRadius: 20,
     marginLeft: 'auto',
@@ -114,7 +192,7 @@ const styles = StyleSheet.create({
     marginLeft: -10
   },
   ButtonCancelText: {
-    color: 'black',
-    fontSize: 15
+    color: `#000000`,
+    fontSize: 14
   }
 })

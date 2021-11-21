@@ -2,12 +2,11 @@ import Geolocation from 'react-native-geolocation-service'
 import React, { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
-  Button,
-  Text,
   TouchableOpacity,
   View,
   SafeAreaView
 } from 'react-native'
+import { Text, Button } from '@ui-kitten/components'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import MapView from 'react-native-maps'
 import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
@@ -147,7 +146,7 @@ const UserScreen = () => {
   // Update state on region change
 
   // Action to be taken after select location button click
-  const onLocationSelect = () => alert(currentPlace.description)
+  const onLocationSelect = () => console.log(currentPlace.description)
 
   if (loading) {
     return (
@@ -238,13 +237,12 @@ const UserScreen = () => {
               ? currentPlace.description
               : 'Đang lấy vị trí...'}
           </Text>
-          <View style={styles.btnContainer}>
-            <Button
-              title='Lấy vị trí tại đây'
-              disabled={regionChangeProgress}
-              onPress={onLocationSelect}
-            ></Button>
-          </View>
+          <TouchableOpacity
+            style={styles.btnContainer}
+            onPress={onLocationSelect}
+          >
+            <Text style={styles.ButtonText}>Lấy vị trí tại đây</Text>
+          </TouchableOpacity>
         </View>
         <SearchAddressModal
           isModalVisible={isModalVisible}

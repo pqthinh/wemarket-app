@@ -1,20 +1,35 @@
 import useCache from 'hooks/useCache'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import {
+  ActivityIndicator,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+
 import Geolocation from 'react-native-geolocation-service'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import MapModal from '../../components/MapModal'
-import SettingModal from '../../components/SettingModal'
-import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
-import products from './data'
+import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
+import MapModal from 'components/MapModal'
+import SettingModal from 'components/SettingModal'
+import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
+import { withArray } from 'exp-value'
+import { getViewProductMap } from 'actions/mapActions'
+
 const MapScreen = () => {
+  const dispatch = useDispatch()
+  const listProductReducer = useSelector(state => {
+    return state.listProductMapFilter
+  })
+
+  const [listProduct, setListProduct] = useState([])
+
+  const [loading, setLoading] = useState(true)
   const [location, setLocation] = useState({
     latitude: 21.0369,
     longitude: 105.7823
@@ -43,15 +58,53 @@ const MapScreen = () => {
     longitude: null
   })
   const [openDirection, setOpenDirection] = useState(false)
+  const handleLocationPermission = async () => {
+    let permissionCheck = ''
+    if (Platform.OS === 'ios') {
+      permissionCheck = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
 
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(
+          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+        )
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+
+    if (Platform.OS === 'android') {
+      permissionCheck = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+        )
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+  }
   const close = () => {
     setModalVisible(false)
   }
   const close_2 = () => {
     setModalVisible2(false)
   }
+
+  useEffect(() => {
+    handleLocationPermission()
+  }, [])
+
   useEffect(async () => {
-    setRadius(await get('save_radius'))
+    setRadius((await get('save_radius')) || 1)
   }, [])
 
   useMemo(() => {
@@ -60,12 +113,14 @@ const MapScreen = () => {
       latitudeDelta: (Math.PI * radius) / 111.045
     }))
   }, [radius])
+
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
         console.log(position)
         const { latitude, longitude } = position.coords
         setLocation({ latitude, longitude })
+        setLoading(false)
         setRegion(prevState => ({
           ...prevState,
           latitude: latitude,
@@ -74,70 +129,97 @@ const MapScreen = () => {
       },
       error => {
         console.log(error.code, error.message)
+        setLoading(false)
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     )
   }, [])
 
+  useEffect(() => {
+    if (listProductReducer) {
+      setListProduct(withArray('listViewProductMap.result', listProductReducer))
+    }
+  }, [listProductReducer])
+
+  useEffect(async () => {
+    const distance = (await get('save_radius')) || 1
+    dispatch(
+      getViewProductMap({
+        lat: location.latitude,
+        lng: location.longitude,
+        distance: distance
+      })
+    )
+  }, [])
+
+  const dispatchSettingMap = useCallback(
+    (getRadius, categoryId) =>
+      dispatch(
+        getViewProductMap({
+          lat: location.latitude,
+          lng: location.longitude,
+          distance: getRadius,
+          categoryId: categoryId
+        })
+      ),
+    [dispatch]
+  )
+  if (loading) {
+    return (
+      <View style={styles.spinnerView}>
+        <ActivityIndicator size='large' color='#E26740' />
+      </View>
+    )
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle='dark-content' />
-      {/* {location && ( */}
+
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         region={region}
-        //region={region}
-        //onRegionChangeComplete={region => setRegion(region)}
-
-        showsIndoors={true}
         zoomControlEnabled={true}
         zoomEnabled={true}
         zoomTapEnabled={true}
-        showsScale={true}
-        showsBuildings={true}
-        showsCompass={true}
         showsUserLocation={true}
         // customMapStyle={customStyleMap}
-        paddingAdjustmentBehavior='automatic'
-        showsMyLocationButton={true}
-        showsBuildings={true}
         maxZoomLevel={17.5}
-        loadingEnabled={true}
+        enableHighAccuracy={false}
       >
-        {products.map((host, i) => {
-          if (host.place.latitude && host.place.longitude) {
+        {listProduct.map((host, i) => {
+          if (parseFloat(host.lat) && parseFloat(host.lng)) {
             return (
               <Marker
                 key={i}
                 coordinate={{
-                  latitude: host.place.latitude,
-                  longitude: host.place.longitude
+                  latitude: parseFloat(host.lat),
+                  longitude: parseFloat(host.lng)
                 }}
                 image={{
-                  uri: 'https://i.ibb.co/6DxQH3t/ic-phone.png'
+                  uri: host.iconCategory
                 }}
-                title={host.name_product}
+                title={host.name}
                 pinColor={'#ffd1dc'}
                 onPress={() => {
                   setModalVisible(true)
                   setProduct({
-                    place: host.place.name,
-                    name: host.name_product,
-                    image: host.product_images[0],
-                    name_user: host.name_user,
-                    star: host.star,
+                    place: host.address,
+                    name: host.name,
+                    image: host.image,
+                    name_user: host.username,
                     price: host.price
                   })
                   setModalVisible2(false)
                   setCoordinate({
-                    latitude: host.place.latitude,
-                    longitude: host.place.longitude
+                    latitude: parseFloat(host.lat),
+                    longitude: parseFloat(host.lng)
                   })
                   setRegion(prevState => ({
                     ...prevState,
-                    latitude: host.place.latitude,
-                    longitude: host.place.longitude
+                    latitude: parseFloat(host.lat),
+                    longitude: parseFloat(host.lng)
                   }))
                   setOpenDirection(false)
                 }}
@@ -166,6 +248,7 @@ const MapScreen = () => {
           fillColor='rgba(128,191,255,0.2)'
         />
       </MapView>
+
       <TouchableOpacity
         style={styles.Button}
         onPress={() => {
@@ -186,8 +269,8 @@ const MapScreen = () => {
         close={close_2}
         sliderValue={radius}
         setSliderValue={setRadius}
+        settingMap={dispatchSettingMap}
       />
-      {/* )} */}
     </SafeAreaView>
   )
 }
@@ -199,6 +282,11 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject
+  },
+  spinnerView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   Button: {
     backgroundColor: 'rgba(255, 255, 255, 0.75)',
@@ -221,4 +309,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MapScreen
+export default React.memo(MapScreen)

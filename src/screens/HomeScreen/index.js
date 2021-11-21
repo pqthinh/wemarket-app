@@ -1,13 +1,21 @@
+import { getListProduct } from 'actions/homeActions'
 import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
-import SliderImage from 'components/SliderImage'
 import WrapperContent from 'components/WrapperContent'
-import React, { useEffect, useState, useCallback } from 'react'
-import { SafeAreaView, ScrollView } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { getListProduct } from 'actions/homeActions'
+import SliderImage from 'components/SliderImage'
 import { withArray, withBoolean, withNumber } from 'exp-value'
-import { View, ActivityIndicator, FlatList } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  View
+} from 'react-native'
+
+import { Divider } from '@ui-kitten/components'
+import { useDispatch, useSelector } from 'react-redux'
+import { ScreenContainer } from './styled'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
@@ -56,74 +64,79 @@ const HomeScreen = ({}) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView>
-        <SliderImage />
+      <Divider />
+      <ScreenContainer>
+        <ScrollView>
+          <SafeAreaView>
+            <SliderImage />
+          </SafeAreaView>
 
-        <Category />
+          <Category />
 
-        <WrapperContent
-          name={'Sản phẩm mới'}
-          horizontal={true}
-          loadMoreAction={() => console.log('Hello world ')}
-        >
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={[...Array(10).keys()]}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
+          <WrapperContent
+            name={'Sản phẩm mới'}
+            horizontal={true}
+            loadMoreAction={() => console.log('Hello world ')}
+          >
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={[...Array(10).keys()]}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
 
-        <WrapperContent name={'Top tìm kiếm'}>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={listProduct}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <ProductItem style={{ width: 150 }} product={item} />
-            )}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
+          <WrapperContent name={'Top tìm kiếm'}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={listProduct}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item }) => (
+                <ProductItem style={{ width: 150 }} product={item} />
+              )}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
 
-        <WrapperContent name={'Sản phẩm được yêu thích'}>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={listProduct}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <ProductItem style={{ width: 150 }} product={item} />
-            )}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
+          <WrapperContent name={'Sản phẩm được yêu thích'}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={listProduct}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item }) => (
+                <ProductItem style={{ width: 150 }} product={item} />
+              )}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
 
-        {/* Get all product */}
-        <WrapperContent
-          name={'Gợi ý hôm nay'}
-          stickyHeaderHiddenOnScroll={true}
-        >
-          <FlatList
-            numColumns={2}
-            data={listProduct}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => <ProductItem product={item} />}
-            ListFooterComponent={renderFooter}
-            onEndReached={handleLoadMoreInListProduct}
-            onEndReachedThreshold={0.5}
-          />
-        </WrapperContent>
-      </ScrollView>
+          {/* Get all product */}
+          <WrapperContent
+            name={'Gợi ý hôm nay'}
+            stickyHeaderHiddenOnScroll={true}
+          >
+            <FlatList
+              numColumns={2}
+              data={listProduct}
+              keyExtractor={(_, index) => index.toString()}
+              renderItem={({ item }) => <ProductItem product={item} />}
+              ListFooterComponent={renderFooter}
+              onEndReached={handleLoadMoreInListProduct}
+              onEndReachedThreshold={0.5}
+            />
+          </WrapperContent>
+        </ScrollView>
+      </ScreenContainer>
     </SafeAreaView>
   )
 }

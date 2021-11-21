@@ -92,7 +92,7 @@ export default MapModal = props => {
 }
 const styles = StyleSheet.create({
   Container: {
-    flex: 0.3,
+    flex: 1 / 3,
     backgroundColor: `#ffffff`,
     paddingVertical: 20,
     paddingHorizontal: 20
