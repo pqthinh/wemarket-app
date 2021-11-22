@@ -1,19 +1,15 @@
-import React from 'react'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import HomeStack from './HomeStack'
-import { DetailsScreen } from 'screens/DetailsScreen'
-import Map from 'screens/MapScreen'
-import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { View } from 'react-native'
-import MapSelect from 'screens/MapSelect'
 import {
   BottomNavigation,
   BottomNavigationTab,
   Icon,
-  Layout,
   Text
 } from '@ui-kitten/components'
+import React from 'react'
+import Map from 'screens/MapScreen'
+import MapSelect from 'screens/MapSelect'
+import { HOME_SCREEN } from 'utils/ScreenName'
+import HomeStack from './HomeStack'
 const { Navigator, Screen } = createBottomTabNavigator()
 
 const HomeIcon = props => <Icon {...props} name='home' pack='material' />
@@ -34,8 +30,6 @@ const IconPostNews = props => (
         height: 60,
         width: 60,
         borderRadius: 60,
-        //justifyContent: 'center',
-        //alignItems: 'center',
         alignSelf: 'center',
         backgroundColor: '#F2F3F7'
       }
@@ -49,6 +43,7 @@ function Test() {
 }
 const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
+    appearance='noIndicator'
     selectedIndex={state.index}
     onSelect={index => navigation.navigate(state.routeNames[index])}
   >
@@ -63,7 +58,6 @@ export default function BottomTab({}) {
   return (
     <Navigator
       initialRouteName={HOME_SCREEN}
-      appearance='noIndicator'
       screenOptions={{
         tabBarActiveTintColor: '#E26740',
         tabBarBadgeStyle: {

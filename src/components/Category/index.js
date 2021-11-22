@@ -8,21 +8,15 @@ import {
   Wrapper,
   WrapperCategory
 } from './styled'
+import { category } from 'utils/map/category.js'
 
-const Category = ({ navigation }) => {
-  const [categories, setCategories] = useState([])
-
-  useEffect(() => {
-    let newsList = require('constants/category.json')
-    setCategories(newsList)
-  }, [])
-
+const Category = () => {
   return (
     <Wrapper>
       <Title>Danh mục sản phẩm</Title>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <WrapperCategory>
-          {categories?.map((x, index) => (
+          {[...category]?.map((x, index) => (
             <TouchableOpacity onPress={() => {}} key={index}>
               <CategoryItem>
                 <ImageCategory source={{ uri: x.image }} />
