@@ -5,11 +5,11 @@ import {
   Linking,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View
 } from 'react-native'
-import { SliderBox } from 'react-native-image-slider-box'
+import { Text } from '@ui-kitten/components'
+import SliderImage from 'components/SliderImage'
 import { Icon } from './styled'
 
 const ProductScreen = ({ navigation, route }) => {
@@ -55,26 +55,10 @@ const ProductScreen = ({ navigation, route }) => {
   }, [])
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
         <View style={{ width: '100%', height: 250 }}>
-          <SliderBox
-            images={withArray('anh', news)}
-            autoplay
-            circleLoop
-            sliderBoxHeight={400}
-            resizeMethod={'resize'}
-            resizeMode={'cover'}
-            paginationBoxStyle={{
-              position: 'absolute',
-              bottom: 0,
-              padding: 0,
-              alignItems: 'center',
-              alignSelf: 'center',
-              justifyContent: 'center',
-              paddingVertical: 10
-            }}
-          />
+          <SliderImage />
         </View>
 
         <View style={styles.blockName}>
@@ -194,7 +178,7 @@ const ProductScreen = ({ navigation, route }) => {
           <Text style={{ color: '#000' }}>Chat online</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
