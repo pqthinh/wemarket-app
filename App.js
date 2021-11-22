@@ -48,7 +48,7 @@ const App = props => {
                   theme={{ ...eva[theme], ...themeEva }}
                   customMapping={mapping}
                 >
-                  <NavigationContainer>
+                  <NavigationContainer fallback={<LoadingAtoms />}>
                     <AppNavigator {...props} />
                   </NavigationContainer>
                 </ApplicationProvider>
