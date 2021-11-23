@@ -1,0 +1,180 @@
+import React, { useEffect, useState } from 'react'
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet
+} from 'react-native'
+import ImagePicker from 'react-native-image-picker'
+import { useDispatch, useSelector } from 'react-redux'
+// import Api from '../../Api/Api'
+import { firebase } from 'configs/firebaseConfig'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import { sendMessage } from 'actions/chatActions'
+const InputBox = props => {
+  const dispatch = useDispatch()
+  const listMessageReducer = useSelector(state => {
+    return state.manageChat
+  })
+  const { chatRoomID } = props
+  const [messages, setMessages] = useState([])
+  const [users, setUsers] = useState([])
+  const [message, setMessage] = useState('')
+  const [uploading, setUploading] = useState(false)
+
+  let user = firebase.auth().currentUser
+  useEffect(() => {
+    setMessages(listMessageReducer.messages)
+    console.log(listMessageReducer.messages)
+    setUsers(listMessageReducer.users)
+  }, [listMessageReducer])
+  useEffect(() => {
+    return dispatch(onChatContent(chatRoomID))
+  }, [chatRoomID])
+
+  const handleInputKeyUp = e => {
+    if (e.keyCode === 13) {
+      handleSendClick()
+    }
+  }
+
+  const handleSendClick = () => {
+    if (message !== '') {
+      sendMessage(chatRoomID, user.uid, 'text', message, users)
+      setMessage('')
+    }
+  }
+
+  launchCamera = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images'
+      }
+    }
+    ImagePicker.launchCamera(options, response => {
+      console.log('Response = ', response)
+      _handleImagePicked(response)
+    })
+  }
+  launchImageLibrary = () => {
+    let options = {
+      storageOptions: {
+        skipBackup: true,
+        path: 'images'
+      }
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      console.log('Response = ', response)
+      _handleImagePicked(response)
+    })
+  }
+  const _handleImagePicked = async pickerResult => {
+    try {
+      setUploading(true)
+
+      if (!pickerResult.didCancel) {
+        let imageUri = pickerResult
+          ? `data:image/jpg;base64,${pickerResult.data}`
+          : null
+        Api.sendMessage(chatRoomID, myUserId, 'photo', imageUri, users)
+        setMessage('')
+      }
+    } catch (e) {
+      console.log(e)
+      alert('Upload failed, sorry :(')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={100}
+      style={{ width: '100%' }}
+    >
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <TextInput
+            placeholder={'Type a message'}
+            style={styles.textInput}
+            value={message}
+            onChangeText={setMessage}
+            onKeyUp={handleInputKeyUp}
+          />
+
+          <TouchableOpacity onPress={launchImageLibrary}>
+            {!message && (
+              <FontAwesome
+                name='image'
+                size={24}
+                color='grey'
+                style={styles.icon}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={launchCamera}>
+            {!message && (
+              <FontAwesome
+                name='camera'
+                size={24}
+                color='grey'
+                style={styles.icon}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          {!message ? (
+            {}
+          ) : (
+            <TouchableOpacity onPress={handleSendClick}>
+              <MaterialIcons name='send' size={26} color='white' />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </KeyboardAvoidingView>
+  )
+}
+
+export default InputBox
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    margin: 10,
+    alignItems: 'flex-end'
+  },
+  mainContainer: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 10,
+    height: 60,
+    borderRadius: 25,
+    marginRight: 10,
+    flex: 1,
+    alignItems: 'flex-end'
+  },
+  textInput: {
+    flex: 1,
+    marginHorizontal: 10
+  },
+  icon: {
+    marginHorizontal: 5
+  },
+  buttonContainer: {
+    backgroundColor: '#0C6157',
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

@@ -3,6 +3,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import HomeStack from './HomeStack'
 import { DetailsScreen } from 'screens/DetailsScreen'
 import Map from 'screens/MapScreen'
+import ChatStack from './ChatStack'
+import ProfileStack from './ProfileStack'
 import { HOME_SCREEN, CHAT_SCREEN } from 'utils/ScreenName'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { View } from 'react-native'
@@ -78,8 +80,8 @@ export default function BottomTab({}) {
       <Screen name={HOME_SCREEN} component={HomeStack} />
       <Screen name='Map' component={Map} />
       <Screen name='MapSelect' component={MapSelect} />
-      <Screen name='Card' component={Test} />
-      <Screen name='Profile' component={Test} />
+      <Screen name='ChatScreen' component={ChatStack} />
+      <Screen name='Profile' component={ProfileStack} />
     </Navigator>
   )
 }

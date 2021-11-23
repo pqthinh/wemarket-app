@@ -54,8 +54,8 @@ const MapScreen = () => {
     longitudeDelta: 0.01
   })
   const [coordinate, setCoordinate] = useState({
-    latitude: null,
-    longitude: null
+    latitude: 0,
+    longitude: 0
   })
   const [openDirection, setOpenDirection] = useState(false)
   const handleLocationPermission = async () => {
@@ -207,7 +207,7 @@ const MapScreen = () => {
                     longitude: parseFloat(host.lng)
                   }}
                   image={{
-                    uri: host.iconCategory
+                    uri: host.iconCategory ? host.iconCategory : null
                   }}
                   title={host.name}
                   pinColor={'#ffd1dc'}
