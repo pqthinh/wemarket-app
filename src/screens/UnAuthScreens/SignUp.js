@@ -291,7 +291,7 @@ const makeStyles = colors =>
     error: {
       position: 'absolute',
       top: '100%',
-      color: colors.red[1],
+      color: colors.red,
       fontWeight: '500'
     },
     back: {

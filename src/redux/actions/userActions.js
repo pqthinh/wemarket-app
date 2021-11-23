@@ -14,11 +14,31 @@ export const signup =
   ({ data, handleCheck }) =>
   async dispatch => {
     try {
-      const { email, password } = data
+      console.log(1)
+      const { email, password, name } = data
       dispatch({ type: SIGNUP_REQUEST })
       const res = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
+      await firebase
+        .auth()
+        .currentUser.updateProfile({
+          displayName: name,
+          photoURL:
+            'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg'
+        })
+        .then(() => {
+          let user = firebase.auth().currentUser
+          firebase.firestore().collection('users').doc(user.uid).set(
+            {
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              email: user.email
+            },
+            { merge: true }
+          )
+        })
+      console.log(res)
       dispatch({ type: SIGNUP_SUCCESS, payload: res })
       handleCheck(SIGNUP_SUCCESS, true, 'Success')
     } catch (error) {
@@ -29,6 +49,7 @@ export const signup =
         message = 'Email không đúng định dạng'
       } else message = withEmpty('message', error)
       dispatch({ type: SIGNUP_FAILED, payload: message })
+      console.log(message, 'message')
       handleCheck(SIGNUP_FAILED, false, message)
     }
   }
