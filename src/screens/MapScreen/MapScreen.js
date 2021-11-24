@@ -26,7 +26,11 @@ const MapScreen = () => {
   const listProductReducer = useSelector(state => {
     return state.listProductMapFilter
   })
-
+  const [user, setUser] = useState({
+    uid: '',
+    displayName: '',
+    photoURL: ''
+  })
   const [listProduct, setListProduct] = useState([])
 
   const [loading, setLoading] = useState(true)
@@ -221,6 +225,11 @@ const MapScreen = () => {
                       //star: host.star,
                       price: host.price
                     })
+                    setUser({
+                      uid: host.uid,
+                      displayName: host.username,
+                      photoURL: host.avatar
+                    })
                     setModalVisible2(false)
                     setCoordinate({
                       latitude: parseFloat(host.lat),
@@ -271,6 +280,7 @@ const MapScreen = () => {
           modalVisible={modalVisible}
           close={close}
           product={product}
+          userChat={user}
           setOpenDirection={setOpenDirection}
         />
         <SettingModal
