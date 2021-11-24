@@ -49,7 +49,7 @@ const InputBox = props => {
     }
   }
 
-  launchCamera = () => {
+  const launchCamera = () => {
     let options = {
       storageOptions: {
         skipBackup: true,
@@ -61,7 +61,7 @@ const InputBox = props => {
       _handleImagePicked(response)
     })
   }
-  launchImageLibrary = () => {
+  const launchImageLibrary = () => {
     let options = {
       storageOptions: {
         skipBackup: true,

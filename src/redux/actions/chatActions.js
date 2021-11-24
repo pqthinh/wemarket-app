@@ -177,7 +177,7 @@ export const addNewChat = (me, friend) => async dispatch => {
   return dispatch({
     type: REGISTER_ROOM,
     id: newChat.id,
-    name: friend.name
+    name: friend.displayName
   })
   // await Api.addNewChat(user, user2);
 }

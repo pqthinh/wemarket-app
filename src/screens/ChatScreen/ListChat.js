@@ -12,9 +12,8 @@ function ListChat() {
   const [chatList, setChatList] = useState([])
   let user = firebase.auth().currentUser
   useEffect(() => {
+    console.log(listChatReducer)
     setChatList(listChatReducer.chatList)
-
-    console.log(listChatReducer.chatList)
   }, [listChatReducer])
   useEffect(() => {
     // const getList = async () => {

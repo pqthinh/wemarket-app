@@ -11,7 +11,11 @@ import {
 const INITIAL = {
   loading: true,
   messages: [],
-  roomKey: null
+  id: null,
+  error: null,
+  name: null,
+  chatList: [],
+  users: []
 }
 
 const manageChat = (state = INITIAL, action) => {
@@ -26,7 +30,7 @@ const manageChat = (state = INITIAL, action) => {
     case FETCH_ROOM_ERROR:
       return { ...INITIAL, loading: false, error: action.error }
     case REGISTER_ROOM:
-      return { ...state, id: action.id, name: action.name }
+      return { ...state, loading: false, id: action.id, name: action.name }
     case GET_LIST_CHAT_SUCCESS:
       return { ...state, loading: false, chatList: action.chatList }
     case GET_LIST_CHAT_FAILED:
