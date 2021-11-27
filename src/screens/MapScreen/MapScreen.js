@@ -1,5 +1,6 @@
+import { getViewProductMap } from 'actions/mapActions'
 import useCache from 'hooks/useCache'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -8,25 +9,27 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-
 import Geolocation from 'react-native-geolocation-service'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useDispatch, useSelector } from 'react-redux'
 import MapModal from 'components/MapModal'
 import SettingModal from 'components/SettingModal'
 import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
 import { withArray } from 'exp-value'
-import { getViewProductMap } from 'actions/mapActions'
 
 const MapScreen = () => {
   const dispatch = useDispatch()
   const listProductReducer = useSelector(state => {
     return state.listProductMapFilter
   })
-
+  const [user, setUser] = useState({
+    uid: '',
+    displayName: '',
+    photoURL: ''
+  })
   const [listProduct, setListProduct] = useState([])
 
   const [loading, setLoading] = useState(true)
@@ -54,8 +57,8 @@ const MapScreen = () => {
     longitudeDelta: 0.01
   })
   const [coordinate, setCoordinate] = useState({
-    latitude: null,
-    longitude: null
+    latitude: 0,
+    longitude: 0
   })
   const [openDirection, setOpenDirection] = useState(false)
   const handleLocationPermission = async () => {
@@ -198,7 +201,7 @@ const MapScreen = () => {
                   longitude: parseFloat(host.lng)
                 }}
                 image={{
-                  uri: host.iconCategory
+                  uri: host.iconCategory ? host.iconCategory : null
                 }}
                 title={host.name}
                 pinColor={'#ffd1dc'}
@@ -209,7 +212,13 @@ const MapScreen = () => {
                     name: host.name,
                     image: host.image,
                     name_user: host.username,
+                    //star: host.star,
                     price: host.price
+                  })
+                  setUser({
+                    uid: host.uid,
+                    displayName: host.username,
+                    photoURL: host.avatar
                   })
                   setModalVisible2(false)
                   setCoordinate({
@@ -248,7 +257,6 @@ const MapScreen = () => {
           fillColor='rgba(128,191,255,0.2)'
         />
       </MapView>
-
       <TouchableOpacity
         style={styles.Button}
         onPress={() => {
@@ -262,6 +270,7 @@ const MapScreen = () => {
         modalVisible={modalVisible}
         close={close}
         product={product}
+        userChat={user}
         setOpenDirection={setOpenDirection}
       />
       <SettingModal

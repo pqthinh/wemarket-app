@@ -9,7 +9,9 @@ import React from 'react'
 import Map from 'screens/MapScreen'
 import MapSelect from 'screens/MapSelect'
 import { HOME_SCREEN } from 'utils/ScreenName'
+import ChatStack from './ChatStack'
 import HomeStack from './HomeStack'
+import ProfileStack from './ProfileStack'
 const { Navigator, Screen } = createBottomTabNavigator()
 
 const HomeIcon = props => <Icon {...props} name='home' pack='material' />
@@ -70,22 +72,10 @@ export default function BottomTab({}) {
       tabBar={props => <BottomTabBar {...props} />}
     >
       <Screen name={HOME_SCREEN} component={HomeStack} />
-      <Screen
-        name='Map'
-        component={Map}
-        options={{
-          tabBarVisible: false
-        }}
-      />
-      <Screen
-        name='MapSelect'
-        component={MapSelect}
-        options={{
-          tabBarVisible: false
-        }}
-      />
-      <Screen name='Card' component={Test} />
-      <Screen name='Profile' component={Test} />
+      <Screen name='Map' component={Map} />
+      <Screen name='MapSelect' component={MapSelect} />
+      <Screen name='ChatScreen' component={ChatStack} />
+      <Screen name='Profile' component={ProfileStack} />
     </Navigator>
   )
 }

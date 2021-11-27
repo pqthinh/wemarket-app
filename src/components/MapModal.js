@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import {
   Text,
   View,
@@ -12,8 +12,47 @@ import Modal from 'react-native-modal'
 import NumberFormat from 'react-number-format'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { useDispatch, useSelector } from 'react-redux'
+import { firebase } from 'configs/firebaseConfig'
+import { addNewChat, findRoom } from 'actions/chatActions'
+import { useNavigation } from '@react-navigation/native'
 // var screen = Dimensions.get('window');
 export default MapModal = props => {
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const messageReducer = useSelector(state => {
+    return state.manageChat
+  })
+  const [newRoom, setNewRoom] = useState(false)
+  const [id, setId] = useState()
+  const [name, setName] = useState()
+  let user = firebase.auth().currentUser
+  useEffect(() => {
+    console.log(messageReducer)
+    if ((messageReducer.type = 'FETCH_ROOM_ERROR')) setNewRoom(true)
+    else {
+      setId(messageReducer.id)
+      setName(messageReducer.name)
+    }
+  }, [messageReducer])
+  const dispatchFindRoom = useCallback(
+    (me, friend) => dispatch(findRoom(me, friend)),
+    [dispatch]
+  )
+  const dispatchAddRoom = useCallback(
+    (me, friend) => dispatch(addNewChat(me, friend)),
+    [dispatch]
+  )
+  const dispatchChat = () => {
+    if (newRoom) {
+      dispatchAddRoom(user, props.userChat)
+    } else dispatchFindRoom((user, props.userChat))
+    // navigation.navigate('Chat', {
+    //   id: id,
+    //   name: name
+    // })
+    props.close()
+  }
   return (
     <Modal
       isVisible={props.modalVisible}
@@ -76,7 +115,7 @@ export default MapModal = props => {
             <Icon name='directions' size={20} color='white' />
             <Text style={styles.ButtonText}>Đường đi</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.MessageButton} onPress={props.close}>
+          <TouchableOpacity style={styles.MessageButton} onPress={dispatchChat}>
             <FeatherIcon name='message-square' size={20} color='white' />
             <Text style={styles.ButtonText}>Nhắn tin</Text>
           </TouchableOpacity>
