@@ -70,8 +70,20 @@ export default function BottomTab({}) {
       tabBar={props => <BottomTabBar {...props} />}
     >
       <Screen name={HOME_SCREEN} component={HomeStack} />
-      <Screen name='Map' component={Map} />
-      <Screen name='MapSelect' component={MapSelect} />
+      <Screen
+        name='Map'
+        component={Map}
+        options={{
+          tabBarVisible: false
+        }}
+      />
+      <Screen
+        name='MapSelect'
+        component={MapSelect}
+        options={{
+          tabBarVisible: false
+        }}
+      />
       <Screen name='Card' component={Test} />
       <Screen name='Profile' component={Test} />
     </Navigator>

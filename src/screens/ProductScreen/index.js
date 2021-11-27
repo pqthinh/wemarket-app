@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  SafeAreaView,
   View
 } from 'react-native'
 import { Text } from '@ui-kitten/components'
@@ -56,10 +57,8 @@ const ProductScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
-        <View style={{ width: '100%', height: 250 }}>
-          <SliderImage />
-        </View>
+      <ScrollView>
+        <SliderImage style={{ width: '100%', height: 250 }} />
 
         <View style={styles.blockName}>
           <Text style={styles.title}>{withEmpty('ten', news)}</Text>
