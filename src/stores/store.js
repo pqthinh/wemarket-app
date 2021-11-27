@@ -15,7 +15,7 @@ const initialState = {}
 const composeEnhancers = composeWithDevTools({
   realtime: true,
   port: 8000,
-  hostname: 'localhost'
+  hostname: '192.168.101.103'
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
