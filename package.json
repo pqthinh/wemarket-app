@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "remotedev": "remotedev --hostname=localhost --port=8000"
+    "remotedev": "remotedev --hostname=192.168.101.103 --port=8000"
   },
   "dependencies": {
     "@eva-design/eva": "^2.1.1",
