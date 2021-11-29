@@ -40,9 +40,6 @@ const IconPostNews = props => (
   />
 )
 
-function Test() {
-  return <Text>Test</Text>
-}
 const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
     appearance='noIndicator'

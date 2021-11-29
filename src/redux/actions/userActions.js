@@ -9,23 +9,30 @@ import {
   LOGIN_FAILED,
   LOGOUT
 } from '../actionTypes/userActionTypes'
+import axios from 'configs/api/baseUrl'
+import { REGISTER_USER, API_GET_USER_DETAIL } from 'configs/api/apiPath'
+import { withEmpty, withNull, withObject } from 'exp-value'
 
 export const signup =
   ({ data, handleCheck }) =>
   async dispatch => {
     try {
-      console.log(1)
+      const avatar =
+        'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg'
       const { email, password, name } = data
+
+      console.log(data, 'data')
       dispatch({ type: SIGNUP_REQUEST })
       const res = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
+
+      // push to firestore
       await firebase
         .auth()
         .currentUser.updateProfile({
           displayName: name,
-          photoURL:
-            'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg'
+          photoURL: avatar
         })
         .then(() => {
           let user = firebase.auth().currentUser
@@ -38,9 +45,25 @@ export const signup =
             { merge: true }
           )
         })
-      console.log(res)
-      dispatch({ type: SIGNUP_SUCCESS, payload: res })
-      handleCheck(SIGNUP_SUCCESS, true, 'Success')
+
+      console.log(res, 'res register')
+      const uid = withNull('user.uid', res)
+
+      console.log(uid, 'uid')
+      // add to database
+      const registerUser = await axios.post(REGISTER_USER, {
+        username: name,
+        email: email,
+        phone: phone,
+        address: address,
+        uid: uid,
+        avatar: avatar
+      })
+
+      if (withNull('data.status', registerUser)) {
+        dispatch({ type: SIGNUP_SUCCESS, payload: 'Đăng ký thành công' })
+        handleCheck(SIGNUP_SUCCESS, true, 'Đăng ký thành công')
+      }
     } catch (error) {
       let message
       if (error.code === 'auth/email-already-in-use') {
@@ -48,8 +71,9 @@ export const signup =
       } else if (error.code === 'auth/invalid-email') {
         message = 'Email không đúng định dạng'
       } else message = withEmpty('message', error)
+
       dispatch({ type: SIGNUP_FAILED, payload: message })
-      console.log(message, 'message')
+
       handleCheck(SIGNUP_FAILED, false, message)
     }
   }
@@ -61,10 +85,20 @@ export const login =
       const res = await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
-      if (res) {
-        dispatch({ type: LOGIN_SUCCESS, payload: res })
-        handleCheck(LOGIN_SUCCESS, true, 'Success')
-        // call api cua hoan
+
+      if (withEmpty('user.uid', res)) {
+        const getUserInfo = await axios.get(
+          API_GET_USER_DETAIL(withEmpty('user.uid', res))
+        )
+
+        if (withNull('data.status', getUserInfo)) {
+          console.log(withNull('data.status', getUserInfo))
+          dispatch({
+            type: LOGIN_SUCCESS,
+            payload: withObject('data.data', getUserInfo)
+          })
+          handleCheck(LOGIN_SUCCESS, true, 'Đăng nhập thành công')
+        }
       }
     } catch (error) {
       let message
@@ -82,6 +116,7 @@ export const login =
           message = error.toString() || 'Lỗi mạng '
           break
       }
+      console.log(message)
       dispatch({ type: LOGIN_FAILED, payload: message })
       handleCheck(LOGIN_FAILED, false, message)
     }
