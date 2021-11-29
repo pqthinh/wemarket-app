@@ -1,4 +1,3 @@
-import { useTheme } from '@react-navigation/native'
 import React, { useState, useCallback } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import {
@@ -19,8 +18,7 @@ import Toast from 'react-native-toast-message'
 import { Container } from './styled'
 
 export default function SignUp({ navigation }) {
-  const { colors } = useTheme()
-  const styles = makeStyles(colors)
+  const styles = makeStyles()
   const dispatch = useDispatch()
   const userInfo = useSelector(state => {
     return state.userState
@@ -47,7 +45,7 @@ export default function SignUp({ navigation }) {
     }
   })
   const signUp = data => {
-    dispatch(signup(data, handleCheck))
+    dispatch(signup({ data, handleCheck }))
   }
 
   React.useEffect(() => {
@@ -264,7 +262,7 @@ export default function SignUp({ navigation }) {
   )
 }
 
-const makeStyles = colors =>
+const makeStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -291,7 +289,7 @@ const makeStyles = colors =>
     error: {
       position: 'absolute',
       top: '100%',
-      color: colors.red,
+      color: '#EB5757',
       fontWeight: '500'
     },
     back: {
@@ -300,7 +298,7 @@ const makeStyles = colors =>
       alignItems: 'center'
     },
     backText: {
-      color: colors.primary,
+      color: '#2F80ED',
       fontWeight: '900'
     },
     input: {

@@ -35,7 +35,6 @@ export default function Map() {
           })}
         />
       </Stack.Navigator>
-      <MapScreen />
     </PlaceProvider>
   )
 }
