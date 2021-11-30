@@ -151,7 +151,7 @@ const UserScreen = () => {
   if (loading) {
     return (
       <View style={styles.spinnerView}>
-        <ActivityIndicator size='large' color='#0000ff' />
+        <ActivityIndicator size='large' color='#E26740' />
       </View>
     )
   } else {
