@@ -29,30 +29,31 @@ export default MapModal = props => {
   let user = firebase.auth().currentUser
   useEffect(() => {
     console.log(messageReducer)
-    if ((messageReducer.type = 'FETCH_ROOM_ERROR')) setNewRoom(true)
-    else {
+    if ((messageReducer.type = 'FETCH_ROOM_ERROR')) {
+      setNewRoom(true)
+    } else {
       setId(messageReducer.id)
       setName(messageReducer.name)
     }
+    console.log(messageReducer.id, messageReducer.name)
   }, [messageReducer])
-  const dispatchFindRoom = useCallback(
-    (me, friend) => dispatch(findRoom(me, friend)),
-    [dispatch]
-  )
-  const dispatchAddRoom = useCallback(
-    (me, friend) => dispatch(addNewChat(me, friend)),
-    [dispatch]
-  )
-  const dispatchChat = () => {
+  // const dispatchFindRoom = useCallback(
+  //   (me, friend) => dispatch(findRoom(me, friend)),
+  //   [dispatch]
+  // )
+  // const dispatchAddRoom = useCallback(
+  //   (me, friend) => dispatch(addNewChat(me, friend)),
+  //   [dispatch]
+  // )
+  const dispatchChat = useCallback(() => {
     if (newRoom) {
-      dispatchAddRoom(user, props.userChat)
-    } else dispatchFindRoom((user, props.userChat))
+      return dispatch(addNewChat(user, props.userChat)), props.close()
+    } else return dispatch(findRoom(user, props.userChat)), props.close()
     // navigation.navigate('Chat', {
     //   id: id,
     //   name: name
     // })
-    props.close()
-  }
+  }, [dispatch])
   return (
     <Modal
       isVisible={props.modalVisible}

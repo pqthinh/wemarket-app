@@ -18,13 +18,13 @@ export default function Map() {
             title: 'Bản đồ'
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name='Map Modal'
           component={MapModal}
           options={{
             headerShown: false
           }}
-        />
+        /> */}
         <Stack.Screen
           name='Chat'
           component={ChatScreen}
@@ -35,7 +35,6 @@ export default function Map() {
           })}
         />
       </Stack.Navigator>
-      <MapScreen />
     </PlaceProvider>
   )
 }
