@@ -11,6 +11,7 @@ import {
 import Modal from 'react-native-modal'
 import NumberFormat from 'react-number-format'
 import FeatherIcon from 'react-native-vector-icons/Feather'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
 import { firebase } from 'configs/firebaseConfig'
@@ -65,6 +66,14 @@ export default MapModal = props => {
       onSwipeComplete={props.close}
     >
       <View style={styles.Container}>
+        <View style={styles.iconRow}>
+          <MaterialIcons
+            name='horizontal-rule'
+            size={50}
+            color='silver'
+            // onPress={toggleModal}
+          />
+        </View>
         <View style={styles.Row}>
           <Text numberOfLines={1} style={styles.TextBold}>
             {props.product.name}
@@ -136,6 +145,12 @@ const styles = StyleSheet.create({
     backgroundColor: `#ffffff`,
     paddingVertical: 20,
     paddingHorizontal: 20
+  },
+  iconRow: {
+    flex: 0.6,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: -35
   },
   Row: {
     flexDirection: 'row',

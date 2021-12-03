@@ -42,11 +42,12 @@ const styles = StyleSheet.create({
   },
   emailText: {
     fontSize: 16,
-    paddingLeft: 14
+    paddingLeft: 10
   },
   iconRow: {
     flex: 2,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingLeft: 6
   }
 })
 
