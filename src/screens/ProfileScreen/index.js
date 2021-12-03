@@ -44,37 +44,39 @@ const ProfileScreen = ({ navigation }) => {
           </Button>
         )}
       </Layout> */}
-      {user && (
-        <View
-          style={styles.userRow}
-          onStartShouldSetResponder={() => navigation.navigate('Sửa hồ sơ')}
-        >
-          <View style={styles.userImage}>
-            <Avatar
-              rounded
-              size='large'
-              source={{
-                uri:
-                  user?.photoURL ||
-                  'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
-              }}
-            />
-          </View>
-          <View>
-            <Text style={{ fontSize: 16 }}>
-              {user?.displayName || 'Người dùng'}
-            </Text>
-            <Text
-              style={{
-                color: 'gray',
-                fontSize: 16
-              }}
-            >
-              {user.email}
-            </Text>
-          </View>
+      {/* {user && ( */}
+      <View
+        style={styles.userRow}
+        onStartShouldSetResponder={() =>
+          navigation.navigate('Sửa trang cá nhân')
+        }
+      >
+        <View style={styles.userImage}>
+          <Avatar
+            rounded
+            size='large'
+            source={{
+              uri:
+                user?.photoURL ||
+                'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
+            }}
+          />
         </View>
-      )}
+        <View>
+          <Text style={{ fontSize: 16 }}>
+            {user?.displayName || 'Người dùng'}
+          </Text>
+          <Text
+            style={{
+              color: 'gray',
+              fontSize: 16
+            }}
+          >
+            {user?.email || 'test@gmail.com'}
+          </Text>
+        </View>
+      </View>
+      {/* )} */}
       <TopTab.Navigator
         screenOptions={{
           tabBarIndicatorStyle: { backgroundColor: '#E26740' },
