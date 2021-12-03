@@ -4,7 +4,7 @@ import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import SignIn from 'screens/UnAuthScreens/SignIn'
 import SignUp from 'screens/UnAuthScreens/SignUp'
 import ProfileScreen from 'screens/ProfileScreen'
-import Profile from 'components/ProfileUser/Profile'
+import EditProfileStack from './EditProfileStack'
 const Stack = createStackNavigator()
 
 const screenOptions = {
@@ -13,16 +13,16 @@ const screenOptions = {
 
 export default function ProfileStack() {
   return (
-    <Stack.Navigator initialRouteName='Profile'>
+    <Stack.Navigator initialRouteName='Trang cá nhân'>
       <Stack.Screen
-        name='Profile Screen'
+        name='Trang cá nhân'
         component={ProfileScreen}
         options={screenOptions}
       />
       <Stack.Screen
-        name='Sửa hồ sơ'
-        component={Profile}
-        options={{ headerShown: true }}
+        name='Sửa trang cá nhân'
+        component={EditProfileStack}
+        options={screenOptions}
       />
       <Stack.Screen
         name={SIGN_IN_SCREEN}

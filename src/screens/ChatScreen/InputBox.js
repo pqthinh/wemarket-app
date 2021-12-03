@@ -7,7 +7,7 @@ import {
   Platform,
   StyleSheet
 } from 'react-native'
-import ImagePicker from 'react-native-image-picker'
+
 import { useDispatch, useSelector } from 'react-redux'
 // import Api from '../../Api/Api'
 import { firebase } from 'configs/firebaseConfig'
@@ -49,26 +49,22 @@ const InputBox = props => {
     }
   }
 
-  const launchCamera = () => {
+  const launch_Camera = () => {
     let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images'
-      }
+      includeBase64: true,
+      mediaType: 'photo'
     }
-    ImagePicker.launchCamera(options, response => {
+    launchCamera(options, response => {
       console.log('Response = ', response)
       _handleImagePicked(response)
     })
   }
-  const launchImageLibrary = () => {
+  const launch_ImageLibrary = () => {
     let options = {
-      storageOptions: {
-        skipBackup: true,
-        path: 'images'
-      }
+      includeBase64: true,
+      mediaType: 'photo'
     }
-    ImagePicker.launchImageLibrary(options, response => {
+    launchImageLibrary(options, response => {
       console.log('Response = ', response)
       _handleImagePicked(response)
     })
@@ -77,16 +73,20 @@ const InputBox = props => {
     try {
       setUploading(true)
 
-      if (!pickerResult.didCancel) {
+      if (pickerResult.assets) {
         let imageUri = pickerResult
-          ? `data:image/jpg;base64,${pickerResult.data}`
+          ? `data:image/jpg;base64,${pickerResult.assets[0].base64}`
           : null
-        Api.sendMessage(chatRoomID, myUserId, 'photo', imageUri, users)
+        sendMessage(chatRoomID, user.uid, 'photo', imageUri, users)
         setMessage('')
+      } else if (pickerResult.didCancel) {
+        console.log('User cancelled image picker')
+      } else if (pickerResult.error) {
+        console.log('ImagePicker Error: ', pickerResult.error)
       }
     } catch (e) {
       console.log(e)
-      alert('Upload failed, sorry :(')
+      console.log('Upload failed, sorry :(')
     } finally {
       setUploading(false)
     }
@@ -108,7 +108,7 @@ const InputBox = props => {
             onKeyUp={handleInputKeyUp}
           />
 
-          <TouchableOpacity onPress={launchImageLibrary}>
+          <TouchableOpacity onPress={launch_ImageLibrary}>
             {!message && (
               <FontAwesome
                 name='image'
@@ -118,7 +118,7 @@ const InputBox = props => {
               />
             )}
           </TouchableOpacity>
-          <TouchableOpacity onPress={launchCamera}>
+          <TouchableOpacity onPress={launch_Camera}>
             {!message && (
               <FontAwesome
                 name='camera'

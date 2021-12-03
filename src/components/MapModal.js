@@ -48,12 +48,12 @@ export default MapModal = props => {
   // )
   const dispatchChat = useCallback(() => {
     if (newRoom) {
-      return dispatch(addNewChat(user, props.userChat)), props.close()
-    } else return dispatch(findRoom(user, props.userChat)), props.close()
-    // navigation.navigate('Chat', {
-    //   id: id,
-    //   name: name
-    // })
+      dispatch(addNewChat(user, props.userChat)), props.close()
+    } else dispatch(findRoom(user, props.userChat)), props.close()
+    return props.navigation.navigate('Chat', {
+      id: id,
+      name: name
+    })
   }, [dispatch])
   return (
     <Modal

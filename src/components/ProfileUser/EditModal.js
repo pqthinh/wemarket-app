@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
-import {
-  StyleSheet,
-  Touchable,
-  TouchableHighlight,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { StyleSheet, TouchableHighlight, View, Image } from 'react-native'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Icon } from 'react-native-elements'
 import { Text } from '@ui-kitten/components'
 import Modal from 'react-native-modal'
-
-export default EditImage = ({ isModalVisible, toggleModal }) => {
+import useCache from 'hooks/useCache'
+import { useNavigation } from '@react-navigation/native'
+export default EditModal = ({
+  isModalVisible,
+  toggleModal,
+  onImageLibraryPress,
+  onCameraPress
+}) => {
   return (
     <Modal
       isVisible={isModalVisible}
@@ -29,7 +30,7 @@ export default EditImage = ({ isModalVisible, toggleModal }) => {
           />
         </View>
         <TouchableHighlight
-          onPress={() => console.log('click')}
+          onPress={onImageLibraryPress}
           underlayColor='lightgrey'
         >
           <View style={styles.Row}>
@@ -42,10 +43,7 @@ export default EditImage = ({ isModalVisible, toggleModal }) => {
             <Text>Tải ảnh lên</Text>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => console.log('click')}
-          underlayColor='lightgrey'
-        >
+        <TouchableHighlight onPress={onCameraPress} underlayColor='lightgrey'>
           <View style={styles.Row}>
             <Icon
               name='camera'
