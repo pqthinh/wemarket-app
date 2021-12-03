@@ -10,16 +10,17 @@ import {
   View
 } from 'react-native'
 import { Text } from '@ui-kitten/components'
+import { useShowState } from 'core/hooks'
 import Email from './Email'
 import Separator from './Separator'
 import Tel from './Tel'
 import Address from './Address'
-
+import EditImage from './EditImage'
 import { useNavigation } from '@react-navigation/native'
 const Profile = () => {
   const navigation = useNavigation()
   const [userDetails, setUserDetails] = useState({})
-
+  const [isModalVisible, toggleImageModal] = useShowState()
   // useEffect(() => {
   //   fetchUserDetails()
   // }, [userDetails])
@@ -50,10 +51,6 @@ const Profile = () => {
   //   )
   // }
 
-  const handleEditAvatarNavigation = () => {
-    navigation.navigate('EditAvatar')
-  }
-
   const { avatar, name, email, phoneNumber, address } = userDetails
   return (
     <ScrollView style={styles.scroll}>
@@ -80,7 +77,7 @@ const Profile = () => {
                     style={{ width: 150, height: 150 }}
                   />
                   <View style={styles.add}>
-                    <TouchableOpacity onPress={handleEditAvatarNavigation}>
+                    <TouchableOpacity onPress={toggleImageModal}>
                       <Icon type='material' name='camera-alt' fill='#111' />
                     </TouchableOpacity>
                   </View>
@@ -115,6 +112,10 @@ const Profile = () => {
           {Separator()}
         </Card>
       </View>
+      <EditImage
+        isModalVisible={isModalVisible}
+        toggleModal={toggleImageModal}
+      />
     </ScrollView>
   )
 }
