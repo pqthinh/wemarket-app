@@ -31,7 +31,7 @@ const Profile = ({ navigation }) => {
   const [pickerResponse, setPickerResponse] = useState(null)
   const [isModalVisible, toggleImageModal] = useShowState()
   useEffect(() => {
-    console.log(profileUserReducer)
+    console.log(profileUserReducer, 'profile')
   }, [profileUserReducer])
   const onSubmitPress = useCallback(
     () => dispatch(updateAvatar(image)),

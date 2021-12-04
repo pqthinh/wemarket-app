@@ -3,12 +3,14 @@ import UserReducers from './UserReducers'
 import { listTopViewProduct, listProduct } from './HomeReducers'
 import { listProductMapFilter } from './MapReducers'
 import { manageChat } from './ChatReducers'
+import { manageProfile } from './ProfileReducers'
 const appReducer = combineReducers({
   userState: UserReducers,
   listTopViewProduct,
   listProduct,
   listProductMapFilter,
-  manageChat
+  manageChat,
+  manageProfile
 })
 
 const rootReducer = (state, action) => {
