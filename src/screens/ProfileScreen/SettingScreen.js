@@ -90,7 +90,7 @@ const Setting = ({ navigation }) => {
           <Chevron />
         </ListItem>
         <ListItem
-          onPress={() => navigation.navigate('Sửa hồ sơ')}
+          onPress={() => navigation.navigate('Sửa trang cá nhân')}
           containerStyle={styles.listItemContainer}
         >
           <BaseIcon

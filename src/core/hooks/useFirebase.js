@@ -1,8 +1,8 @@
 import { storage } from 'configs/firebaseConfig'
 
-const useFirebase = ({ imageAsFile, bucket = '/images/' }) => {
+const useFirebase = (imageAsFile, bucket = '/images/') => {
   var link = ''
-  console.log(imageAsFile, 'image')
+  console.log(imageAsFile, 'images')
   const uploadTask = storage
     .ref(`${bucket + imageAsFile.fileName}`)
     .put(imageAsFile)
@@ -32,4 +32,4 @@ const useFirebase = ({ imageAsFile, bucket = '/images/' }) => {
   return link
 }
 
-export { useFirebase }
+export default useFirebase
