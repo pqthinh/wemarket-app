@@ -4,7 +4,7 @@ import {
   FETCH_USER_ERROR,
   UPDATE_USER_SUCCESS
 } from '../actionTypes/profileActionType'
-import { useFirebase } from 'hooks/useFirebase'
+import useFirebase from 'hooks/useFirebase'
 const db = firebase.firestore()
 
 export const getUserDetails = () => async dispatch => {

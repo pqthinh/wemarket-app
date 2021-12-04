@@ -20,7 +20,6 @@ import Separator from './Separator'
 import Tel from './Tel'
 import Address from './Address'
 import EditModal from './EditModal'
-import useCache from 'hooks/useCache'
 import EditAvatar from './EditAvatar'
 import { updateAvatar } from 'actions/profileAction'
 const Profile = ({ navigation }) => {
@@ -35,12 +34,7 @@ const Profile = ({ navigation }) => {
     console.log(profileUserReducer)
   }, [profileUserReducer])
   const onSubmitPress = useCallback(
-    image =>
-      dispatch(
-        updateAvatar({
-          avatarImage: image
-        })
-      ),
+    () => dispatch(updateAvatar(image)),
     [dispatch]
   )
   // useEffect(() => {
@@ -101,11 +95,7 @@ const Profile = ({ navigation }) => {
           )}
         </View>
         <View style={{ marginTop: 30 }}>
-          <Button
-            title='add post'
-            status='success'
-            onPress={() => onSubmitPress(image)}
-          />
+          <Button title='add post' status='success' onPress={onSubmitPress} />
         </View>
       </View>
       // <EditAvatar uri={uri} />
