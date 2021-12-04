@@ -12,7 +12,7 @@ import MapView from 'react-native-maps'
 import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
 import styles from './styled'
 import SearchAddressModal from '../../components/SearchAddressModal'
-import { useShowState } from '../../core/hooks'
+import { useShowState } from 'core/hooks'
 import { usePlace } from '../../context/PlacesManager'
 import Geocoder from 'react-native-geocoding'
 
@@ -151,7 +151,7 @@ const UserScreen = () => {
   if (loading) {
     return (
       <View style={styles.spinnerView}>
-        <ActivityIndicator size='large' color='#0000ff' />
+        <ActivityIndicator size='large' color='#E26740' />
       </View>
     )
   } else {
