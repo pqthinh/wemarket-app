@@ -55,7 +55,6 @@ const InputBox = props => {
       mediaType: 'photo'
     }
     launchCamera(options, response => {
-      console.log('Response = ', response)
       _handleImagePicked(response)
     })
   }
@@ -65,7 +64,6 @@ const InputBox = props => {
       mediaType: 'photo'
     }
     launchImageLibrary(options, response => {
-      console.log('Response = ', response)
       _handleImagePicked(response)
     })
   }
