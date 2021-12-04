@@ -18,7 +18,7 @@ export const signup =
   async dispatch => {
     try {
       const avatar =
-        'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg'
+        'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
       const { email, password, name } = data
 
       console.log(data, 'data')

@@ -17,4 +17,5 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig)
   firebase.firestore().settings({ experimentalForceLongPolling: true })
 }
-export { firebase }
+const storage = firebase.storage()
+export { firebase, storage }

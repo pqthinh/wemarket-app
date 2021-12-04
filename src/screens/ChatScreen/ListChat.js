@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { Button, Layout, Text } from '@ui-kitten/components'
 import ChatListItem from './ChatListItem'
 import { firebase } from 'configs/firebaseConfig'
 import { getChatList } from 'actions/chatActions'
@@ -35,17 +36,37 @@ function ListChat() {
     // getList()
     dispatch(getChatList(user))
   }, [])
-
-  return (
-    <FlatList
-      style={{ width: '100%' }}
-      data={chatList}
-      renderItem={({ item, index }) => (
-        <ChatListItem chatRoom={item} index={index} />
-      )}
-      keyExtractor={item => item.chatId}
-    />
-  )
+  console.log(chatList, 'list chat')
+  if (chatList == '')
+    return (
+      <Layout style={styles.container}>
+        <Text category='h4'>Không có lịch sử chat</Text>
+      </Layout>
+    )
+  else
+    return (
+      <FlatList
+        style={{ width: '100%' }}
+        data={chatList}
+        renderItem={({ item, index }) => (
+          <ChatListItem chatRoom={item} index={index} />
+        )}
+        keyExtractor={item => item.chatId}
+      />
+    )
 }
 
 export default ListChat
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  addButton: {
+    marginVertical: 8
+  }
+})
