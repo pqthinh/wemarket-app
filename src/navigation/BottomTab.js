@@ -42,8 +42,11 @@ const IconPostNews = props => (
 
 const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
-    appearance='noIndicator'
+    // appearance='noIndicator'
     selectedIndex={state.index}
+    tabBarOptions={{
+      keyboardHidesTabBar: true
+    }}
     onSelect={index => navigation.navigate(state.routeNames[index])}
   >
     <BottomNavigationTab title='Trang chủ' icon={HomeIcon} />
@@ -68,7 +71,13 @@ export default function BottomTab({}) {
       }}
       tabBar={props => <BottomTabBar {...props} />}
     >
-      <Screen name={HOME_SCREEN} component={HomeStack} />
+      <Screen
+        name={HOME_SCREEN}
+        component={HomeStack}
+        options={{
+          tabBarVisible: false
+        }}
+      />
       <Screen name='Map' component={Map} />
       <Screen name='MapSelect' component={MapSelect} />
       <Screen name='ChatScreen' component={ChatStack} />

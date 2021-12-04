@@ -23,7 +23,7 @@ import {
 } from './styled'
 import { IMAGES } from 'assets'
 
-const HomeScreen = ({}) => {
+const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch()
   const listProductState = useSelector(state => {
     return state.listProduct || {}
@@ -124,7 +124,9 @@ const HomeScreen = ({}) => {
               showsHorizontalScrollIndicator={false}
               data={listProductTop}
               keyExtractor={(_, index) => index.toString()}
-              renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
+              renderItem={({ _ }) => (
+                <ProductItem navigation={navigation} style={{ width: 150 }} />
+              )}
               ListFooterComponent={_renderFooter}
               onEndReached={handleLoadMoreProductTop}
               onEndReachedThreshold={0.5}
@@ -138,7 +140,11 @@ const HomeScreen = ({}) => {
               data={listProductSuggestions}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
-                <ProductItem style={{ width: 150 }} product={item} />
+                <ProductItem
+                  navigation={navigation}
+                  style={{ width: 150 }}
+                  product={item}
+                />
               )}
               ListFooterComponent={_renderFooter}
               onEndReached={handleLoadMoreInProductSuggestions}
@@ -153,7 +159,11 @@ const HomeScreen = ({}) => {
               data={listProductFav}
               keyExtractor={(_, index) => index.toString()}
               renderItem={({ item }) => (
-                <ProductItem style={{ width: 150 }} product={item} />
+                <ProductItem
+                  navigation={navigation}
+                  style={{ width: 150 }}
+                  product={item}
+                />
               )}
               ListFooterComponent={_renderFooter}
               onEndReached={handleLoadMoreInProductFav}

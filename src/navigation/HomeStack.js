@@ -9,7 +9,7 @@ const HomeStack = () => (
   <Navigator>
     <Screen
       name='HOME'
-      options={{ title: 'Trang chủ' }}
+      options={{ title: 'Trang chủ', headerShown: false }}
       component={HomeScreen}
     />
     <Screen

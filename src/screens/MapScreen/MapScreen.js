@@ -19,9 +19,11 @@ import MapModal from 'components/MapModal'
 import SettingModal from 'components/SettingModal'
 import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
 import { withArray } from 'exp-value'
+import { useNavigation } from '@react-navigation/native'
 
 const MapScreen = () => {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
   const listProductReducer = useSelector(state => {
     return state.listProductMapFilter
   })

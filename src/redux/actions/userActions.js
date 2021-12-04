@@ -21,7 +21,6 @@ export const signup =
         'https://static2.yan.vn/YanNews/2167221/202102/facebook-cap-nhat-avatar-doi-voi-tai-khoan-khong-su-dung-anh-dai-dien-e4abd14d.jpg'
       const { email, password, name } = data
 
-      console.log(data, 'data')
       dispatch({ type: SIGNUP_REQUEST })
       const res = await firebase
         .auth()
@@ -46,10 +45,8 @@ export const signup =
           )
         })
 
-      console.log(res, 'res register')
       const uid = withNull('user.uid', res)
 
-      console.log(uid, 'uid')
       // add to database
       const registerUser = await axios.post(REGISTER_USER, {
         username: name,
@@ -92,7 +89,6 @@ export const login =
         )
 
         if (withNull('data.status', getUserInfo)) {
-          console.log(withNull('data.status', getUserInfo))
           dispatch({
             type: LOGIN_SUCCESS,
             payload: withObject('data.data', getUserInfo)
@@ -116,7 +112,6 @@ export const login =
           message = error.toString() || 'Lỗi mạng '
           break
       }
-      console.log(message)
       dispatch({ type: LOGIN_FAILED, payload: message })
       handleCheck(LOGIN_FAILED, false, message)
     }
