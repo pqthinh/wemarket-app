@@ -11,6 +11,7 @@ import {
   Image,
   Button
 } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Text } from '@ui-kitten/components'
 import { useShowState } from 'core/hooks'
@@ -21,11 +22,27 @@ import Address from './Address'
 import EditModal from './EditModal'
 import useCache from 'hooks/useCache'
 import EditAvatar from './EditAvatar'
+import { updateAvatar } from 'actions/profileAction'
 const Profile = ({ navigation }) => {
-  const { set, get } = useCache
+  const dispatch = useDispatch()
+  const profileUserReducer = useSelector(state => {
+    return state.manageProfile
+  })
   const [userDetails, setUserDetails] = useState({})
   const [pickerResponse, setPickerResponse] = useState(null)
   const [isModalVisible, toggleImageModal] = useShowState()
+  useEffect(() => {
+    console.log(profileUserReducer)
+  }, [profileUserReducer])
+  const onSubmitPress = useCallback(
+    image =>
+      dispatch(
+        updateAvatar({
+          avatarImage: image
+        })
+      ),
+    [dispatch]
+  )
   // useEffect(() => {
   //   fetchUserDetails()
   // }, [userDetails])
@@ -72,21 +89,26 @@ const Profile = ({ navigation }) => {
     }
     launchCamera(options, setPickerResponse)
   }, [])
+  const image = pickerResponse?.assets && pickerResponse?.assets[0]
   const uri = pickerResponse?.assets && pickerResponse.assets[0].uri
   const { avatar, name, email, phoneNumber, address } = userDetails
   if (uri) {
     return (
-      // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      //   <View>
-      //     {uri && (
-      //       <Image source={{ uri }} style={{ width: 300, height: 300 }} />
-      //     )}
-      //   </View>
-      //   <View style={{ marginTop: 30 }}>
-      //     <Button title='add post' status='success' />
-      //   </View>
-      // </View>
-      <EditAvatar uri={uri} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+          {uri && (
+            <Image source={{ uri }} style={{ width: 300, height: 300 }} />
+          )}
+        </View>
+        <View style={{ marginTop: 30 }}>
+          <Button
+            title='add post'
+            status='success'
+            onPress={() => onSubmitPress(image)}
+          />
+        </View>
+      </View>
+      // <EditAvatar uri={uri} />
     )
   } else {
     return (
