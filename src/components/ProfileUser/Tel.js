@@ -1,9 +1,8 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements'
-import { Text } from '@ui-kitten/components'
+import { Text, Icon } from '@ui-kitten/components'
 import PropTypes from 'prop-types'
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -12,15 +11,17 @@ const styles = StyleSheet.create({
   },
   iconRow: {
     flex: 2,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginLeft: 25
   },
   smsIcon: {
     color: 'gray',
     fontSize: 30
   },
   smsRow: {
-    flex: 2,
-    justifyContent: 'flex-start'
+    flex: 1,
+    justifyContent: 'flex-start',
+    marginRight: 5
   },
   telIcon: {
     color: '#75BCFF',
@@ -55,10 +56,9 @@ const Tel = ({ phoneNumber, onPressTel }) => {
     <TouchableOpacity onPress={() => onPressTel(phoneNumber)}>
       <View style={[styles.container]}>
         <View style={styles.iconRow}>
-          <Icon
+          <MaterialIcons
             name='call'
-            underlayColor='transparent'
-            iconStyle={styles.telIcon}
+            style={styles.telIcon}
             onPress={() => onPressTel(phoneNumber)}
           />
         </View>
@@ -68,10 +68,9 @@ const Tel = ({ phoneNumber, onPressTel }) => {
           </View>
         </View>
         <View style={styles.smsRow}>
-          <Icon
+          <MaterialIcons
             name='edit'
-            underlayColor='transparent'
-            iconStyle={styles.smsIcon}
+            style={styles.smsIcon}
             onPress={() => onPressTel(phoneNumber)}
           />
         </View>

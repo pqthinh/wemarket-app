@@ -1,13 +1,12 @@
 import React from 'react'
-import { Icon } from 'react-native-elements'
-
+import EntypoIcons from 'react-native-vector-icons/Entypo'
 
 const Chevron = () => (
-  <Icon
-    name="chevron-right"
-    type="entypo"
+  <EntypoIcons
+    name='chevron-right'
     color='#D1D1D6'
-    containerStyle={{ marginLeft: -15, width: 20 }}
+    size={24}
+    style={{ marginLeft: -15, width: 20 }}
   />
 )
 
