@@ -5,6 +5,7 @@ import BaseIcon from 'components/IconProfile/Icon'
 import Chevron from 'components/IconProfile/Chevron'
 import InfoText from 'components/IconProfile/InfoText'
 import { Button } from '@ui-kitten/components'
+import { useNavigation } from '@react-navigation/native'
 const styles = StyleSheet.create({
   scroll: {
     backgroundColor: 'white'
@@ -30,7 +31,8 @@ const styles = StyleSheet.create({
   }
 })
 
-const Setting = ({ navigation }) => {
+const Setting = () => {
+  const navigation = useNavigation()
   const [userDetails, setUserDetails] = useState({})
   const [pushNotifications, setPushNotifications] = useState(true)
   // useEffect(()=>{

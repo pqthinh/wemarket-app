@@ -1,19 +1,17 @@
 import React, { Component, useEffect, useState, useCallback } from 'react'
-import { Card, Icon, Avatar } from 'react-native-elements'
 import {
   TouchableOpacity,
   ImageBackground,
-  Linking,
   Platform,
   ScrollView,
   StyleSheet,
   View,
-  Image,
   Button
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { Text } from '@ui-kitten/components'
+import { Text, Avatar } from '@ui-kitten/components'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useShowState } from 'core/hooks'
 import Email from './Email'
 import Separator from './Separator'
@@ -21,7 +19,7 @@ import Tel from './Tel'
 import Address from './Address'
 import EditModal from './EditModal'
 import EditAvatar from './EditAvatar'
-import { updateAvatar } from 'actions/profileAction'
+import { updateAvatar } from 'actions/profileActions'
 const Profile = ({ navigation }) => {
   const dispatch = useDispatch()
   const profileUserReducer = useSelector(state => {
@@ -33,10 +31,6 @@ const Profile = ({ navigation }) => {
   useEffect(() => {
     console.log(profileUserReducer, 'profile')
   }, [profileUserReducer])
-  const onSubmitPress = useCallback(
-    () => dispatch(updateAvatar(image)),
-    [dispatch]
-  )
   // useEffect(() => {
   //   fetchUserDetails()
   // }, [userDetails])
@@ -84,6 +78,12 @@ const Profile = ({ navigation }) => {
     launchCamera(options, setPickerResponse)
   }, [])
   const image = pickerResponse?.assets && pickerResponse?.assets[0]
+  console.log(image, 'image-picker')
+
+  const onSubmitPress = useCallback(
+    image => dispatch(updateAvatar(image)),
+    [dispatch]
+  )
   const uri = pickerResponse?.assets && pickerResponse.assets[0].uri
   const { avatar, name, email, phoneNumber, address } = userDetails
   if (uri) {
@@ -91,11 +91,15 @@ const Profile = ({ navigation }) => {
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <View>
           {uri && (
-            <Image source={{ uri }} style={{ width: 300, height: 300 }} />
+            <Avatar source={{ uri }} style={{ width: 300, height: 300 }} />
           )}
         </View>
         <View style={{ marginTop: 30 }}>
-          <Button title='add post' status='success' onPress={onSubmitPress} />
+          <Button
+            title='add post'
+            status='success'
+            onPress={() => onSubmitPress(image)}
+          />
         </View>
       </View>
       // <EditAvatar uri={uri} />
@@ -104,56 +108,60 @@ const Profile = ({ navigation }) => {
     return (
       <ScrollView style={styles.scroll}>
         <View style={styles.container}>
-          <Card containerStyle={styles.cardContainer}>
-            <View style={styles.headerContainer}>
-              <ImageBackground
-                style={styles.headerBackgroundImage}
-                blurRadius={10}
-                source={{
-                  uri: 'https://forums.macrumors.com/attachments/img_0215-jpg.685731/'
-                }}
-              >
-                <View style={styles.headerColumn}>
-                  <View>
-                    <Avatar
-                      rounded
-                      size='xlarge'
-                      source={{
-                        uri:
-                          avatar ||
-                          'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
-                      }}
-                      style={{ width: 150, height: 150 }}
-                    />
-                    <View style={styles.add}>
-                      <TouchableOpacity onPress={toggleImageModal}>
-                        <Icon type='material' name='camera-alt' fill='#111' />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={styles.userName}>
-                    <Text style={styles.userNameText}>
-                      {name || 'Người dùng'}
-                    </Text>
+          {/* <Card style={styles.cardContainer}> */}
+          <View style={styles.headerContainer}>
+            <ImageBackground
+              style={styles.headerBackgroundImage}
+              blurRadius={10}
+              source={{
+                uri: 'https://forums.macrumors.com/attachments/img_0215-jpg.685731/'
+              }}
+            >
+              <View style={styles.headerColumn}>
+                <View>
+                  <Avatar
+                    rounded
+                    size='xlarge'
+                    source={{
+                      uri:
+                        avatar ||
+                        'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
+                    }}
+                    style={{ width: 150, height: 150 }}
+                  />
+                  <View style={styles.add}>
+                    <TouchableOpacity onPress={toggleImageModal}>
+                      <MaterialIcons
+                        name='camera-alt'
+                        size={24}
+                        color='black'
+                      />
+                    </TouchableOpacity>
                   </View>
                 </View>
-              </ImageBackground>
-            </View>
+                <View style={styles.userName}>
+                  <Text style={styles.userNameText}>
+                    {name || 'Người dùng'}
+                  </Text>
+                </View>
+              </View>
+            </ImageBackground>
+          </View>
 
-            <Email
-              email={email || 'test@gmail.com'}
-              //onPressEmail={onPressEmail}
-            />
-            {Separator()}
-            <Address address={address || '144 Xuân Thuỷ, Cầu Giấy, Hà Nội'} />
-            {Separator()}
-            <Tel
-              phoneNumber={phoneNumber || '012789125'}
-              // onPressSms={onPressSms}
-              // onPressTel={onPressTel}
-            />
-            {Separator()}
-          </Card>
+          <Email
+            email={email || 'test@gmail.com'}
+            //onPressEmail={onPressEmail}
+          />
+          {Separator()}
+          <Address address={address || '144 Xuân Thuỷ, Cầu Giấy, Hà Nội'} />
+          {Separator()}
+          <Tel
+            phoneNumber={phoneNumber || '012789125'}
+            // onPressSms={onPressSms}
+            // onPressTel={onPressTel}
+          />
+          {Separator()}
+          {/* </Card> */}
         </View>
         <EditModal
           isModalVisible={isModalVisible}

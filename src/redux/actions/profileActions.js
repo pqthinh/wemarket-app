@@ -28,7 +28,8 @@ export const getUserDetails = () => async dispatch => {
     })
 }
 export const updateAvatar = avatarImage => async dispatch => {
-  const uri = useFirebase(avatarImage)
+  console.log(avatarImage)
+  const uri = useFirebase({ avatarImage })
   let user = firebase.auth().currentUser
   await db.collection('users').doc(user.uid).update({
     photoURl: uri

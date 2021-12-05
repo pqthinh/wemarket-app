@@ -1,4 +1,3 @@
-  
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon } from 'react-native-elements'
@@ -15,17 +14,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 10,
     marginRight: 18,
-    width: 34,
-  },
+    width: 34
+  }
 })
 
 const BaseIcon = ({ containerStyle, icon }) => (
   <View style={[styles.container, containerStyle]}>
     <Icon
       size={24}
-      color="white"
-      type="material"
-      name="notifications"
+      color='white'
+      type='material'
+      name='notifications'
       {...icon}
     />
   </View>
@@ -34,13 +33,13 @@ const BaseIcon = ({ containerStyle, icon }) => (
 BaseIcon.propTypes = {
   containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   icon: PropTypes.object,
-  iconStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+  iconStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
 }
 
 BaseIcon.defaultProps = {
   containerStyle: {},
   icon: {},
-  iconStyle: {},
+  iconStyle: {}
 }
 
-export default BaseIcon;
+export default BaseIcon

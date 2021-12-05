@@ -12,6 +12,7 @@ import { HOME_SCREEN } from 'utils/ScreenName'
 import ChatStack from './ChatStack'
 import HomeStack from './HomeStack'
 import ProfileStack from './ProfileStack'
+
 const { Navigator, Screen } = createBottomTabNavigator()
 
 const HomeIcon = props => <Icon {...props} name='home' pack='material' />
@@ -53,7 +54,7 @@ const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigationTab title='Trang cá nhân' icon={ProfileIcon} />
   </BottomNavigation>
 )
-export default function BottomTab({}) {
+const BottomTab = () => {
   return (
     <Navigator
       initialRouteName={HOME_SCREEN}
@@ -76,3 +77,4 @@ export default function BottomTab({}) {
     </Navigator>
   )
 }
+export default BottomTab
