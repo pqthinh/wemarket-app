@@ -1,6 +1,5 @@
-import { Text } from '@ui-kitten/components'
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { Avatar } from 'react-native-elements'
 import { useTheme } from 'stores/theme-context'
@@ -9,11 +8,12 @@ import { useDispatch } from 'react-redux'
 import { firebase } from 'configs/firebaseConfig'
 import PostScreen from './PostScreen'
 import Setting from './SettingScreen'
-
+import { Tab, TabBar, TabView, Text, Layout } from '@ui-kitten/components'
 import MaterialTabs from 'react-native-material-tabs'
 
 const ProfileScreen = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const dispatch = useDispatch()
   const [user, setUser] = useState(null)
   const signOut = () => {
@@ -77,30 +77,8 @@ const ProfileScreen = ({ navigation }) => {
           </Text>
         </View>
       </View>
-      {/* )} */}
-      {/* <TopTab.Navigator
-        screenOptions={{
-          tabBarIndicatorStyle: { backgroundColor: '#E26740' },
-          tabBarActiveTintColor: '#E26740',
-          tabBarInactiveTintColor: 'gray'
-        }}
-      >
-        <TopTab.Screen
-          name='Setting'
-          component={Setting}
-          options={{ title: 'Cài đặt' }}
-        />
-        <TopTab.Screen
-          name='Posts'
-          component={PostScreen}
-          options={{ title: 'Bài viết' }}
-        />
-      </TopTab.Navigator> */}
-      {/* <Navigator tabBar={props => <TopTabBar {...props} />}>
-        <Screen name='Cài đặt' component={Setting} />
-        <Screen name='Bài viết' component={PostScreen} />
-      </Navigator> */}
-      <MaterialTabs
+
+      {/* <MaterialTabs
         items={['Cài đặt', 'Bài viết']}
         selectedIndex={selectedTab}
         onChange={setSelectedTab}
@@ -109,8 +87,16 @@ const ProfileScreen = ({ navigation }) => {
         indicatorColor='#E26740'
         inactiveTextColor='gray'
         activeTextColor='#E26740'
-      />
-      {selectedTab == 0 ? <Setting /> : <PostScreen />}
+      /> */}
+      <TabBar
+        selectedIndex={selectedIndex}
+        onSelect={index => setSelectedIndex(index)}
+        style={{ height: 40 }}
+      >
+        <Tab title='Cài đặt'>{/* <Setting /> */}</Tab>
+        <Tab title='Bài viết'>{/* <PostScreen /> */}</Tab>
+      </TabBar>
+      {selectedIndex == 0 ? <Setting /> : <PostScreen />}
     </SafeAreaView>
   )
 }

@@ -4,7 +4,7 @@ import { TabBar, Tab, Divider, Layout } from '@ui-kitten/components'
 export const TodoTabBar = props => {
   const onTabSelect = index => {
     const selectedTabRoute = props.state.routeNames[index]
-    props.navigation.navigate(selectedTabRoute)
+    //props.navigation.navigate(selectedTabRoute)
   }
 
   const createNavigationTabForRoute = route => {
