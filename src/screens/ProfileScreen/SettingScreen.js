@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native'
 const styles = StyleSheet.create({
   scroll: {
     backgroundColor: 'white'
+    //flexShrink: 2
+    // flex: 1
   },
   userRow: {
     alignItems: 'center',
