@@ -1,11 +1,14 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { Component, useCallback, useEffect, useState } from 'react'
 import { ScrollView, Switch, StyleSheet, Text, View } from 'react-native'
+import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { ListItem } from 'react-native-elements'
 import BaseIcon from 'components/IconProfile/Icon'
 import Chevron from 'components/IconProfile/Chevron'
 import InfoText from 'components/IconProfile/InfoText'
 import { Button } from '@ui-kitten/components'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
+import { logout } from 'actions/userActions'
 const styles = StyleSheet.create({
   scroll: {
     backgroundColor: 'white'
@@ -33,30 +36,19 @@ const styles = StyleSheet.create({
   }
 })
 
-const Setting = () => {
+const Setting = ({ user }) => {
+  const dispatch = useDispatch()
   const navigation = useNavigation()
   const [userDetails, setUserDetails] = useState({})
   const [pushNotifications, setPushNotifications] = useState(true)
-  // useEffect(()=>{
-  //   fetchUserDetails()
-  // })
-
-  // onPressSetting = () => {
-  //   this.props.navigation.navigate('Options')
-  // }
 
   const onChangePushNotifications = () => {
     setPushNotifications(!pushNotifications)
   }
-  //    const  fetchUserDetails = async () => {
-  //       try {
-  //         const userDetails = await Api.getUserDetails()
-  //         setUserDetails(userDetails)
-  //       } catch (error) {
-  //         console.log(error)
-  //       }
-  //     }
-  //   const { avatar, name, email } = userDetails
+  const logOut = useCallback(() => dispatch(logout()), [dispatch])
+  const signIn = () => {
+    navigation.navigate(SIGN_IN_SCREEN)
+  }
   return (
     <ScrollView style={styles.scroll}>
       <InfoText text='Account' />
@@ -93,22 +85,38 @@ const Setting = () => {
           <ListItem.Title style={{ fontSize: 15 }}>Sáng</ListItem.Title>
           <Chevron />
         </ListItem>
-        <ListItem
-          onPress={() => navigation.navigate('Sửa trang cá nhân')}
-          containerStyle={styles.listItemContainer}
-        >
-          <BaseIcon
-            containerStyle={{ backgroundColor: '#A4C8F0' }}
-            icon={{
-              type: 'font-awesome',
-              name: 'user-o'
-            }}
-          />
-          <ListItem.Content>
-            <ListItem.Title>Thiết lập tài khoản</ListItem.Title>
-          </ListItem.Content>
-          <Chevron />
-        </ListItem>
+        {user ? (
+          <ListItem
+            onPress={() => navigation.navigate('Sửa trang cá nhân')}
+            containerStyle={styles.listItemContainer}
+          >
+            <BaseIcon
+              containerStyle={{ backgroundColor: '#A4C8F0' }}
+              icon={{
+                type: 'font-awesome',
+                name: 'user-o'
+              }}
+            />
+            <ListItem.Content>
+              <ListItem.Title>Thiết lập tài khoản</ListItem.Title>
+            </ListItem.Content>
+            <Chevron />
+          </ListItem>
+        ) : (
+          <ListItem onPress={signIn} containerStyle={styles.listItemContainer}>
+            <BaseIcon
+              containerStyle={{ backgroundColor: '#A4C8F0' }}
+              icon={{
+                type: 'font-awesome',
+                name: 'user-o'
+              }}
+            />
+            <ListItem.Content>
+              <ListItem.Title>Thiết lập tài khoản</ListItem.Title>
+            </ListItem.Content>
+            <Chevron />
+          </ListItem>
+        )}
         <ListItem
           //   onPress={() => this.onPressSetting()}
           containerStyle={styles.listItemContainer}
@@ -199,7 +207,11 @@ const Setting = () => {
         </ListItem>
       </View>
 
-      <Button style={styles.logoutButton}>Đăng xuất</Button>
+      {user && (
+        <Button onPress={logOut} style={styles.logoutButton}>
+          Đăng xuất
+        </Button>
+      )}
     </ScrollView>
   )
 }
