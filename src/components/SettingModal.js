@@ -40,7 +40,12 @@ export default SettingModal = props => {
         return category.filter(c => c.type === e[0])[0].id
       })
     console.log(listCategory)
-    props.settingMap(props.sliderValue, listCategory)
+    props.settingMap(
+      props.sliderValue,
+      listCategory,
+      props.location.latitude,
+      props.location.longitude
+    )
   }
   const getRadius = async () => {
     props.setSliderValue(await get('save_radius'))

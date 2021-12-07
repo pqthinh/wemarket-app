@@ -33,10 +33,7 @@ const MapScreen = () => {
   const [listProduct, setListProduct] = useState([])
 
   const [loading, setLoading] = useState(true)
-  const [location, setLocation] = useState({
-    latitude: 21.0369,
-    longitude: 105.7823
-  })
+  const [location, setLocation] = useState(null)
   const { set, get } = useCache
 
   const [modalVisible, setModalVisible] = useState(false)
@@ -51,8 +48,8 @@ const MapScreen = () => {
   })
   const [radius, setRadius] = useState(null)
   const [region, setRegion] = useState({
-    latitude: location.latitude,
-    longitude: location.longitude,
+    latitude: location?.latitude || 21.0541883,
+    longitude: location?.longitude || 105.8263367,
     latitudeDelta: (Math.PI * radius) / 111.045,
     longitudeDelta: 0.01
   })
@@ -141,6 +138,7 @@ const MapScreen = () => {
   useEffect(() => {
     if (listProductReducer) {
       setListProduct(withArray('listViewProductMap.result', listProductReducer))
+      console.log(listProduct, 'product_list')
     }
   }, [listProductReducer])
 
@@ -148,19 +146,19 @@ const MapScreen = () => {
     const distance = (await get('save_radius')) || 1
     dispatch(
       getViewProductMap({
-        lat: location.latitude,
-        lng: location.longitude,
+        lat: location?.latitude || 21.0541883,
+        lng: location?.longitude || 105.8263367,
         distance: distance
       })
     )
   }, [])
 
   const dispatchSettingMap = useCallback(
-    (getRadius, categoryId) =>
+    (getRadius, categoryId, lat, lng) =>
       dispatch(
         getViewProductMap({
-          lat: location.latitude,
-          lng: location.longitude,
+          lat: lat || 21.0541883,
+          lng: lng || 105.8263367,
           distance: getRadius,
           categoryId: categoryId
         })
@@ -285,12 +283,14 @@ const MapScreen = () => {
         close={close_2}
         sliderValue={radius}
         setSliderValue={setRadius}
+        location={location}
         settingMap={dispatchSettingMap}
       />
     </SafeAreaView>
   )
 }
 
+export default React.memo(MapScreen)
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
@@ -324,5 +324,3 @@ const styles = StyleSheet.create({
     elevation: 11
   }
 })
-
-export default React.memo(MapScreen)
