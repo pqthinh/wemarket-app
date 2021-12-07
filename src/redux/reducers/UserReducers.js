@@ -52,7 +52,7 @@ export default (state = {}, action) => {
     case LOGOUT:
       return {
         ...state,
-        userInfo: {},
+        userInfo: null,
         loading: false,
         type: action.type,
         message: ''

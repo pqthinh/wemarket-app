@@ -49,7 +49,7 @@ const MapScreen = () => {
     star: '',
     price: ''
   })
-  const [radius, setRadius] = useState(1)
+  const [radius, setRadius] = useState(null)
   const [region, setRegion] = useState({
     latitude: location.latitude,
     longitude: location.longitude,
@@ -107,7 +107,7 @@ const MapScreen = () => {
   }, [])
 
   useEffect(async () => {
-    setRadius((await get('save_radius')) || 1)
+    setRadius(await get('save_radius'))
   }, [])
 
   useMemo(() => {
@@ -192,7 +192,11 @@ const MapScreen = () => {
         enableHighAccuracy={false}
       >
         {listProduct.map((host, i) => {
-          if (parseFloat(host.lat) && parseFloat(host.lng)) {
+          if (
+            parseFloat(host.lat) &&
+            parseFloat(host.lng) &&
+            host.iconCategory
+          ) {
             return (
               <Marker
                 key={i}
@@ -201,7 +205,7 @@ const MapScreen = () => {
                   longitude: parseFloat(host.lng)
                 }}
                 image={{
-                  uri: host.iconCategory ? host.iconCategory : null
+                  uri: host?.iconCategory || null
                 }}
                 title={host.name}
                 pinColor={'#ffd1dc'}
@@ -225,11 +229,12 @@ const MapScreen = () => {
                     latitude: parseFloat(host.lat),
                     longitude: parseFloat(host.lng)
                   })
-                  setRegion(prevState => ({
-                    ...prevState,
+                  setRegion({
                     latitude: parseFloat(host.lat),
-                    longitude: parseFloat(host.lng)
-                  }))
+                    longitude: parseFloat(host.lng),
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.01
+                  })
                   setOpenDirection(false)
                 }}
               />
@@ -246,16 +251,18 @@ const MapScreen = () => {
           />
         )}
         {coordinate.latitude !== null && <Marker coordinate={coordinate} />}
-        <MapView.Circle
-          center={{
-            latitude: location?.latitude || 21.0541883,
-            longitude: location?.longitude || 105.8263367
-          }}
-          radius={radius * 1000}
-          strokeWidth={2}
-          strokeColor='#3399ff'
-          fillColor='rgba(128,191,255,0.2)'
-        />
+        {radius && (
+          <MapView.Circle
+            center={{
+              latitude: location?.latitude || 21.0541883,
+              longitude: location?.longitude || 105.8263367
+            }}
+            radius={radius * 1000}
+            strokeWidth={2}
+            strokeColor='#3399ff'
+            fillColor='rgba(128,191,255,0.2)'
+          />
+        )}
       </MapView>
       <TouchableOpacity
         style={styles.Button}
