@@ -19,7 +19,7 @@ export const signup =
     try {
       const avatar =
         'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
-      const { email, password, name } = data
+      const { email, password, name, phone, address } = data
 
       console.log(data, 'data')
       dispatch({ type: SIGNUP_REQUEST })
@@ -65,6 +65,7 @@ export const signup =
         handleCheck(SIGNUP_SUCCESS, true, 'Đăng ký thành công')
       }
     } catch (error) {
+      console.log(error)
       let message
       if (error.code === 'auth/email-already-in-use') {
         message = 'Email đã được sử dụng'

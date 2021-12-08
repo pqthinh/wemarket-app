@@ -14,7 +14,7 @@ export default (state = {}, action) => {
       return {
         ...state,
         loading: true,
-        userInfo: {},
+        userInfo: null,
         message: ''
       }
     case SIGNUP_SUCCESS:

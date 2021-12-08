@@ -43,9 +43,15 @@ export default SettingModal = props => {
     props.settingMap(
       props.sliderValue,
       listCategory,
-      props.location.latitude,
-      props.location.longitude
+      props.location?.latitude || 21.0541883,
+      props.location?.longitude || 105.8263367
     )
+    props.setRegion({
+      latitude: props.location?.latitude || 21.0541883,
+      longitude: props.location?.longitude || 105.8263367,
+      latitudeDelta: (Math.PI * props.sliderValue) / 111.045,
+      longitudeDelta: 0.01
+    })
   }
   const getRadius = async () => {
     props.setSliderValue(await get('save_radius'))

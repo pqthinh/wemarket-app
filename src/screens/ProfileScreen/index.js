@@ -14,16 +14,11 @@ import { Tab, TabBar, Text, Layout, Button } from '@ui-kitten/components'
 const ProfileScreen = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
 
   const userReducer = useSelector(state => {
     return state.userState
   })
-  useEffect(() => {
-    console.log(userReducer.userInfo, 'user')
-    setUser(userReducer.userInfo)
-  }, [userReducer])
-  console.log(user, 'user_info')
+  console.log(userReducer.userInfo)
   const signIn = () => {
     navigation.navigate(SIGN_IN_SCREEN)
   }
@@ -31,7 +26,7 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate(SIGN_UP_SCREEN)
   }
 
-  if (user)
+  if (userReducer.userInfo)
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
@@ -47,20 +42,22 @@ const ProfileScreen = ({ navigation }) => {
                 size='large'
                 source={{
                   uri:
-                    user?.avatar ||
+                    userReducer.userInfo?.avatar ||
                     'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
                 }}
               />
             </View>
             <View>
-              <Text style={{ fontSize: 16 }}>{user.username}</Text>
+              <Text style={{ fontSize: 16 }}>
+                {userReducer.userInfo.username}
+              </Text>
               <Text
                 style={{
                   color: 'gray',
                   fontSize: 16
                 }}
               >
-                {user.email}
+                {userReducer.userInfo.email}
               </Text>
             </View>
           </View>
@@ -73,7 +70,11 @@ const ProfileScreen = ({ navigation }) => {
             <Tab title='Cài đặt' />
             <Tab title='Bài viết' />
           </TabBar>
-          {selectedIndex == 0 ? <Setting user={user} /> : <PostScreen />}
+          {selectedIndex == 0 ? (
+            <Setting user={userReducer.userInfo} />
+          ) : (
+            <PostScreen />
+          )}
         </ScrollView>
       </SafeAreaView>
     )
@@ -99,7 +100,7 @@ const ProfileScreen = ({ navigation }) => {
             Đăng ký
           </Button>
         </View>
-        <Setting user={user} />
+        <Setting user={userReducer.userInfo} />
       </ScrollView>
     )
 }

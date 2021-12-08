@@ -1,5 +1,5 @@
 import { useTheme } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Image,
   KeyboardAvoidingView,
@@ -12,7 +12,7 @@ import {
 import { Input, Button, Text } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMAGES } from 'assets'
-import { SIGN_UP_SCREEN } from 'utils/ScreenName'
+import { SIGN_UP_SCREEN, HOME_SCREEN } from 'utils/ScreenName'
 import { login } from 'actions/userActions'
 import { useForm, Controller } from 'react-hook-form'
 import Toast from 'react-native-toast-message'
@@ -55,6 +55,14 @@ export default function SignIn({ navigation }) {
       })
     } else Toast.hide()
   }, [error, userInfo])
+  React.useEffect(() => {
+    if (userInfo.userInfo) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: HOME_SCREEN }]
+      })
+    }
+  }, [userInfo.userInfo])
 
   return (
     <Container>

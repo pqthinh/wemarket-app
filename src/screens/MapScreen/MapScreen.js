@@ -151,7 +151,7 @@ const MapScreen = () => {
         distance: distance
       })
     )
-  }, [])
+  }, [location])
 
   const dispatchSettingMap = useCallback(
     (getRadius, categoryId, lat, lng) =>
@@ -249,7 +249,7 @@ const MapScreen = () => {
           />
         )}
         {coordinate.latitude !== null && <Marker coordinate={coordinate} />}
-        {radius && (
+        {radius && location && (
           <MapView.Circle
             center={{
               latitude: location?.latitude || 21.0541883,
@@ -284,6 +284,7 @@ const MapScreen = () => {
         sliderValue={radius}
         setSliderValue={setRadius}
         location={location}
+        setRegion={setRegion}
         settingMap={dispatchSettingMap}
       />
     </SafeAreaView>
