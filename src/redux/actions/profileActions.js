@@ -1,31 +1,26 @@
 import { firebase } from 'configs/firebaseConfig'
 import {
-  FETCH_USER_SUCCESS,
-  FETCH_USER_ERROR,
+  FETCH_POST_REQUEST,
+  FETCH_POST_SUCCESS,
+  FETCH_POST_FAILED,
   UPDATE_USER_SUCCESS
 } from '../actionTypes/profileActionType'
+import { GET_POST_USER } from 'configs/api/apiPath'
+import axios from 'configs/api/baseUrl'
 import useFirebase from 'hooks/useFirebase'
 const db = firebase.firestore()
 
-export const getUserDetails = () => async dispatch => {
-  let user = firebase.auth().currentUser
-  return db
-    .collection('users')
-    .doc(user.uid)
-    .get()
-    .then(function (doc) {
-      let userDetails = doc.data()
-      return dispatch({
-        type: FETCH_USER_SUCCESS,
-        currentUser: userDetails
-      })
-    })
-    .catch(function (error) {
-      return dispatch({
-        type: FETCH_USER_ERROR,
-        error: error
-      })
-    })
+export const getPostUser = params => async dispatch => {
+  console.log(params)
+  try {
+    //dispatch({ type: FETCH_POST_REQUEST })
+    const res = await axios.post(GET_POST_USER, params)
+    if (res && res.data) {
+      dispatch({ type: FETCH_POST_SUCCESS, payload: res.data })
+    } else dispatch({ type: FETCH_POST_FAILED, payload: 'Có lỗi xuất hiện' })
+  } catch (error) {
+    dispatch({ type: FETCH_POST_FAILED, payload: error })
+  }
 }
 export const updateAvatar = avatarImage => async dispatch => {
   console.log(avatarImage)

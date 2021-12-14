@@ -138,7 +138,6 @@ const MapScreen = () => {
   useEffect(() => {
     if (listProductReducer) {
       setListProduct(withArray('listViewProductMap.result', listProductReducer))
-      console.log(listProduct, 'product_list')
     }
   }, [listProductReducer])
 

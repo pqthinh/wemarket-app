@@ -11,3 +11,6 @@ export const FILTER_LIST_PRODUCT = '/common/product/filter'
 // get product detail
 export const GET_PRODUCT_DETAIL = (idProduct, lat, lng) =>
   `/common/product/${idProduct + lat && lng ? `?lat=${lat}&lng=${lng}` : ''}`
+
+// get post user
+export const GET_POST_USER = '/user/product'
