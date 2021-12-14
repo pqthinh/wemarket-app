@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { Avatar } from 'react-native-elements'
-import { useTheme } from 'stores/theme-context'
-import { logout } from 'actions/userActions'
-import { firebase } from 'configs/firebaseConfig'
 import PostScreen from './PostScreen'
 import Setting from './SettingScreen'
 import { useDispatch, useSelector } from 'react-redux'
@@ -73,7 +70,7 @@ const ProfileScreen = ({ navigation }) => {
           {selectedIndex == 0 ? (
             <Setting user={userReducer.userInfo} />
           ) : (
-            <PostScreen />
+            <PostScreen user={userReducer.userInfo} />
           )}
         </ScrollView>
       </SafeAreaView>

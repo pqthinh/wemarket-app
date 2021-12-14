@@ -7,6 +7,7 @@ import { FILTER_LIST_PRODUCT } from 'configs/api/apiPath'
 import axios from 'configs/api/baseUrl'
 
 export const getViewProductMap = params => async dispatch => {
+  console.log(params)
   try {
     dispatch({ type: FILTER_PRODUCT_REQUEST })
     const res = await axios.post(FILTER_LIST_PRODUCT, params)
