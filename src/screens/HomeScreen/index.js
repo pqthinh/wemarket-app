@@ -12,7 +12,8 @@ import {
   ScrollView,
   View
 } from 'react-native'
-
+import { renderRightActions } from 'components/Header'
+import { TopNavigation, Layout } from '@ui-kitten/components'
 import { Divider } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -107,6 +108,14 @@ const HomeScreen = ({}) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <Layout level='3'>
+        <TopNavigation
+          alignment='center'
+          //title='Eva Application'
+          accessoryRight={renderRightActions}
+          // style={{ backgroundColor: '#F2F3F7' }}
+        />
+      </Layout>
       <Divider />
       <ScreenContainer>
         <ScrollView onScroll={_onScroll} scrollEventThrottle={50}>

@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { ScrollView } from 'react-native-virtualized-view'
 import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { Avatar } from 'react-native-elements'
 import PostScreen from './PostScreen'
 import Setting from './SettingScreen'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { Tab, TabBar, Text, Layout, Button } from '@ui-kitten/components'
-
+import {
+  Tab,
+  TabBar,
+  Text,
+  Layout,
+  Button,
+  TopNavigation
+} from '@ui-kitten/components'
+import { renderRightActions } from 'components/Header'
 const ProfileScreen = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const dispatch = useDispatch()
@@ -27,6 +34,14 @@ const ProfileScreen = ({ navigation }) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
+          <Layout level='3'>
+            <TopNavigation
+              alignment='center'
+              //title='Eva Application'
+              accessoryRight={renderRightActions}
+              style={{ backgroundColor: '#F2F3F7' }}
+            />
+          </Layout>
           <View
             style={styles.userRow}
             onStartShouldSetResponder={() =>

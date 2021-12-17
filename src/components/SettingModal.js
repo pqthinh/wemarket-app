@@ -71,7 +71,7 @@ export default SettingModal = props => {
         <TouchableOpacity style={styles.ButtonCancel} onPress={getRadius}>
           <Text style={styles.ButtonCancelText}>Huỷ</Text>
         </TouchableOpacity>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 0.5 }}>
           <Text style={styles.title}>Tuỳ chỉnh sản phẩm hiển thị</Text>
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -132,7 +132,7 @@ export default SettingModal = props => {
 }
 const styles = StyleSheet.create({
   Container: {
-    flex: 0.4,
+    flex: 0.5,
     backgroundColor: `#ffffff`,
     paddingVertical: 20,
     paddingHorizontal: 20
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   title: {
-    marginVertical: 5,
-    fontSize: 16,
+    marginVertical: 2,
+    fontSize: 15,
     fontWeight: 'bold'
   },
   icon: {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   BookNow: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 0.3,
     justifyContent: 'flex-end'
   },
   BookNowButton: {

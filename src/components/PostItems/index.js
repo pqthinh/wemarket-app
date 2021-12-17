@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   imageProduct: {
     width: 100,
     height: 100,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     flex: 0.3,
     marginLeft: 5
   },
