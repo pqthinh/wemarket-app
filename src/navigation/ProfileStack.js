@@ -5,6 +5,7 @@ import SignIn from 'screens/UnAuthScreens/SignIn'
 import SignUp from 'screens/UnAuthScreens/SignUp'
 import ProfileScreen from 'screens/ProfileScreen'
 import EditProfileStack from './EditProfileStack'
+import ChatStack from './ChatStack'
 const { Navigator, Screen } = createStackNavigator()
 
 const screenOptions = {
@@ -33,6 +34,11 @@ export default function ProfileStack() {
         name={SIGN_UP_SCREEN}
         component={SignUp}
         options={{ headerShown: true, title: 'Đăng ký' }}
+      />
+      <Screen
+        name='ChatScreen'
+        component={ChatStack}
+        options={{ headerShown: false, title: 'Chat' }}
       />
     </Navigator>
   )

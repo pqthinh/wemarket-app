@@ -122,15 +122,15 @@ export default MapModal = props => {
             // onPress={props.close}
             onPress={() => props.setOpenDirection(true)}
           >
-            <Icon name='directions' size={20} color='white' />
+            <Icon name='directions' size={18} color='white' />
             <Text style={styles.ButtonText}>Đường đi</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.MessageButton} onPress={dispatchChat}>
-            <FeatherIcon name='message-square' size={20} color='white' />
+            <FeatherIcon name='message-square' size={18} color='white' />
             <Text style={styles.ButtonText}>Nhắn tin</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.SaveButton} onPress={props.close}>
-            <FeatherIcon name='bookmark' size={20} color='white' />
+            <FeatherIcon name='bookmark' size={18} color='white' />
             <Text style={styles.ButtonText}>Quan tâm</Text>
           </TouchableOpacity>
         </View>
@@ -141,16 +141,25 @@ export default MapModal = props => {
 }
 const styles = StyleSheet.create({
   Container: {
-    flex: 1 / 3,
+    flex: 0.45,
     backgroundColor: `#ffffff`,
     paddingVertical: 20,
     paddingHorizontal: 20
   },
   iconRow: {
-    flex: 0.6,
+    flex: 0.19,
     justifyContent: 'center',
     alignSelf: 'center',
     marginTop: -35
+  },
+  BookNow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 0.19,
+    justifyContent: 'flex-end',
+    height: 50,
+
+    height: '100%'
   },
   Row: {
     flexDirection: 'row',
@@ -169,12 +178,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontWeight: '600'
   },
-  BookNow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
+
   DirectButton: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -214,7 +218,8 @@ const styles = StyleSheet.create({
   ButtonText: {
     fontWeight: 'bold',
     color: 'white',
-    marginLeft: 5
+    marginLeft: 5,
+    fontSize: 12
   },
   modal: {
     justifyContent: 'flex-end',

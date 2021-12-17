@@ -13,7 +13,7 @@ const db = firebase.firestore()
 export const getPostUser = params => async dispatch => {
   console.log(params)
   try {
-    //dispatch({ type: FETCH_POST_REQUEST })
+    dispatch({ type: FETCH_POST_REQUEST })
     const res = await axios.post(GET_POST_USER, params)
     if (res && res.data) {
       dispatch({ type: FETCH_POST_SUCCESS, payload: res.data })

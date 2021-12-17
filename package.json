@@ -49,6 +49,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-toast-message": "^1.6.0",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-virtualized-view": "^0.1.5",
     "react-number-format": "^4.7.3",
     "react-redux": "^7.2.5",
     "react-ui-kit-native": "^0.0.25",
