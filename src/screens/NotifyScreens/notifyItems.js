@@ -5,18 +5,18 @@ const image = require('images/logo.png')
 
 const NotifyItems = ({ item }) => {
   return (
-    <Layout style={styles.container}>
+    <Layout style={item.isRead == 1 ? styles.container : styles.container_2}>
       <View style={styles.Row}>
         <View style={styles.avatar}>
           <Avatar
             rounded
             size='medium'
-            source={item.id == 1 ? { uri: item.avatar } : image}
+            source={item.code == 1 ? { uri: item.avatar } : image}
           />
         </View>
         <View style={styles.content}>
           <Text style={styles.title}>{item.title}</Text>
-          {item.id == 1 ? (
+          {item.code == 1 ? (
             <Text>
               {item.username} đã bình luận bài viết của bạn: " {item.content} "
             </Text>
@@ -36,8 +36,11 @@ const NotifyItems = ({ item }) => {
 export default NotifyItems
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  container_2: {
     flex: 1,
-    marginVertical: 5
+    backgroundColor: '#FDECD9'
   },
   avatar: {
     flex: 2
