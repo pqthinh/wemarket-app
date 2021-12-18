@@ -79,7 +79,7 @@ const ProfileScreen = ({ navigation }) => {
             onSelect={index => setSelectedIndex(index)}
             style={{ height: 40 }}
           >
-            <Tab title='Cài đặt' />
+            <Tab title='Tài khoản' />
             <Tab title='Bài viết' />
           </TabBar>
           {selectedIndex == 0 ? (

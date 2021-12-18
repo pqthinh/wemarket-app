@@ -51,7 +51,36 @@ const Setting = ({ user }) => {
   }
   return (
     <ScrollView style={styles.scroll}>
-      <InfoText text='Account' />
+      <InfoText text='Mua hàng' />
+      <View>
+        <ListItem containerStyle={styles.listItemContainer}>
+          <BaseIcon
+            containerStyle={{ backgroundColor: '#F6B48C' }}
+            icon={{
+              type: 'ionicon',
+              name: 'bookmark-outline'
+            }}
+          />
+          <ListItem.Content>
+            <ListItem.Title>Đã lưu</ListItem.Title>
+          </ListItem.Content>
+          <Chevron />
+        </ListItem>
+        <ListItem containerStyle={styles.listItemContainer}>
+          <BaseIcon
+            containerStyle={{ backgroundColor: '#75BCFF' }}
+            icon={{
+              type: 'ionicon',
+              name: 'time-outline'
+            }}
+          />
+          <ListItem.Content>
+            <ListItem.Title>Đã xem gần đây</ListItem.Title>
+          </ListItem.Content>
+          <Chevron />
+        </ListItem>
+      </View>
+      <InfoText text='Cài đặt' />
       <View>
         <ListItem containerStyle={styles.listItemContainer}>
           <BaseIcon
@@ -135,7 +164,7 @@ const Setting = ({ user }) => {
           <Chevron />
         </ListItem>
       </View>
-      <InfoText text='More' />
+      <InfoText text='Xem thêm' />
       <View>
         <ListItem containerStyle={styles.listItemContainer}>
           <BaseIcon
