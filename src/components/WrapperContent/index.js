@@ -25,7 +25,6 @@ const WrapperContent = ({
       {loadMore ? (
         <LoadMoreWrapper
           onClick={() => {
-            console.log('thinh')
             if (typeof loadMoreAction === 'function') loadMoreAction()
           }}
         >

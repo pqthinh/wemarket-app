@@ -7,7 +7,10 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILED,
-  LOGOUT
+  LOGOUT,
+  LOCATION_REQUEST,
+  LOCATION_SUCCESS,
+  LOCATION_FAILED
 } from '../actionTypes/userActionTypes'
 import axios from 'configs/api/baseUrl'
 import { REGISTER_USER, API_GET_USER_DETAIL } from 'configs/api/apiPath'
@@ -134,4 +137,8 @@ export const logout = () => async dispatch => {
 
 export const showAlert = () => async dispatch => {
   dispatch({ type: SHOW_ALERT, payload: 'Không có quyền truy cập' })
+}
+
+export const getLocation = location => async dispatch => {
+  dispatch({ type: LOCATION_SUCCESS, payload: location })
 }

@@ -24,8 +24,8 @@ moment.locale('vi')
 const ProductItem = ({
   product = fakeProduct,
   style,
-  isTopProduct = true,
-  isTopLike = true,
+  isTop = true,
+  isFav = true,
   isReputation = true
 }) => {
   const navigation = useNavigation()
@@ -56,10 +56,10 @@ const ProductItem = ({
             </PostTime>
           </WrapperIcon>
         </WrapperContentProduct>
-        {isTopProduct ? (
+        {isTop ? (
           <TopProduct source={require('assets/images/top-product.png')} />
         ) : null}
-        {isTopLike ? (
+        {isFav ? (
           <TopLikeProduct source={require('assets/images/like.png')} />
         ) : null}
         {isReputation ? <TrustTag>Tài trợ</TrustTag> : null}
