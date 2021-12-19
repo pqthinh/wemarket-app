@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/Ionicons'
 
-export const MaterialIconsPack = {
-  name: 'material',
+export const IonIconsPack = {
+  name: 'ionicons',
   icons: createIconsMap()
 }
 
@@ -19,10 +19,10 @@ function createIconsMap() {
 }
 
 const IconProvider = name => ({
-  toReactElement: props => MaterialIcon({ name, ...props })
+  toReactElement: props => Ionicons({ name, ...props })
 })
 
-function MaterialIcon({ name, style }) {
+function Ionicons({ name, style }) {
   const { height, tintColor, ...iconStyle } = StyleSheet.flatten(style)
   return <Icon name={name} size={height} color={tintColor} style={iconStyle} />
 }

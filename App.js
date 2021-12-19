@@ -5,7 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import * as eva from '@eva-design/eva'
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
-import { MaterialIconsPack } from './material-icons'
+import { IonIconsPack } from './ion-icons'
 import { AppNavigator } from './src/AppNavigator'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import LightTheme from 'configs/theme/LightTheme'
@@ -37,7 +37,7 @@ const App = props => {
     <Provider store={store}>
       <ThemeProvider theme={themeColors}>
         <PersistGate loading={<LoadingAtoms />} persistor={persistor}>
-          <IconRegistry icons={[EvaIconsPack, MaterialIconsPack]} />
+          <IconRegistry icons={[EvaIconsPack, IonIconsPack]} />
           <AppProvider>
             <ThemeContext.Provider
               value={{ theme: theme, toggleTheme: () => toggleTheme() }}

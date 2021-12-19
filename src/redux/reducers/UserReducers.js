@@ -19,7 +19,7 @@ const userState = (state = {}, action) => {
       return {
         ...state,
         loading: true,
-        userInfo: {},
+        userInfo: null,
         message: ''
       }
     case SIGNUP_SUCCESS:
@@ -57,7 +57,7 @@ const userState = (state = {}, action) => {
     case LOGOUT:
       return {
         ...state,
-        userInfo: {},
+        userInfo: null,
         loading: false,
         type: action.type,
         message: ''

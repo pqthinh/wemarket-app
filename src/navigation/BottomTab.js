@@ -6,21 +6,35 @@ import {
   Text
 } from '@ui-kitten/components'
 import React from 'react'
-import Map from 'screens/MapScreen'
+import MapStack from './MapStack'
 import MapSelect from 'screens/MapSelect'
 import { HOME_SCREEN } from 'utils/ScreenName'
-import ChatStack from './ChatStack'
+import NotifyStack from './NotifyStack'
 import HomeStack from './HomeStack'
 import ProfileStack from './ProfileStack'
+
 const { Navigator, Screen } = createBottomTabNavigator()
 
-const HomeIcon = props => <Icon {...props} name='home' pack='material' />
-const MapIcon = props => <Icon {...props} name='map' pack='material' />
-const MessageIcon = props => (
-  <Icon {...props} name='question-answer' pack='material' />
-)
-const ProfileIcon = props => <Icon {...props} name='person' pack='material' />
 const IconPostNews = props => (
+  <Icon
+    {...props}
+    name='add-circle-outline'
+    style={[
+      props.style,
+      {
+        position: 'absolute',
+        bottom: -20,
+        height: 60,
+        width: 60,
+        borderRadius: 60,
+        alignSelf: 'center',
+        backgroundColor: 'white'
+      }
+    ]}
+    pack='ionicons'
+  />
+)
+const IconPostNewsPress = props => (
   <Icon
     {...props}
     name='add-circle'
@@ -33,10 +47,10 @@ const IconPostNews = props => (
         width: 60,
         borderRadius: 60,
         alignSelf: 'center',
-        backgroundColor: '#F2F3F7'
+        backgroundColor: 'white'
       }
     ]}
-    pack='material'
+    pack='ionicons'
   />
 )
 
@@ -46,14 +60,45 @@ const BottomTabBar = ({ navigation, state }) => (
     selectedIndex={state.index}
     onSelect={index => navigation.navigate(state.routeNames[index])}
   >
-    <BottomNavigationTab title='Trang chủ' icon={HomeIcon} />
-    <BottomNavigationTab title='Bản đồ' icon={MapIcon} />
-    <BottomNavigationTab icon={IconPostNews} />
-    <BottomNavigationTab title='Tin nhắn' icon={MessageIcon} />
-    <BottomNavigationTab title='Trang cá nhân' icon={ProfileIcon} />
+    <BottomNavigationTab
+      title='Trang chủ'
+      icon={
+        <Icon
+          name={state.index == 0 ? 'home' : 'home-outline'}
+          pack='ionicons'
+        />
+      }
+    />
+    <BottomNavigationTab
+      title='Bản đồ'
+      icon={
+        <Icon name={state.index == 1 ? 'map' : 'map-outline'} pack='ionicons' />
+      }
+    />
+    <BottomNavigationTab
+      icon={state.index == 2 ? IconPostNewsPress : IconPostNews}
+    />
+    <BottomNavigationTab
+      title='Thông báo'
+      icon={
+        <Icon
+          name={state.index == 3 ? 'notifications' : 'notifications-outline'}
+          pack='ionicons'
+        />
+      }
+    />
+    <BottomNavigationTab
+      title='Trang cá nhân'
+      icon={
+        <Icon
+          name={state.index == 4 ? 'person' : 'person-outline'}
+          pack='ionicons'
+        />
+      }
+    />
   </BottomNavigation>
 )
-export default function BottomTab({}) {
+const BottomTab = () => {
   return (
     <Navigator
       initialRouteName={HOME_SCREEN}
@@ -69,10 +114,11 @@ export default function BottomTab({}) {
       tabBar={props => <BottomTabBar {...props} />}
     >
       <Screen name={HOME_SCREEN} component={HomeStack} />
-      <Screen name='Map' component={Map} />
+      <Screen name='Map' component={MapStack} />
       <Screen name='MapSelect' component={MapSelect} />
-      <Screen name='ChatScreen' component={ChatStack} />
+      <Screen name='NotifyScreen' component={NotifyStack} />
       <Screen name='Profile' component={ProfileStack} />
     </Navigator>
   )
 }
+export default BottomTab

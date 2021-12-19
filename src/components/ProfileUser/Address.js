@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from '@ui-kitten/components'
 
 const styles = StyleSheet.create({
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     fontSize: 30
   },
   smsRow: {
-    flex: 2,
+    flex: 1,
     justifyContent: 'flex-start'
   },
   emailColumn: {
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
   iconRow: {
     flex: 2,
     justifyContent: 'center',
-    paddingLeft: 6
+
+    marginLeft: 25
   }
 })
 
@@ -55,10 +56,10 @@ const Address = ({ onPressAddress, address }) => (
   <TouchableOpacity onPress={() => onPressAddress(address)}>
     <View style={[styles.container]}>
       <View style={styles.iconRow}>
-        <Icon
+        <MaterialIcons
           name='place'
           underlayColor='transparent'
-          iconStyle={styles.emailIcon}
+          style={styles.emailIcon}
           onPress={() => onPressAddress()}
         />
       </View>
@@ -68,10 +69,10 @@ const Address = ({ onPressAddress, address }) => (
         </View>
       </View>
       <View style={styles.smsRow}>
-        <Icon
+        <MaterialIcons
           name='edit'
           underlayColor='transparent'
-          iconStyle={styles.smsIcon}
+          style={styles.smsIcon}
           onPress={() => onPressAddress(address)}
         />
       </View>
