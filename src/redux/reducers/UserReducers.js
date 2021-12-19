@@ -5,10 +5,15 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILED,
-  LOGOUT
+  LOGOUT,
+  LOCATION_REQUEST,
+  LOCATION_SUCCESS,
+  LOCATION_FAILED,
+  SET_RADIUS,
+  SET_CATEGORY
 } from '../actionTypes/userActionTypes'
 
-export default (state = {}, action) => {
+const userState = (state = {}, action) => {
   switch (action.type) {
     case SIGNUP_REQUEST:
       return {
@@ -61,3 +66,43 @@ export default (state = {}, action) => {
       return state
   }
 }
+
+const settingState = (state = {}, action) => {
+  switch (action.type) {
+    case LOCATION_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        permissionLocation: false,
+        location: null
+      }
+    case LOCATION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        permissionLocation: true,
+        location: action.payload
+      }
+    case LOCATION_FAILED:
+      return {
+        ...state,
+        loading: false,
+        permissionLocation: false,
+        location: null
+      }
+    case SET_RADIUS:
+      return {
+        ...state,
+        radius: action.payload
+      }
+    case SET_CATEGORY:
+      return {
+        ...state,
+        category: action.payload
+      }
+    default:
+      return state
+  }
+}
+
+export { userState, settingState }

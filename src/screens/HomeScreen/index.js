@@ -5,6 +5,7 @@ import WrapperContent from 'components/WrapperContent'
 import SliderImage from 'components/SliderImage'
 import { withArray, withBoolean, withNumber } from 'exp-value'
 import React, { useCallback, useEffect, useState } from 'react'
+import Geolocation from 'react-native-geolocation-service'
 import {
   ActivityIndicator,
   FlatList,
@@ -36,11 +37,46 @@ const HomeScreen = ({}) => {
   const [page, setPage] = useState(1)
   const [loadingLoadMore, setLoadingLoadMore] = useState(false)
 
+  const handleLocationPermission = useCallback(async () => {
+    let permissionCheck = ''
+    if (Platform.OS === 'ios') {
+      permissionCheck = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(
+          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+        )
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+
+    if (Platform.OS === 'android') {
+      permissionCheck = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+        )
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+  }, [])
+
   const handleLoadMoreInListProduct = useCallback(() => {
     if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
       return
     dispatch(getListProduct({ offset: page - 1 }))
-  }, [page, dispatch, listProductState])
+  }, [page, dispatch, listProductState.listProduct])
 
   const handleLoadMoreProductTop = useCallback(() => {
     if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
@@ -93,6 +129,23 @@ const HomeScreen = ({}) => {
   }, [])
 
   useEffect(() => {
+    handleLocationPermission()
+  }, [])
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords
+        setLocation({ latitude, longitude })
+      },
+      error => {
+        
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    )
+  }, [])
+
+  useEffect(() => {
     dispatch(getListProduct())
   }, [])
 
@@ -103,7 +156,7 @@ const HomeScreen = ({}) => {
       setListProduct([...listProduct, ...loadListProduct])
       setPage(page + 1)
     }
-  }, [listProductState])
+  }, [listProductState.listProduct])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
