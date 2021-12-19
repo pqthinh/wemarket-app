@@ -22,6 +22,7 @@ export const getTopViewProduct = params => async dispatch => {
 }
 
 export const getListProduct = params => async dispatch => {
+  console.log(params)
   try {
     dispatch({ type: GET_LIST_PRODUCT_REQUEST })
 

@@ -5,7 +5,8 @@ import SignIn from 'screens/UnAuthScreens/SignIn'
 import SignUp from 'screens/UnAuthScreens/SignUp'
 import ProfileScreen from 'screens/ProfileScreen'
 import EditProfileStack from './EditProfileStack'
-const Stack = createStackNavigator()
+import ChatStack from './ChatStack'
+const { Navigator, Screen } = createStackNavigator()
 
 const screenOptions = {
   headerShown: false
@@ -13,27 +14,32 @@ const screenOptions = {
 
 export default function ProfileStack() {
   return (
-    <Stack.Navigator initialRouteName='Trang cá nhân'>
-      <Stack.Screen
+    <Navigator initialRouteName='Trang cá nhân'>
+      <Screen
         name='Trang cá nhân'
         component={ProfileScreen}
         options={screenOptions}
       />
-      <Stack.Screen
+      <Screen
         name='Sửa trang cá nhân'
         component={EditProfileStack}
         options={screenOptions}
       />
-      <Stack.Screen
+      <Screen
         name={SIGN_IN_SCREEN}
         component={SignIn}
-        options={screenOptions}
+        options={{ headerShown: true, title: 'Đăng nhập' }}
       />
-      <Stack.Screen
+      <Screen
         name={SIGN_UP_SCREEN}
         component={SignUp}
-        options={screenOptions}
+        options={{ headerShown: true, title: 'Đăng ký' }}
       />
-    </Stack.Navigator>
+      <Screen
+        name='ChatScreen'
+        component={ChatStack}
+        options={{ headerShown: false, title: 'Chat' }}
+      />
+    </Navigator>
   )
 }

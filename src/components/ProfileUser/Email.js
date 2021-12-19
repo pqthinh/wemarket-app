@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from '@ui-kitten/components'
 
 const styles = StyleSheet.create({
@@ -37,17 +37,17 @@ const styles = StyleSheet.create({
   },
   iconRow: {
     flex: 2,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginLeft: 25
   }
 })
 
 const Email = ({ onPressEmail, email }) => (
   <View style={[styles.container]}>
     <View style={styles.iconRow}>
-      <Icon
+      <MaterialIcons
         name='email'
-        underlayColor='transparent'
-        iconStyle={styles.emailIcon}
+        style={styles.emailIcon}
         onPress={() => onPressEmail()}
       />
     </View>
