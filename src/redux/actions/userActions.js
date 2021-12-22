@@ -1,20 +1,19 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { API_GET_USER_DETAIL, REGISTER_USER } from 'configs/api/apiPath'
+import axios from 'configs/api/baseUrl'
 import { firebase } from 'configs/firebaseConfig'
+import { withEmpty, withNull, withObject } from 'exp-value'
 import {
-  SIGNUP_REQUEST,
-  SIGNUP_SUCCESS,
-  SIGNUP_FAILED,
+  LOCATION_SUCCESS,
+  LOGIN_FAILED,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_FAILED,
   LOGOUT,
-  LOCATION_REQUEST,
-  LOCATION_SUCCESS,
-  LOCATION_FAILED
+  SIGNUP_FAILED,
+  SIGNUP_REQUEST,
+  SIGNUP_SUCCESS,
+  SET_RADIUS
 } from '../actionTypes/userActionTypes'
-import axios from 'configs/api/baseUrl'
-import { REGISTER_USER, API_GET_USER_DETAIL } from 'configs/api/apiPath'
-import { withEmpty, withNull, withObject } from 'exp-value'
 
 export const signup =
   ({ data, handleCheck }) =>
@@ -142,4 +141,8 @@ export const showAlert = () => async dispatch => {
 
 export const getLocation = location => async dispatch => {
   dispatch({ type: LOCATION_SUCCESS, payload: location })
+}
+
+export const getRadius = radius => async dispatch => {
+  dispatch({ type: SET_RADIUS, payload: radius })
 }

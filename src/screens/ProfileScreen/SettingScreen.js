@@ -49,11 +49,20 @@ const Setting = ({ user }) => {
   const signIn = () => {
     navigation.navigate(SIGN_IN_SCREEN)
   }
+  const handleBookmark = () => {
+    navigation.navigate('Bookmark Screen')
+  }
+  const handleSeenRecent = () => {
+    navigation.navigate('SeenRecent Screen')
+  }
   return (
     <ScrollView style={styles.scroll}>
       <InfoText text='Mua hàng' />
       <View>
-        <ListItem containerStyle={styles.listItemContainer}>
+        <ListItem
+          onPress={handleBookmark}
+          containerStyle={styles.listItemContainer}
+        >
           <BaseIcon
             containerStyle={{ backgroundColor: '#F6B48C' }}
             icon={{
@@ -66,7 +75,10 @@ const Setting = ({ user }) => {
           </ListItem.Content>
           <Chevron />
         </ListItem>
-        <ListItem containerStyle={styles.listItemContainer}>
+        <ListItem
+          onPress={handleSeenRecent}
+          containerStyle={styles.listItemContainer}
+        >
           <BaseIcon
             containerStyle={{ backgroundColor: '#75BCFF' }}
             icon={{
