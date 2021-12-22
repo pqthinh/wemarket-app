@@ -6,6 +6,8 @@ import SignUp from 'screens/UnAuthScreens/SignUp'
 import ProfileScreen from 'screens/ProfileScreen'
 import EditProfileStack from './EditProfileStack'
 import ChatStack from './ChatStack'
+import BookmarkScreen from 'screens/ProfileScreen/BookMark'
+import SeenRecentScreen from 'screens/ProfileScreen/SeenRecent'
 const { Navigator, Screen } = createStackNavigator()
 
 const screenOptions = {
@@ -35,10 +37,16 @@ export default function ProfileStack() {
         component={SignUp}
         options={{ headerShown: true, title: 'Đăng ký' }}
       />
+      <Screen name='ChatScreen' component={ChatStack} options={screenOptions} />
       <Screen
-        name='ChatScreen'
-        component={ChatStack}
-        options={{ headerShown: false, title: 'Chat' }}
+        name='Bookmark Screen'
+        component={BookmarkScreen}
+        options={{ headerShown: true, title: 'Đã lưu' }}
+      />
+      <Screen
+        name='SeenRecent Screen'
+        component={SeenRecentScreen}
+        options={{ headerShown: true, title: 'Đã xem gần đây' }}
       />
     </Navigator>
   )
