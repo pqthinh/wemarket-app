@@ -67,7 +67,15 @@ const userState = (state = {}, action) => {
   }
 }
 
-const settingState = (state = {}, action) => {
+const settingState = (
+  state = {
+    loading: false,
+    location: { lat: 21.0378383, lng: 105.7833717 },
+    radius: 10,
+    category: 1
+  },
+  action
+) => {
   switch (action.type) {
     case LOCATION_REQUEST:
       return {

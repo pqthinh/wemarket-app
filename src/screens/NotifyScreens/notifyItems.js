@@ -1,36 +1,118 @@
-import React from 'react'
+import React, { useCallback, useRef, useEffect } from 'react'
 import { Avatar, Layout, Text, Divider } from '@ui-kitten/components'
-import { FlatList, View, StyleSheet, Image } from 'react-native'
+import {
+  FlatList,
+  View,
+  StyleSheet,
+  Image,
+  I18nManager,
+  Animated
+} from 'react-native'
+import { RectButton, TouchableOpacity } from 'react-native-gesture-handler'
+import moment from 'moment'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { useDispatch, useSelector } from 'react-redux'
+import { getNotifies, updateNotify, deleteNotify } from 'actions/notifyActions'
+import { update } from 'lodash'
 const image = require('images/logo.png')
 
 const NotifyItems = ({ item }) => {
-  return (
-    <Layout style={item.isRead == 1 ? styles.container : styles.container_2}>
-      <View style={styles.Row}>
-        <View style={styles.avatar}>
-          <Avatar
-            rounded
-            size='medium'
-            source={item.code == 1 ? { uri: item.avatar } : image}
-          />
-        </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>{item.title}</Text>
-          {item.code == 1 ? (
-            <Text>
-              {item.username} đã bình luận bài viết của bạn: " {item.content} "
-            </Text>
-          ) : (
-            <Text>{item.content}</Text>
-          )}
-          <Text style={styles.time}>{item.creatAt}</Text>
-        </View>
+  const updateRef = useRef(Swipeable)
+  const dispatch = useDispatch()
+  const userReducer = useSelector(state => {
+    return state.userState
+  })
 
-        <Image source={{ uri: item.image }} style={styles.imageProduct} />
+  const handlePressUpdate = useCallback(
+    (uid, id) => {
+      dispatch(updateNotify({ uid: uid, idNotify: id }))
+    },
+    [dispatch]
+  )
+
+  const handlePressDelete = useCallback(
+    (uid, id) => {
+      dispatch(deleteNotify({ uid: uid, id: id }))
+    },
+    [dispatch]
+  )
+
+  const renderRightActions = (progress, _dragAnimatedValue) => {
+    const scale = progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [64, 0],
+      extrapolate: 'clamp'
+    })
+    return (
+      <View
+        style={{
+          width: 64,
+          flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row'
+        }}
+      >
+        <Animated.View style={{ flex: 1, transform: [{ translateX: scale }] }}>
+          <RectButton
+            style={styles.rightAction}
+            onPress={() => handlePressDelete(userReducer.userInfo.uid, item.id)}
+          >
+            {/* Change it to some icons */}
+            <Text style={styles.actionText}>Xoá</Text>
+          </RectButton>
+        </Animated.View>
       </View>
+    )
+  }
+  return (
+    <Swipeable
+      ref={updateRef}
+      friction={2}
+      rightThreshold={40}
+      enableTrackpadTwoFingerGesture
+      rightThreshold={40}
+      renderRightActions={renderRightActions}
+    >
+      <TouchableOpacity
+        style={item.isRead == 1 ? styles.container : styles.container_2}
+        // onStartShouldSetResponder={() => {
+        //   item.isRead == 0
+        //     ? handlePressUpdate(userState.userInfo.uid, item.id)
+        //     : null
+        // }}
+        onPress={() => {
+          !item.isRead
+            ? handlePressUpdate(userReducer.userInfo.uid, item.id)
+            : null
+        }}
+      >
+        <View style={styles.Row}>
+          <View style={styles.avatar}>
+            <Avatar
+              rounded
+              size='medium'
+              source={item.code == 2 ? { uri: item.avatar } : image}
+            />
+          </View>
+          <View style={styles.content}>
+            <Text style={styles.title}>{item.title}</Text>
+            {item.code == 2 ? (
+              <Text>
+                <Text style={{ fontWeight: 'bold' }}>{item.username}</Text> đã
+                bình luận bài viết của bạn: " {item.content} "
+              </Text>
+            ) : (
+              <Text>{item.content}</Text>
+            )}
+            <Text style={styles.time}>
+              {moment(item.createdAt).format('DD/MM/YYYY HH:mm:ss')}
+            </Text>
+          </View>
 
-      <Divider style={styles.divider} />
-    </Layout>
+          <Image source={{ uri: item.image }} style={styles.imageProduct} />
+        </View>
+
+        <Divider style={styles.divider} />
+      </TouchableOpacity>
+    </Swipeable>
   )
 }
 export default NotifyItems
@@ -60,8 +142,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-
-    marginTop: 5
+    marginTop: 5,
+    fontSize: 17
   },
   userName: {
     alignSelf: 'center'
@@ -73,5 +155,20 @@ const styles = StyleSheet.create({
   divider: {
     marginLeft: 10,
     height: 1.5
+  },
+
+  rightAction: {
+    alignItems: 'center',
+
+    backgroundColor: '#EB5757',
+    flex: 1,
+    justifyContent: 'center',
+    width: 64
+  },
+  actionText: {
+    color: 'white',
+    fontSize: 16,
+    backgroundColor: 'transparent',
+    padding: 10
   }
 })

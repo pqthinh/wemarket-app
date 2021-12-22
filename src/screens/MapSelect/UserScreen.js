@@ -1,20 +1,20 @@
-import Geolocation from 'react-native-geolocation-service'
+import { Text } from '@ui-kitten/components'
+import { useShowState } from 'core/hooks'
 import React, { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
+  SafeAreaView,
   TouchableOpacity,
-  View,
-  SafeAreaView
+  View
 } from 'react-native'
-import { Text, Button } from '@ui-kitten/components'
-import FeatherIcon from 'react-native-vector-icons/Feather'
+import Geocoder from 'react-native-geocoding'
+import Geolocation from 'react-native-geolocation-service'
 import MapView from 'react-native-maps'
+import FeatherIcon from 'react-native-vector-icons/Feather'
+import SearchAddressModal from '../../components/SearchAddressModal'
+import { usePlace } from '../../context/PlacesManager'
 import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
 import styles from './styled'
-import SearchAddressModal from '../../components/SearchAddressModal'
-import { useShowState } from 'core/hooks'
-import { usePlace } from '../../context/PlacesManager'
-import Geocoder from 'react-native-geocoding'
 
 Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'vi' })
 const UserScreen = () => {

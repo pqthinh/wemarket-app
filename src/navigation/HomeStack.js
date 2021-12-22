@@ -3,6 +3,7 @@ import React from 'react'
 import HomeScreen from 'screens/HomeScreen'
 import ProductScreen from 'screens/ProductScreen'
 import ChatStack from './ChatStack'
+import SettingMap from '../screens/HomeScreen/SettingMap'
 const { Navigator, Screen } = createStackNavigator()
 
 const HomeStack = () => (
@@ -21,6 +22,11 @@ const HomeStack = () => (
       name='ChatScreen'
       component={ChatStack}
       options={{ headerShown: false, title: 'Chat' }}
+    />
+    <Screen
+      name='FilterHome'
+      component={SettingMap}
+      options={{ headerShown: false }}
     />
   </Navigator>
 )

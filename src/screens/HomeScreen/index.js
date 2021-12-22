@@ -1,4 +1,5 @@
 import { getListProduct } from 'actions/homeActions'
+import { getLocation } from 'actions/userActions'
 import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
 import WrapperContent from 'components/WrapperContent'
@@ -15,7 +16,7 @@ import {
 } from 'react-native'
 import { renderRightActions } from 'components/Header'
 import { TopNavigation, Layout } from '@ui-kitten/components'
-import { Divider } from '@ui-kitten/components'
+import { Divider, Button } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   ScreenContainer,
@@ -24,9 +25,11 @@ import {
   ProductContainer
 } from './styled'
 import { IMAGES } from 'assets'
+import { useNavigation } from '@react-navigation/native'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
   const listProductState = useSelector(state => {
     return state.listProduct || {}
   })
@@ -34,9 +37,9 @@ const HomeScreen = ({}) => {
   const [listProductTop, setListProductTop] = useState([...Array(10).keys()])
   const [listProductFav, setListProductFav] = useState([])
   const [listProductSuggestions, setListProductSuggestions] = useState([])
-
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(2)
   const [loadingLoadMore, setLoadingLoadMore] = useState(false)
+  const [location, setLocation] = useState(null)
 
   const handleLocationPermission = useCallback(async () => {
     let permissionCheck = ''
@@ -74,28 +77,64 @@ const HomeScreen = ({}) => {
   }, [])
 
   const handleLoadMoreInListProduct = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [page, dispatch, listProductState.listProduct])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [page, dispatch, location, listProductState.listProduct])
 
   const handleLoadMoreProductTop = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [listProductState.listProduct, page, location])
 
   const handleLoadMoreInProductSuggestions = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [listProductState.listProduct, page, location])
 
   const handleLoadMoreInProductFav = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [listProductState.listProduct, page, location])
 
   const _onScroll = event => {
     let y = Math.ceil(event.nativeEvent.contentOffset.y)
@@ -137,22 +176,32 @@ const HomeScreen = ({}) => {
     Geolocation.getCurrentPosition(
       position => {
         const { latitude, longitude } = position.coords
+        dispatch(getLocation({ latitude, longitude }))
         setLocation({ latitude, longitude })
       },
-      error => {
-        
-      },
+      error => {},
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     )
   }, [])
 
   useEffect(() => {
-    dispatch(getListProduct())
-  }, [])
+    if (!location) return
+    dispatch(
+      getListProduct({
+        offset: 0,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [location])
 
   useEffect(() => {
     const loadListProduct = withArray('listProduct.result', listProductState)
     setLoadingLoadMore(withBoolean('loading', listProductState))
+    if (page == 1) {
+      setListProduct(loadListProduct)
+      return
+    }
     if (loadListProduct.length > 0) {
       setListProduct([...listProduct, ...loadListProduct])
       setPage(page + 1)
@@ -192,7 +241,11 @@ const HomeScreen = ({}) => {
               onEndReachedThreshold={0.5}
             />
           </WrapperContent>
-
+          <Button
+            onPress={() => {
+              navigation.navigate('FilterHome')
+            }}
+          ></Button>
           <WrapperContent name={'Top tìm kiếm'}>
             <FlatList
               horizontal
@@ -223,7 +276,7 @@ const HomeScreen = ({}) => {
             />
           </WrapperContent>
 
-          <Section>
+          <Section style={{ paddingBottom: 40 }}>
             <SectionName>{'Gợi ý hôm nay'}</SectionName>
             <SliderImage images={IMAGES.LIST_PRODUCT} style={{ height: 100 }} />
             <ProductContainer>
