@@ -12,6 +12,7 @@ import { Button, Layout, Text } from '@ui-kitten/components'
 import { getPostUser } from 'actions/profileActions'
 import { withArray, withNumber, withBoolean } from 'exp-value'
 import PostItems from 'components/PostItems'
+
 const PostScreen = ({ user }) => {
   const [listPost, setListPost] = useState([])
   const dispatch = useDispatch()

@@ -8,31 +8,35 @@ import {
 } from 'react-native'
 import { Layout, TopNavigation, Text } from '@ui-kitten/components'
 import { renderRightActions } from 'components/Header'
-import NotifyItems from './notifyItems'
 import { useDispatch, useSelector } from 'react-redux'
-import { getNotifies, updateNotify, deleteNotify } from 'actions/notifyActions'
+import {
+  getBookmarks,
+  createBookmark,
+  deleteBookmark
+} from 'actions/bookmarkActions'
+import BookMarkItem from 'components/BookMarkItem'
 
-const NotifyScreen = () => {
+const BookmarkScreen = () => {
   const dispatch = useDispatch()
   const userReducer = useSelector(state => {
     return state.userState
   })
-  const notifiesReducer = useSelector(state => {
-    return state.manageNotifies
+  const bookmarksReducer = useSelector(state => {
+    return state.manageBookmarks
   })
   useEffect(() => {
-    dispatch(getNotifies(userReducer.userInfo.uid))
+    dispatch(getBookmarks(userReducer.userInfo.uid + '/all'))
   }, [])
   useEffect(() => {
-    if (notifiesReducer.listNotify) {
-      console.log(notifiesReducer.listNotify.length, 'length list')
+    if (bookmarksReducer.listBookmark) {
+      console.log(bookmarksReducer.listBookmark.length, 'length list')
     }
-  }, [notifiesReducer])
+  }, [bookmarksReducer])
 
-  if (notifiesReducer.loading) {
+  if (bookmarksReducer.loading) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <Layout level='3'>
+        {/* <Layout level='3'>
           <TopNavigation
             alignment='center'
             title={() => (
@@ -44,7 +48,7 @@ const NotifyScreen = () => {
               borderBottomWidth: 3
             }}
           />
-        </Layout>
+        </Layout> */}
         <View style={styles.spinnerView}>
           <ActivityIndicator size='large' color='#E26740' />
         </View>
@@ -54,7 +58,7 @@ const NotifyScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Layout level='3'>
+      {/* <Layout level='3'>
         <TopNavigation
           alignment='center'
           title={() => (
@@ -66,32 +70,38 @@ const NotifyScreen = () => {
             borderBottomWidth: 3
           }}
         />
-      </Layout>
+      </Layout> */}
 
-      {notifiesReducer.listNotify ? (
+      {bookmarksReducer.listBookmark != [] ? (
         <Layout>
           <FlatList
-            data={notifiesReducer.listNotify}
-            inverted={true}
+            data={bookmarksReducer.listBookmark}
+            numColumns={2}
+            //inverted={true}
             renderItem={({ item, key }) => (
-              <NotifyItems item={item} index={key} />
+              <BookMarkItem product={item} index={key} />
             )}
             keyExtractor={(_, index) => index.toString()}
           />
         </Layout>
       ) : (
         <Layout>
-          <Text category='h4'>Chưa có thông báo nào</Text>
+          <Text category='h4'>Chưa có bài viết nào</Text>
         </Layout>
       )}
     </SafeAreaView>
   )
 }
-export default NotifyScreen
+export default BookmarkScreen
 const styles = StyleSheet.create({
   spinnerView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection: 'row'
   }
 })

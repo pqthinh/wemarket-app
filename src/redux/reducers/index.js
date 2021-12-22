@@ -5,6 +5,9 @@ import { listProductMapFilter } from './MapReducers'
 import { manageChat } from './ChatReducers'
 import { getProductDetails } from './ProductReducers'
 import { manageProfile } from './ProfileReducers'
+import { manageNotifies } from './NotifyReducers'
+import { manageBookmarks } from './BookmarkReducers'
+import { listProductSeenRecent } from './SeenRecentReducers'
 const appReducer = combineReducers({
   userState: UserReducers,
   listTopViewProduct,
@@ -12,7 +15,10 @@ const appReducer = combineReducers({
   listProductMapFilter,
   manageChat,
   getProductDetails,
-  manageProfile
+  manageProfile,
+  manageNotifies,
+  manageBookmarks,
+  listProductSeenRecent
 })
 
 const rootReducer = (state, action) => {
