@@ -1,5 +1,9 @@
-import { getListProduct } from 'actions/homeActions'
-import { getLocation } from 'actions/userActions'
+import {
+  getListProduct,
+  getNewProduct,
+  getTopViewProduct
+} from 'actions/homeActions'
+import { getLocation, toggleBottom } from 'actions/userActions'
 import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
 import WrapperContent from 'components/WrapperContent'
@@ -33,8 +37,14 @@ const HomeScreen = ({}) => {
   const listProductState = useSelector(state => {
     return state.listProduct || {}
   })
+  const listTopProductState = useSelector(state => {
+    return state.listTopViewProduct || {}
+  })
+  const listNewProductState = useSelector(state => {
+    return state.listNewProduct || []
+  })
   const [listProduct, setListProduct] = useState([])
-  const [listProductTop, setListProductTop] = useState([...Array(10).keys()])
+  const [listProductTop, setListProductTop] = useState([])
   const [listProductFav, setListProductFav] = useState([])
   const [listProductSuggestions, setListProductSuggestions] = useState([])
   const [page, setPage] = useState(2)
@@ -170,6 +180,7 @@ const HomeScreen = ({}) => {
 
   useEffect(() => {
     handleLocationPermission()
+    dispatch(toggleBottom(false))
   }, [])
 
   useEffect(() => {
@@ -187,13 +198,39 @@ const HomeScreen = ({}) => {
   useEffect(() => {
     if (!location) return
     dispatch(
+      getNewProduct({
+        lat: location.latitude,
+        lng: location.longitude,
+        range: 100
+      })
+    )
+    dispatch(
+      getTopViewProduct({
+        lat: location.latitude,
+        lng: location.longitude,
+        range: 100
+      })
+    )
+    dispatch(
       getListProduct({
         offset: 0,
         lat: location.latitude,
-        lng: location.longitude
+        lng: location.longitude,
+        range: 100
       })
     )
   }, [location])
+  useEffect(() => {
+    setListProductFav(
+      withArray('listTopViewProduct.result', listTopProductState)
+    )
+    setListProductSuggestions(
+      withArray('listTopViewProduct.result', listTopProductState)
+    )
+  }, [listTopProductState])
+  useEffect(() => {
+    setListProductTop(withArray('listNewProduct.result', listNewProductState))
+  }, [listNewProductState])
 
   useEffect(() => {
     const loadListProduct = withArray('listProduct.result', listProductState)
@@ -225,17 +262,15 @@ const HomeScreen = ({}) => {
 
           <Category />
 
-          <WrapperContent
-            name={'Sản phẩm mới'}
-            horizontal={true}
-            loadMoreAction={() => console.log('Hello world ')}
-          >
+          <WrapperContent name={'Sản phẩm mới'} horizontal={true}>
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
               data={listProductTop}
               keyExtractor={(_, index) => index.toString()}
-              renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
+              renderItem={({ item }) => (
+                <ProductItem style={{ width: 150 }} product={item} />
+              )}
               ListFooterComponent={_renderFooter}
               onEndReached={handleLoadMoreProductTop}
               onEndReachedThreshold={0.5}

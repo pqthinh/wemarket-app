@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { userState, settingState } from './UserReducers'
-import { listTopViewProduct, listProduct } from './HomeReducers'
+import { listTopViewProduct, listProduct, listNewProduct } from './HomeReducers'
 import { listProductMapFilter } from './MapReducers'
 import { manageChat } from './ChatReducers'
 import { getProductDetails } from './ProductReducers'
@@ -10,6 +10,7 @@ import { manageBookmarks } from './BookmarkReducers'
 import { listProductSeenRecent } from './SeenRecentReducers'
 const appReducer = combineReducers({
   userState,
+  listNewProduct,
   listTopViewProduct,
   listProduct,
   listProductMapFilter,

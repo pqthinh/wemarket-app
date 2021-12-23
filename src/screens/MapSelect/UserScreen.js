@@ -11,10 +11,12 @@ import Geocoder from 'react-native-geocoding'
 import Geolocation from 'react-native-geolocation-service'
 import MapView from 'react-native-maps'
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import SearchAddressModal from '../../components/SearchAddressModal'
-import { usePlace } from '../../context/PlacesManager'
-import { GOOGLE_MAPS_API_KEY } from '../../utils/map/constants'
+import SearchAddressModal from 'components/SearchAddressModal'
+import { usePlace } from 'context/PlacesManager'
+import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
 import styles from './styled'
+import { getLocation } from 'actions/userActions'
+import { useDispatch } from 'react-redux'
 
 Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'vi' })
 const UserScreen = () => {
@@ -24,14 +26,16 @@ const UserScreen = () => {
   const {
     place: { currentPlace }
   } = usePlace()
-  const [isMapReady, setIsMapReady] = useState(false)
+
   const [marginTop, setMarginTop] = useState(1)
-  const [userLocation, setUserLocation] = useState('')
+  const [userLocation, setUserLocation] = useState(place)
   const [regionChangeProgress, setRegionChangeProgress] = useState(false)
   const [error, setError] = useState(null)
   const [isModalVisible, togglePlaceModal] = useShowState()
   const [newAddress, setNewAddress] = useState(null)
+  const dispatch = useDispatch()
   const mapRef = React.createRef()
+
   useEffect(() => {
     Geolocation.getCurrentPosition(
       position => {
@@ -62,8 +66,6 @@ const UserScreen = () => {
   }, [dispatchPlace])
 
   const onMapReady = () => {
-    setIsMapReady(true)
-    // setTimeout(() => map.Mapview.animateToRegion(region), 10)
     setMarginTop(0)
     mapRef.current.animateToRegion({
       latitude: currentPlace.latitude,
@@ -85,7 +87,6 @@ const UserScreen = () => {
           location: { lat, lng }
         }
       } = res.results[0]
-      //setUserLocation(formatted_address)
 
       dispatchPlace({
         type: 'SET_CURRENT_PLACE',
@@ -109,44 +110,22 @@ const UserScreen = () => {
           location: { lat, lng }
         }
       } = res.results[0]
-      //setUserLocation(formatted_address)
 
       dispatchPlace({
         type: 'SET_CURRENT_PLACE',
         description: formatted_address,
         placeId: place_id,
         latitude: lat,
-        longitude: lng
+        longitude: lng,
+        address: formatted_address
       })
       setRegionChangeProgress(false)
     })
-    // fetch(`https://geocode.xyz/${region.latitude},${region.longitude}?geoit=json`
-    // )
-    // .then((response) => response.json())
-    // .then((responseJson) => {
-    //     console.log(responseJson)
-    //     let userLocation;
-    //     if(responseJson.poi.addr_housenumber !== undefined) {
-    //     userLocation = responseJson.poi.addr_housenumber+ " " + responseJson.poi.addr_street + ", " + responseJson.osmtags.name+ ", " + responseJson.region;
-    //     }
-    //     else if(responseJson.poi.addr_housenumber === undefined && responseJson.poi.addr_street !== undefined) {
-    //       userLocation = responseJson.poi.addr_street + ", " + responseJson.osmtags.name+ ", " + responseJson.region;
-    //     }
-    //     else if(responseJson.poi.addr_street === undefined){
-    //       userLocation =  responseJson.osmtags.name+ ", " + responseJson.region;
-    //     }
-    //     this.setState({
-    //       userLocation: userLocation,
-    //       regionChangeProgress: false
-    //     });
-
-    // });
   }
 
-  // Update state on region change
-
-  // Action to be taken after select location button click
-  const onLocationSelect = () => console.log(currentPlace.description)
+  const onLocationSelect = () => {
+    dispatch(getLocation(currentPlace))
+  }
 
   if (loading) {
     return (
@@ -165,12 +144,6 @@ const UserScreen = () => {
                 marginTop: marginTop
               }}
               ref={mapRef}
-              // region={{
-              //   latitude: currentPlace?.latitude || region.latitude,
-              //   longitude: currentPlace?.longitude || region.longitude,
-              //   latitudeDelta: 0.01,
-              //   longitudeDelta: 0.01
-              // }}
               region={{
                 latitude: currentPlace?.latitude || 21.0369,
                 longitude: currentPlace?.longitude || 105.7823,
@@ -179,7 +152,6 @@ const UserScreen = () => {
               }}
               showsUserLocation={true}
               onMapReady={onMapReady}
-              //onRegionChangeComplete={onRegionChange}
               onPress={onPressMap}
               onPoiClick={onPressMap}
             >
@@ -190,9 +162,6 @@ const UserScreen = () => {
                 }}
                 title={'Vị trí của bạn'}
                 draggable
-                // onPress={() => {
-                //   console.log(region)
-                // }}
               />
             </MapView>
           )}
