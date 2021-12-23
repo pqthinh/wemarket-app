@@ -9,43 +9,21 @@ import InputBox from './InputBox'
 import { onChatContent } from 'actions/chatActions'
 //const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
 function ChatScreen({ navigation }) {
+  const route = useRoute()
+  const id = route.params.id
+  console.log(id, 'id')
   const dispatch = useDispatch()
   const listMessageReducer = useSelector(state => {
     return state.manageChat
   })
-  function LogoTitle() {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          width: 70,
-          justifyContent: 'space-between',
-          marginRight: 10
-        }}
-      ></View>
-    )
-  }
-  const [messages, setMessages] = useState([])
-  const [users, setUsers] = useState([])
 
-  const route = useRoute()
-  // const body = useRef();
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: props => <LogoTitle {...props} />
-    })
-  }, [navigation])
   let user = firebase.auth().currentUser
-  useEffect(() => {
-    setMessages(listMessageReducer.messages)
-    console.log(listMessageReducer.messages)
-    setUsers(listMessageReducer.users)
-  }, [listMessageReducer])
+
   useEffect(() => {
     // setMessages([])
     // let unsub = Api.onChatContent(route.params.id, setMessages, setUsers)
-    return dispatch(onChatContent(route.params.id))
-  }, [route.params.id])
+    dispatch(onChatContent(route.params.id))
+  }, [id])
 
   const yourRef = useRef()
 
@@ -54,15 +32,15 @@ function ChatScreen({ navigation }) {
       <FlatList
         ref={yourRef}
         inverted={true}
-        data={messages}
+        data={listMessageReducer.messages}
         renderItem={({ item, key }) => (
-          <ChatMessage myId={user.id} message={item} index={key} />
+          <ChatMessage myId={user.uid} message={item} index={key} />
         )}
         keyExtractor={(_, index) => index.toString()}
         // Changing the key of the flatlist otherwise it doesn't update
       />
 
-      <InputBox chatRoomID={route.params.id} />
+      <InputBox chatRoomID={id} />
     </View>
   )
 }

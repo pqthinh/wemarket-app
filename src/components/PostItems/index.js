@@ -1,8 +1,8 @@
 import React from 'react'
-import { StyleSheet, Image, View } from 'react-native'
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
 import { Layout, Avatar, Button, Text, Divider } from '@ui-kitten/components'
 import NumberFormat from 'react-number-format'
-
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 const PostItems = ({ item }) => {
   return (
     <Layout style={styles.container}>
@@ -13,6 +13,12 @@ const PostItems = ({ item }) => {
           {' '}
           {item.status == 'active' ? 'Đã kiểm duyệt' : 'Đang chờ duyệt'}
         </Text>
+        <TouchableOpacity
+          style={styles.options}
+          onPress={() => console.log('...')}
+        >
+          <SimpleLineIcons name='options' size={20} color='black' />
+        </TouchableOpacity>
       </View>
       <View style={styles.Row}>
         <Image source={{ uri: item.image }} style={styles.imageProduct} />
@@ -63,6 +69,11 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     alignSelf: 'center',
     color: '#E26740'
+  },
+  options: {
+    marginLeft: 60,
+
+    justifyContent: 'center'
   },
   imageProduct: {
     width: 100,

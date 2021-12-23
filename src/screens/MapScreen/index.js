@@ -46,7 +46,8 @@ const MapScreen = () => {
     image: '',
     name_user: '',
     star: '',
-    price: ''
+    price: '',
+    id: ''
   })
   const [radius, setRadius] = useState(null)
   const [region, setRegion] = useState({
@@ -248,7 +249,8 @@ const MapScreen = () => {
                       image: host.image,
                       name_user: host.username,
                       //star: host.star,
-                      price: host.price
+                      price: host.price,
+                      id: host.id
                     })
                     setUser({
                       uid: host.uid,

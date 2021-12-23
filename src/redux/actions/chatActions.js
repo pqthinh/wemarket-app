@@ -114,7 +114,7 @@ export const getChatList = me => async dispatch => {
         }
         dispatch({
           type: GET_LIST_CHAT_SUCCESS,
-          chatList: chatList
+          chatList: chatList[0]
         })
       } else {
         dispatch({ type: GET_LIST_CHAT_FAILED, error: 'Có lỗi xuất hiện' })
@@ -141,13 +141,7 @@ export const findRoom = (me, friend) => async dispatch => {
         })
       }
     }
-    dispatch({
-      type: FETCH_ROOM_ERROR,
-      error: 'Tìm phòng thất bại'
-    })
   }
-}
-export const addNewChat = (me, friend) => async dispatch => {
   let newChat = await db.collection('chats').add({
     messages: [],
     users: [me.uid, friend.uid]
@@ -179,8 +173,11 @@ export const addNewChat = (me, friend) => async dispatch => {
     id: newChat.id,
     name: friend.displayName
   })
-  // await Api.addNewChat(user, user2);
 }
+// export const addNewChat = (me, friend) => async dispatch => {
+
+//   // await Api.addNewChat(user, user2);
+// }
 
 export const onChatContent = chatId => async dispatch => {
   return db
@@ -191,6 +188,7 @@ export const onChatContent = chatId => async dispatch => {
         let data = doc.data()
         //   setList(data.messages.reverse())
         //   setUsers(data.users)
+
         dispatch({
           type: GET_CONTENT_CHAT,
           messages: data.messages.reverse(),
