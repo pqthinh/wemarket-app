@@ -1,5 +1,4 @@
 import {
-  USER_STATE_CHANGE,
   FETCH_ROOM_SUCCESS,
   FETCH_ROOM_ERROR,
   REGISTER_ROOM,
@@ -8,23 +7,8 @@ import {
   GET_CONTENT_CHAT
 } from '../actionTypes/chatActionType'
 
-const INITIAL = {
-  loading: true,
-  messages: [],
-  id: null,
-  error: null,
-  name: null,
-  chatList: [],
-  users: []
-}
-
-const manageChat = (state = INITIAL, action) => {
+const manageChat = (state = {}, action) => {
   switch (action.type) {
-    case USER_STATE_CHANGE:
-      return {
-        ...state,
-        currentUser: action.currentUser
-      }
     case FETCH_ROOM_SUCCESS:
       return { ...state, loading: false, id: action.id, name: action.name }
     case FETCH_ROOM_ERROR:

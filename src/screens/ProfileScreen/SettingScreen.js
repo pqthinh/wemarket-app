@@ -60,7 +60,7 @@ const Setting = ({ user }) => {
       <InfoText text='Mua hàng' />
       <View>
         <ListItem
-          onPress={handleBookmark}
+          onPress={user ? handleBookmark : signIn}
           containerStyle={styles.listItemContainer}
         >
           <BaseIcon
@@ -76,7 +76,7 @@ const Setting = ({ user }) => {
           <Chevron />
         </ListItem>
         <ListItem
-          onPress={handleSeenRecent}
+          onPress={user ? handleSeenRecent : signIn}
           containerStyle={styles.listItemContainer}
         >
           <BaseIcon
@@ -126,38 +126,26 @@ const Setting = ({ user }) => {
           <ListItem.Title style={{ fontSize: 15 }}>Sáng</ListItem.Title>
           <Chevron />
         </ListItem>
-        {user ? (
-          <ListItem
-            onPress={() => navigation.navigate('Sửa trang cá nhân')}
-            containerStyle={styles.listItemContainer}
-          >
-            <BaseIcon
-              containerStyle={{ backgroundColor: '#A4C8F0' }}
-              icon={{
-                type: 'font-awesome',
-                name: 'user-o'
-              }}
-            />
-            <ListItem.Content>
-              <ListItem.Title>Thiết lập tài khoản</ListItem.Title>
-            </ListItem.Content>
-            <Chevron />
-          </ListItem>
-        ) : (
-          <ListItem onPress={signIn} containerStyle={styles.listItemContainer}>
-            <BaseIcon
-              containerStyle={{ backgroundColor: '#A4C8F0' }}
-              icon={{
-                type: 'font-awesome',
-                name: 'user-o'
-              }}
-            />
-            <ListItem.Content>
-              <ListItem.Title>Thiết lập tài khoản</ListItem.Title>
-            </ListItem.Content>
-            <Chevron />
-          </ListItem>
-        )}
+
+        <ListItem
+          onPress={
+            user ? () => navigation.navigate('Sửa trang cá nhân') : signIn
+          }
+          containerStyle={styles.listItemContainer}
+        >
+          <BaseIcon
+            containerStyle={{ backgroundColor: '#A4C8F0' }}
+            icon={{
+              type: 'font-awesome',
+              name: 'user-o'
+            }}
+          />
+          <ListItem.Content>
+            <ListItem.Title>Thiết lập tài khoản</ListItem.Title>
+          </ListItem.Content>
+          <Chevron />
+        </ListItem>
+
         <ListItem
           //   onPress={() => this.onPressSetting()}
           containerStyle={styles.listItemContainer}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, StyleSheet, Dimensions, Image, Button } from 'react-native'
+import { View, StyleSheet, Dimensions, Image } from 'react-native'
+import { Text } from '@ui-kitten/components'
 import moment from 'moment'
 
 const ChatMessage = props => {

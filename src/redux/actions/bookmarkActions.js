@@ -27,7 +27,7 @@ export const getBookmarks = uid => async dispatch => {
     dispatch({ type: FETCH_BOOKMARK_FAILED, payload: error })
   }
 }
-export const creteBookmark = params => async dispatch => {
+export const createBookmark = params => async dispatch => {
   try {
     const res = await axios.post(CREATE_BOOKMARK, params)
     if (res && res.data.status) {

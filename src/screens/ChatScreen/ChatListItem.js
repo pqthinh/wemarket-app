@@ -1,34 +1,34 @@
-import React from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableWithoutFeedback
-} from 'react-native'
+import React, { useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import { StyleSheet, View, Image, TouchableWithoutFeedback } from 'react-native'
+import { Text } from '@ui-kitten/components'
 import moment from 'moment'
 import { useNavigation } from '@react-navigation/native'
-
-const ChatListItem = props => {
-  const { chatRoom } = props
+import { onChatContent } from 'actions/chatActions'
+const ChatListItem = ({ chatRoom }) => {
+  const dispatch = useDispatch()
   let message = chatRoom.lastMessage
   const navigation = useNavigation()
 
   let authorName = chatRoom.author == chatRoom.with ? chatRoom.title : 'You'
 
-  const onClick = () => {
-    navigation.navigate('Chat', {
-      id: chatRoom.chatId,
-      name: chatRoom.title
-    })
-  }
+  const onClick = useCallback(
+    id => {
+      dispatch(onChatContent(id))
+      navigation.navigate('Chat', {
+        id: chatRoom.chatId,
+        name: chatRoom.title
+      })
+    },
+    [dispatch]
+  )
 
   if (!chatRoom.with) {
     return null
   }
 
   return (
-    <TouchableWithoutFeedback onPress={onClick}>
+    <TouchableWithoutFeedback onPress={() => onClick(chatRoom.chatId)}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
           <Image source={{ uri: chatRoom.image }} style={styles.avatar} />

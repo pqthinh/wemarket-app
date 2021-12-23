@@ -14,26 +14,21 @@ import { firebase } from 'configs/firebaseConfig'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { sendMessage } from 'actions/chatActions'
-const InputBox = props => {
+import { sendMessage, onChatContent } from 'actions/chatActions'
+const InputBox = ({ chatRoomID }) => {
   const dispatch = useDispatch()
   const listMessageReducer = useSelector(state => {
     return state.manageChat
   })
-  const { chatRoomID } = props
-  const [messages, setMessages] = useState([])
-  const [users, setUsers] = useState([])
+  // const { chatRoomID } = props
+
   const [message, setMessage] = useState('')
   const [uploading, setUploading] = useState(false)
 
   let user = firebase.auth().currentUser
+
   useEffect(() => {
-    setMessages(listMessageReducer.messages)
-    console.log(listMessageReducer.messages)
-    setUsers(listMessageReducer.users)
-  }, [listMessageReducer])
-  useEffect(() => {
-    return dispatch(onChatContent(chatRoomID))
+    dispatch(onChatContent(chatRoomID))
   }, [chatRoomID])
 
   const handleInputKeyUp = e => {
@@ -44,7 +39,7 @@ const InputBox = props => {
 
   const handleSendClick = () => {
     if (message !== '') {
-      sendMessage(chatRoomID, user.uid, 'text', message, users)
+      sendMessage(chatRoomID, user, 'text', message, listMessageReducer.users)
       setMessage('')
     }
   }
@@ -75,7 +70,13 @@ const InputBox = props => {
         let imageUri = pickerResult
           ? `data:image/jpg;base64,${pickerResult.assets[0].base64}`
           : null
-        sendMessage(chatRoomID, user.uid, 'photo', imageUri, users)
+        sendMessage(
+          chatRoomID,
+          user,
+          'photo',
+          imageUri,
+          listMessageReducer.users
+        )
         setMessage('')
       } else if (pickerResult.didCancel) {
         console.log('User cancelled image picker')
@@ -127,16 +128,13 @@ const InputBox = props => {
             )}
           </TouchableOpacity>
         </View>
-
-        <View style={styles.buttonContainer}>
-          {!message ? (
-            {}
-          ) : (
+        {!message ? null : (
+          <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handleSendClick}>
               <MaterialIcons name='send' size={26} color='white' />
             </TouchableOpacity>
-          )}
-        </View>
+          </View>
+        )}
       </View>
     </KeyboardAvoidingView>
   )

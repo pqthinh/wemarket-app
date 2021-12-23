@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
   },
   smsIcon: {
     color: 'gray',
-    fontSize: 30
+    fontSize: 30,
+    alignSelf: 'flex-end'
   },
   smsRow: {
     flex: 1,
