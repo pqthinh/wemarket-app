@@ -29,7 +29,6 @@ export default MapModal = props => {
   const [name, setName] = useState()
   let user = firebase.auth().currentUser
   useEffect(() => {
-    console.log(messageReducer)
     if ((messageReducer.type = 'FETCH_ROOM_ERROR')) {
       setNewRoom(true)
     } else {
@@ -38,14 +37,7 @@ export default MapModal = props => {
     }
     console.log(messageReducer.id, messageReducer.name)
   }, [messageReducer])
-  // const dispatchFindRoom = useCallback(
-  //   (me, friend) => dispatch(findRoom(me, friend)),
-  //   [dispatch]
-  // )
-  // const dispatchAddRoom = useCallback(
-  //   (me, friend) => dispatch(addNewChat(me, friend)),
-  //   [dispatch]
-  // )
+
   const dispatchChat = useCallback(() => {
     if (newRoom) {
       dispatch(addNewChat(user, props.userChat)), props.close()
@@ -67,12 +59,7 @@ export default MapModal = props => {
     >
       <View style={styles.Container}>
         <View style={styles.iconRow}>
-          <MaterialIcons
-            name='horizontal-rule'
-            size={50}
-            color='silver'
-            // onPress={toggleModal}
-          />
+          <MaterialIcons name='horizontal-rule' size={50} color='silver' />
         </View>
         <View style={styles.Row}>
           <Text numberOfLines={1} style={styles.TextBold}>

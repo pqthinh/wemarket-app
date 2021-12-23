@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { API_GET_USER_DETAIL, REGISTER_USER } from 'configs/api/apiPath'
 import axios from 'configs/api/baseUrl'
 import { firebase } from 'configs/firebaseConfig'
-import { withEmpty, withNull, withObject } from 'exp-value'
+import { withEmpty, withNull, withObject, withBoolean } from 'exp-value'
 import {
   LOCATION_SUCCESS,
   LOGIN_FAILED,
@@ -12,7 +12,8 @@ import {
   SIGNUP_FAILED,
   SIGNUP_REQUEST,
   SIGNUP_SUCCESS,
-  SET_RADIUS
+  SET_RADIUS,
+  TOGGLE_BOTTOM
 } from '../actionTypes/userActionTypes'
 
 export const signup =
@@ -62,12 +63,14 @@ export const signup =
         avatar: avatar
       })
 
-      if (withNull('data.status', registerUser)) {
+      if (withBoolean('data.status', registerUser)) {
         dispatch({ type: SIGNUP_SUCCESS, payload: 'Đăng ký thành công' })
         handleCheck(SIGNUP_SUCCESS, true, 'Đăng ký thành công')
+      } else {
+        dispatch({ type: SIGNUP_FAILED, payload: 'Email đã được sử dụng' })
+        handleCheck(SIGNUP_FAILED, true, 'Email đã được sử dụng')
       }
     } catch (error) {
-      console.log(error)
       let message
       if (error.code === 'auth/email-already-in-use') {
         message = 'Email đã được sử dụng'
@@ -145,4 +148,8 @@ export const getLocation = location => async dispatch => {
 
 export const getRadius = radius => async dispatch => {
   dispatch({ type: SET_RADIUS, payload: radius })
+}
+
+export const toggleBottom = hiddenBottom => async dispatch => {
+  dispatch({ type: TOGGLE_BOTTOM, payload: hiddenBottom })
 }

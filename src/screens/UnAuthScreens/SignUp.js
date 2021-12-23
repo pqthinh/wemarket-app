@@ -1,5 +1,8 @@
-import React, { useState, useCallback } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { Button, Input, Text } from '@ui-kitten/components'
+import { signup } from 'actions/userActions'
+import { IMAGES } from 'assets'
+import React, { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import {
   Image,
   KeyboardAvoidingView,
@@ -9,16 +12,14 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { Input, Button, Text } from '@ui-kitten/components'
-import { IMAGES } from 'assets'
-import { signup } from 'actions/userActions'
-import { SIGN_IN_SCREEN } from 'utils/ScreenName'
-import { useDispatch, useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
+import { useDispatch, useSelector } from 'react-redux'
+import { SIGN_IN_SCREEN, HOME_SCREEN } from 'utils/ScreenName'
 import { Container } from './styled'
+import { Loading } from 'components'
+import { withBoolean } from 'exp-value'
 
 export default function SignUp({ navigation }) {
-  const styles = makeStyles()
   const dispatch = useDispatch()
   const userInfo = useSelector(state => {
     return state.userState
@@ -55,13 +56,21 @@ export default function SignUp({ navigation }) {
         text1: 'Error',
         text2: userInfo?.message + '👋'
       })
-    }
+    } else Toast.hide()
+    if (withBoolean('userInfo.userInfo', userInfo))
+      navigation.reset({
+        index: 0,
+        routes: [{ name: HOME_SCREEN }]
+      })
   }, [error, userInfo])
 
   return (
     <Container>
-      <Toast ref={ref => Toast.setRef(ref)} />
-
+      <Toast
+        ref={ref => Toast.setRef(ref)}
+        style={!error ? { display: 'none' } : {}}
+      />
+      <Loading loading={userInfo.loading} />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
@@ -262,51 +271,50 @@ export default function SignUp({ navigation }) {
   )
 }
 
-const makeStyles = () =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 60
-    },
-    scroll: {
-      width: '90%',
-      height: '90%'
-    },
-    image: {
-      alignSelf: 'center',
-      height: 100,
-      width: 150
-    },
-    logo: {
-      marginVertical: 20
-    },
-    content: {
-      flex: 1,
-      marginTop: 10
-    },
-    error: {
-      position: 'absolute',
-      top: '100%',
-      color: '#EB5757',
-      fontWeight: '500'
-    },
-    back: {
-      marginTop: 10,
-      marginBottom: 30,
-      alignItems: 'center'
-    },
-    backText: {
-      color: '#2F80ED',
-      fontWeight: '900'
-    },
-    input: {
-      position: 'relative',
-      height: 40,
-      marginVertical: 20
-    },
-    button: {
-      marginVertical: 30
-    }
-  })
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 60
+  },
+  scroll: {
+    width: '90%',
+    height: '90%'
+  },
+  image: {
+    alignSelf: 'center',
+    height: 100,
+    width: 150
+  },
+  logo: {
+    marginVertical: 20
+  },
+  content: {
+    flex: 1,
+    marginTop: 10
+  },
+  error: {
+    position: 'absolute',
+    top: '100%',
+    color: '#EB5757',
+    fontWeight: '500'
+  },
+  back: {
+    marginTop: 10,
+    marginBottom: 30,
+    alignItems: 'center'
+  },
+  backText: {
+    color: '#2F80ED',
+    fontWeight: '900'
+  },
+  input: {
+    position: 'relative',
+    height: 40,
+    marginVertical: 20
+  },
+  button: {
+    marginVertical: 30
+  }
+})

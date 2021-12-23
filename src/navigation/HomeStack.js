@@ -1,9 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import HomeScreen from 'screens/HomeScreen'
+import MapSelect from 'screens/MapSelect'
 import ProductScreen from 'screens/ProductScreen'
-import ChatStack from './ChatStack'
 import SettingMap from '../screens/HomeScreen/SettingMap'
+import ChatStack from './ChatStack'
+
 const { Navigator, Screen } = createStackNavigator()
 
 const HomeStack = () => (
@@ -27,6 +29,11 @@ const HomeStack = () => (
       name='FilterHome'
       component={SettingMap}
       options={{ headerShown: false }}
+    />
+    <Screen
+      name='MapSelect'
+      component={MapSelect}
+      options={{ title: 'Chọn vị trí' }}
     />
   </Navigator>
 )

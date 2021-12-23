@@ -33,13 +33,11 @@ export default SettingModal = props => {
   const saveRadius = async () => {
     await set('save_radius', props?.sliderValue || 1)
     props.close()
-    console.log(categoryId, 'categoryId')
     const listCategory = Object.entries(categoryId)
       .filter(e => e[1])
       .map(e => {
         return category.filter(c => c.type === e[0])[0].id
       })
-    console.log(listCategory)
     props.settingMap(
       props.sliderValue,
       listCategory,

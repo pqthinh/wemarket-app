@@ -10,10 +10,11 @@ import {
   LOCATION_SUCCESS,
   LOCATION_FAILED,
   SET_RADIUS,
-  SET_CATEGORY
+  SET_CATEGORY,
+  TOGGLE_BOTTOM
 } from '../actionTypes/userActionTypes'
 
-const userState = (state = {}, action) => {
+const userState = (state = { loading: false, userInfo: {} }, action) => {
   switch (action.type) {
     case SIGNUP_REQUEST:
       return {
@@ -70,9 +71,11 @@ const userState = (state = {}, action) => {
 const settingState = (
   state = {
     loading: false,
-    location: { lat: 21.0378383, lng: 105.7833717 },
+    geolocation: { lat: 21.0378383, lng: 105.7833717, address: 'Hà Nội' },
+    location: { lat: 21.0378383, lng: 105.7833717, address: 'Hà Nội' },
     radius: 10,
-    category: 1
+    category: 1,
+    hiddenBottom: false
   },
   action
 ) => {
@@ -107,6 +110,11 @@ const settingState = (
       return {
         ...state,
         category: action.payload
+      }
+    case TOGGLE_BOTTOM:
+      return {
+        ...state,
+        hiddenBottom: action.payload
       }
     default:
       return state
