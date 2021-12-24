@@ -7,8 +7,9 @@ import {
 } from '@ui-kitten/components'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import MapSelect from 'screens/MapSelect'
+// import MapSelect from 'screens/MapSelect'
 import { HOME_SCREEN } from 'utils/ScreenName'
+import PostStack from './PostStack'
 import HomeStack from './HomeStack'
 import MapStack from './MapStack'
 import NotifyStack from './NotifyStack'
@@ -121,7 +122,7 @@ const BottomTab = () => {
     >
       <Screen name={HOME_SCREEN} component={HomeStack} />
       <Screen name='Map' component={MapStack} />
-      <Screen name='MapSelect' component={MapSelect} />
+      <Screen name='CreatePost' component={PostStack} />
       <Screen name='NotifyScreen' component={NotifyStack} />
       <Screen name='Profile' component={ProfileStack} />
     </Navigator>

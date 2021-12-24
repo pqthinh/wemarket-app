@@ -1,4 +1,10 @@
-import { Text } from '@ui-kitten/components'
+import {
+  Text,
+  TopNavigationAction,
+  TopNavigation,
+  Layout,
+  Icon
+} from '@ui-kitten/components'
 import { useShowState } from 'core/hooks'
 import React, { useEffect, useState } from 'react'
 import {
@@ -15,8 +21,9 @@ import SearchAddressModal from 'components/SearchAddressModal'
 import { usePlace } from 'context/PlacesManager'
 import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
 import styles from './styled'
-import { getLocation } from 'actions/userActions'
+import { getLocation, toggleBottom } from 'actions/userActions'
 import { useDispatch } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 
 Geocoder.init(GOOGLE_MAPS_API_KEY, { language: 'vi' })
 const UserScreen = () => {
@@ -34,7 +41,12 @@ const UserScreen = () => {
   const [isModalVisible, togglePlaceModal] = useShowState()
   const [newAddress, setNewAddress] = useState(null)
   const dispatch = useDispatch()
+  const navigation = useNavigation()
   const mapRef = React.createRef()
+
+  useEffect(() => {
+    dispatch(toggleBottom(true))
+  }, [])
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -136,7 +148,25 @@ const UserScreen = () => {
   } else {
     return (
       <View style={styles.container}>
-        <SafeAreaView style={{ flex: 2 }}>
+        <Layout level='3'>
+          <TopNavigation
+            accessoryLeft={
+              <TopNavigationAction
+                icon={<Icon name='arrow-back' />}
+                onPress={() => {
+                  dispatch(toggleBottom(false))
+                  navigation.goBack()
+                }}
+              />
+            }
+            title={evaProps => (
+              <Text style={{ fontWeight: '700', fontSize: 18 }} {...evaProps}>
+                Chọn vị trí
+              </Text>
+            )}
+          />
+        </Layout>
+        <SafeAreaView style={{ flex: 2, height: '50%' }}>
           {!!region.latitude && !!region.longitude && (
             <MapView
               style={{
@@ -207,7 +237,7 @@ const UserScreen = () => {
               : 'Đang lấy vị trí...'}
           </Text>
           <TouchableOpacity
-            style={styles.btnContainer}
+            style={[styles.btnContainer, { backgroundColor: '#E26740' }]}
             onPress={onLocationSelect}
           >
             <Text style={styles.ButtonText}>Lấy vị trí tại đây</Text>

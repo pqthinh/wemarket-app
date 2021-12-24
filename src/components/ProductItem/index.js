@@ -1,24 +1,24 @@
-import { withEmpty, withRandomImage, withNull, withBoolean } from 'exp-value'
+import { useNavigation } from '@react-navigation/native'
+import { withBoolean, withEmpty, withNull, withRandomImage } from 'exp-value'
 import moment from 'moment'
+import 'moment/locale/vi'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-
 import {
   Container,
+  Icon,
   ImageProduct,
   NameProduct,
   Place,
   PostTime,
   Price,
-  WrapperIcon,
-  WrapperContentProduct,
-  Icon,
-  TopProduct,
   TopLikeProduct,
-  TrustTag
+  TopProduct,
+  TrustTag,
+  WrapperContentProduct,
+  WrapperIcon
 } from './styled'
-import { useNavigation } from '@react-navigation/native'
-import 'moment/locale/vi'
+
 moment.locale('vi')
 
 const ProductItem = ({ product, style, isReputation = true }) => {

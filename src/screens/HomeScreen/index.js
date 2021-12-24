@@ -8,7 +8,7 @@ import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
 import WrapperContent from 'components/WrapperContent'
 import SliderImage from 'components/SliderImage'
-import { withArray, withBoolean, withNumber } from 'exp-value'
+import { withArray, withBoolean, withNumber, withEmpty } from 'exp-value'
 import React, { useCallback, useEffect, useState } from 'react'
 import Geolocation from 'react-native-geolocation-service'
 import {
@@ -19,8 +19,7 @@ import {
   View
 } from 'react-native'
 import { renderRightActions } from 'components/Header'
-import { TopNavigation, Layout } from '@ui-kitten/components'
-import { Divider, Button } from '@ui-kitten/components'
+import { TopNavigation, Layout, Divider, Button } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   ScreenContainer,
@@ -42,6 +41,9 @@ const HomeScreen = ({}) => {
   })
   const listNewProductState = useSelector(state => {
     return state.listNewProduct || []
+  })
+  const setting = useSelector(state => {
+    return state.settingState
   })
   const [listProduct, setListProduct] = useState([])
   const [listProductTop, setListProductTop] = useState([])
@@ -248,12 +250,7 @@ const HomeScreen = ({}) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout level='3'>
-        <TopNavigation
-          alignment='center'
-          //title='Eva Application'
-          accessoryRight={renderRightActions}
-          // style={{ backgroundColor: '#F2F3F7' }}
-        />
+        <TopNavigation alignment='center' accessoryRight={renderRightActions} />
       </Layout>
       <Divider />
       <ScreenContainer>
@@ -276,11 +273,7 @@ const HomeScreen = ({}) => {
               onEndReachedThreshold={0.5}
             />
           </WrapperContent>
-          <Button
-            onPress={() => {
-              navigation.navigate('FilterHome')
-            }}
-          ></Button>
+
           <WrapperContent name={'Top tìm kiếm'}>
             <FlatList
               horizontal
@@ -310,6 +303,19 @@ const HomeScreen = ({}) => {
               onEndReachedThreshold={0.5}
             />
           </WrapperContent>
+
+          <Button
+            onPress={() => {
+              navigation.navigate('FilterHome')
+            }}
+          >
+            Vị trí hiện tại:{' '}
+            {withEmpty('location.latitude', setting) +
+              ', ' +
+              withEmpty('location.longitude', setting) +
+              '| ' +
+              (withEmpty('radius', setting) || 10 + 'km')}
+          </Button>
 
           <Section style={{ paddingBottom: 40 }}>
             <SectionName>{'Gợi ý hôm nay'}</SectionName>
