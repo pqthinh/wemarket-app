@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { SafeAreaView, StyleSheet, View } from 'react-native'
-import { ScrollView } from 'react-native-virtualized-view'
-import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
-import { Avatar } from 'react-native-elements'
-import PostScreen from './PostScreen'
-import Setting from './SettingScreen'
-import { useDispatch, useSelector } from 'react-redux'
 import {
+  Button,
+  Layout,
   Tab,
   TabBar,
   Text,
-  Layout,
-  Button,
   TopNavigation
 } from '@ui-kitten/components'
 import { renderRightActions } from 'components/Header'
+import React, { useState } from 'react'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
+import { Avatar } from 'react-native-elements'
+import { ScrollView } from 'react-native-virtualized-view'
+import { useDispatch, useSelector } from 'react-redux'
+import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
+import PostScreen from './PostScreen'
+import Setting from './SettingScreen'
+
 const ProfileScreen = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const dispatch = useDispatch()

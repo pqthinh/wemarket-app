@@ -33,7 +33,7 @@ const HomeStack = () => (
     <Screen
       name='MapSelect'
       component={MapSelect}
-      options={{ title: 'Chọn vị trí' }}
+      options={{ headerShown: false }}
     />
   </Navigator>
 )
