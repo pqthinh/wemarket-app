@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import { FlatList, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRoute } from '@react-navigation/native'
-
 import { firebase } from 'configs/firebaseConfig'
 import ChatMessage from './ChatMessage'
 import InputBox from './InputBox'
@@ -11,19 +10,13 @@ import { onChatContent } from 'actions/chatActions'
 function ChatScreen({ navigation }) {
   const route = useRoute()
   const id = route.params.id
-  console.log(id, 'id')
+
   const dispatch = useDispatch()
   const listMessageReducer = useSelector(state => {
     return state.manageChat
   })
 
   let user = firebase.auth().currentUser
-
-  useEffect(() => {
-    // setMessages([])
-    // let unsub = Api.onChatContent(route.params.id, setMessages, setUsers)
-    dispatch(onChatContent(route.params.id))
-  }, [id])
 
   const yourRef = useRef()
 

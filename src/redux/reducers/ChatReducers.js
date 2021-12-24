@@ -4,7 +4,8 @@ import {
   REGISTER_ROOM,
   GET_LIST_CHAT_SUCCESS,
   GET_LIST_CHAT_FAILED,
-  GET_CONTENT_CHAT
+  GET_CONTENT_CHAT,
+  SEND_MESSAGE
 } from '../actionTypes/chatActionType'
 
 const manageChat = (state = {}, action) => {
@@ -25,6 +26,11 @@ const manageChat = (state = {}, action) => {
         loading: false,
         messages: action.messages,
         users: action.users
+      }
+    case SEND_MESSAGE:
+      return {
+        ...state,
+        body: action.body
       }
     default:
       return state

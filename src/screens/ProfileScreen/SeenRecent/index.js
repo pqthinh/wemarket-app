@@ -42,7 +42,7 @@ const SeenRecentScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {seenRecentReducer.listSeenRecent != [] ? (
-        <Layout>
+        <Layout style={styles.container}>
           <FlatList
             data={seenRecentReducer.listSeenRecent}
             numColumns={2}
@@ -54,7 +54,7 @@ const SeenRecentScreen = () => {
           />
         </Layout>
       ) : (
-        <Layout>
+        <Layout style={styles.container}>
           <Text category='h4'>Chưa có bài viết nào</Text>
         </Layout>
       )}
@@ -69,8 +69,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row'
+    flex: 1
   }
 })

@@ -22,6 +22,8 @@ import { GOOGLE_MAPS_API_KEY } from 'utils/map/constants'
 import { withArray } from 'exp-value'
 import { renderRightActions } from 'components/Header'
 import { TopNavigation, Layout, Text } from '@ui-kitten/components'
+import Toast from 'react-native-toast-message'
+
 const MapScreen = () => {
   const dispatch = useDispatch()
   const listProductReducer = useSelector(state => {
@@ -64,6 +66,7 @@ const MapScreen = () => {
   const mapRef = React.createRef()
   const [isMapReady, setIsMapReady] = useState(false)
   const [marginTop, setMarginTop] = useState(1)
+  const [saveBookMark, setSaveBookMark] = useState()
 
   const handleLocationPermission = async () => {
     let permissionCheck = ''
@@ -171,18 +174,24 @@ const MapScreen = () => {
       ),
     [dispatch]
   )
-
-  const onMapReady = () => {
-    setIsMapReady(true)
-    // setTimeout(() => map.Mapview.animateToRegion(region), 10)
-    setMarginTop(0)
-    mapRef.current.animateToRegion({
-      latitude: location?.latitude || 21.0541883,
-      longitude: location?.longitude || 105.8263367,
-      latitudeDelta: 0.005,
-      longitudeDelta: 0.005
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      //text1: 'Success',
+      text2: 'Bài viết đã được lưu' + '  👋'
     })
   }
+  // const onMapReady = () => {
+  //   setIsMapReady(true)
+  //   // setTimeout(() => map.Mapview.animateToRegion(region), 10)
+  //   setMarginTop(0)
+  //   mapRef.current.animateToRegion({
+  //     latitude: location?.latitude || 21.0541883,
+  //     longitude: location?.longitude || 105.8263367,
+  //     latitudeDelta: 0.005,
+  //     longitudeDelta: 0.005
+  //   })
+  // }
   if (loading) {
     return (
       <View style={styles.spinnerView}>
@@ -287,8 +296,8 @@ const MapScreen = () => {
           {radius && location && (
             <MapView.Circle
               center={{
-                latitude: location?.latitude || 21.0541883,
-                longitude: location?.longitude || 105.8263367
+                latitude: region.latitude,
+                longitude: location.longitude
               }}
               radius={radius * 1000}
               strokeWidth={2}
@@ -297,6 +306,12 @@ const MapScreen = () => {
             />
           )}
         </MapView>
+        <Toast
+          position='top'
+          topOffset={50}
+          style={{ marginEnd: 50, marginLeft: 10, marginTop: -50 }}
+          ref={ref => Toast.setRef(ref)}
+        />
         <TouchableOpacity
           style={styles.Button}
           onPress={() => {
@@ -307,12 +322,15 @@ const MapScreen = () => {
           <Ionicons name='options' size={24} color='black' />
         </TouchableOpacity>
       </SafeAreaView>
+
       <MapModal
         modalVisible={modalVisible}
         close={close}
         product={product}
         userChat={user}
         setOpenDirection={setOpenDirection}
+        //setSaveBookMark={setSaveBookMark}
+        showToast={showToast}
       />
       <SettingModal
         modalVisible={modalVisible2}

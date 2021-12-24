@@ -45,7 +45,7 @@ const IconPostNewsPress = props => (
         bottom: -20,
         height: 60,
         width: 60,
-        borderRadius: 60,
+        borderRadius: 30,
         alignSelf: 'center',
         backgroundColor: 'white'
       }

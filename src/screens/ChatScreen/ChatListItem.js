@@ -49,7 +49,7 @@ const ChatListItem = ({ chatRoom }) => {
         </View>
 
         <Text style={styles.time}>
-          {moment(chatRoom.lastMessageDate).format('DD/MM/YYYY')}
+          {moment(chatRoom.lastMessageDate).fromNow()}
         </Text>
       </View>
     </TouchableWithoutFeedback>
