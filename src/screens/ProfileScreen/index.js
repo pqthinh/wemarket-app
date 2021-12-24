@@ -7,23 +7,23 @@ import {
   TopNavigation
 } from '@ui-kitten/components'
 import { renderRightActions } from 'components/Header'
+import { withBoolean, withEmpty, withObject } from 'exp-value'
 import React, { useState } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 import { Avatar } from 'react-native-elements'
 import { ScrollView } from 'react-native-virtualized-view'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import PostScreen from './PostScreen'
 import Setting from './SettingScreen'
 
 const ProfileScreen = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const dispatch = useDispatch()
 
   const userReducer = useSelector(state => {
     return state.userState
   })
-  console.log(userReducer.userInfo)
+
   const signIn = () => {
     navigation.navigate(SIGN_IN_SCREEN)
   }
@@ -31,14 +31,13 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate(SIGN_UP_SCREEN)
   }
 
-  if (userReducer.userInfo)
+  if (withBoolean('userInfo', userReducer))
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
           <Layout level='3'>
             <TopNavigation
               alignment='center'
-              //title='Eva Application'
               accessoryRight={renderRightActions}
               style={{ backgroundColor: '#F2F3F7' }}
             />
@@ -55,14 +54,14 @@ const ProfileScreen = ({ navigation }) => {
                 size='large'
                 source={{
                   uri:
-                    userReducer.userInfo?.avatar ||
+                    withEmpty('userInfo.avatar', userReducer) ||
                     'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
                 }}
               />
             </View>
             <View>
               <Text style={{ fontSize: 16 }}>
-                {userReducer.userInfo.username}
+                {withEmpty('userInfo.username', userReducer)}
               </Text>
               <Text
                 style={{
@@ -70,7 +69,7 @@ const ProfileScreen = ({ navigation }) => {
                   fontSize: 16
                 }}
               >
-                {userReducer.userInfo.email}
+                {withEmpty('userInfo.email', userReducer)}
               </Text>
             </View>
           </View>
@@ -84,9 +83,9 @@ const ProfileScreen = ({ navigation }) => {
             <Tab title='Bài viết' />
           </TabBar>
           {selectedIndex == 0 ? (
-            <Setting user={userReducer.userInfo} />
+            <Setting user={withObject('userInfo', userReducer)} />
           ) : (
-            <PostScreen user={userReducer.userInfo} />
+            <PostScreen user={withObject('userInfo', userReducer)} />
           )}
         </ScrollView>
       </SafeAreaView>
@@ -113,7 +112,7 @@ const ProfileScreen = ({ navigation }) => {
             Đăng ký
           </Button>
         </View>
-        <Setting user={userReducer.userInfo} />
+        <Setting user={withObject('userInfo', userReducer)} />
       </ScrollView>
     )
 }
