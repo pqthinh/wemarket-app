@@ -16,7 +16,14 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
 import { firebase } from 'configs/firebaseConfig'
 import { addNewChat, findRoom } from 'actions/chatActions'
+import Toast from 'react-native-toast-message'
 import { useNavigation } from '@react-navigation/native'
+
+import {
+  getBookmarks,
+  createBookmark,
+  deleteBookmark
+} from 'actions/bookmarkActions'
 // var screen = Dimensions.get('window');
 export default MapModal = props => {
   const navigation = useNavigation()
@@ -24,29 +31,31 @@ export default MapModal = props => {
   const messageReducer = useSelector(state => {
     return state.manageChat
   })
-  const [newRoom, setNewRoom] = useState(false)
-  const [id, setId] = useState()
-  const [name, setName] = useState()
-  let user = firebase.auth().currentUser
-  useEffect(() => {
-    if ((messageReducer.type = 'FETCH_ROOM_ERROR')) {
-      setNewRoom(true)
-    } else {
-      setId(messageReducer.id)
-      setName(messageReducer.name)
-    }
-    console.log(messageReducer.id, messageReducer.name)
-  }, [messageReducer])
 
-  const dispatchChat = useCallback(() => {
-    if (newRoom) {
-      dispatch(addNewChat(user, props.userChat)), props.close()
-    } else dispatch(findRoom(user, props.userChat)), props.close()
-    return props.navigation.navigate('Chat', {
-      id: id,
-      name: name
-    })
-  }, [dispatch])
+  const userReducer = useSelector(state => {
+    return state.userState
+  })
+
+  let user = firebase.auth().currentUser
+
+  const dispatchChat = useCallback(
+    (me, friend) => {
+      dispatch(findRoom(me, friend)), props.close()
+
+      return navigation.navigate('Chat', {
+        id: messageReducer.id,
+        name: messageReducer.name
+      })
+    },
+    [dispatch]
+  )
+  const handlePressCreate = useCallback(
+    (uid, id) => {
+      dispatch(createBookmark({ uid: uid, productId: id }))
+      props.showToast()
+    },
+    [dispatch]
+  )
   return (
     <Modal
       isVisible={props.modalVisible}
@@ -106,19 +115,29 @@ export default MapModal = props => {
         <View style={styles.BookNow}>
           <TouchableOpacity
             style={styles.DirectButton}
-            // onPress={props.close}
-            onPress={() => props.setOpenDirection(true)}
+            onPress={() => {
+              props.setOpenDirection(true)
+              props.close()
+            }}
           >
             <Icon name='directions' size={18} color='white' />
             <Text style={styles.ButtonText}>Đường đi</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.MessageButton} onPress={dispatchChat}>
+          <TouchableOpacity
+            style={styles.MessageButton}
+            onPress={() => dispatchChat(user, props.userChat)}
+          >
             <FeatherIcon name='message-square' size={18} color='white' />
             <Text style={styles.ButtonText}>Nhắn tin</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.SaveButton} onPress={props.close}>
+          <TouchableOpacity
+            style={styles.SaveButton}
+            onPress={() =>
+              handlePressCreate(userReducer.userInfo.uid, props.product.id)
+            }
+          >
             <FeatherIcon name='bookmark' size={18} color='white' />
-            <Text style={styles.ButtonText}>Quan tâm</Text>
+            <Text style={styles.ButtonText}>Lưu bài</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -25,7 +25,7 @@ const IconPostNews = ({ name, tintColor, ...rest }) => {
         bottom: 0,
         height: 60,
         width: 60,
-        borderRadius: 60,
+        borderRadius: 30,
         alignSelf: 'center',
         backgroundColor: '#fff'
       }}

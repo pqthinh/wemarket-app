@@ -41,7 +41,7 @@ export default function ProfileStack() {
       <Screen
         name='Bookmark Screen'
         component={BookmarkScreen}
-        options={{ headerShown: true, title: 'Đã lưu' }}
+        options={screenOptions}
       />
       <Screen
         name='SeenRecent Screen'
