@@ -1,8 +1,18 @@
 import { Button, Card, Modal, Text } from '@ui-kitten/components'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { createProduct } from 'actions/productActions'
+import { withBoolean } from 'exp-value'
 
 const ModalConfirm = ({ data, visible, setVisible }) => {
+  const dispatch = useDispatch()
+
+  const createProductState = useSelector(state => state.createProduct)
+  useEffect(() => {
+    if (withBoolean('product', createProductState)) setVisible(false)
+  }, [createProductState])
+
   return (
     <Modal visible={visible} backdropStyle={styles.backdrop}>
       <Card disabled={true} style={styles.card}>
@@ -15,8 +25,7 @@ const ModalConfirm = ({ data, visible, setVisible }) => {
         <Button
           style={{ marginTop: 40 }}
           onPress={() => {
-            console.log(data)
-            setVisible(false)
+            dispatch(createProduct(data))
           }}
         >
           Xác nhận
