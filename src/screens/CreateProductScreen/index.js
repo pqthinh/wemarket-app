@@ -1,16 +1,17 @@
 import { useNavigation } from '@react-navigation/native'
 import {
+  Button,
   Divider,
   Icon,
-  Layout,
-  Text,
-  TopNavigation,
   Input,
-  Toggle,
+  Layout,
   Select,
   SelectItem,
-  Button
+  Text,
+  Toggle,
+  TopNavigation
 } from '@ui-kitten/components'
+import BaseIcon from 'components/IconProfile/Icon'
 import ModalLogin from 'components/ModalLogin'
 import EditModal from 'components/ProfileUser/EditModal'
 import { useShowState } from 'core/hooks'
@@ -21,26 +22,24 @@ import {
   withNumber,
   withObject
 } from 'exp-value'
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   FlatList,
-  useWindowDimensions,
-  View,
+  Image,
   ImageBackground,
-  Image
+  useWindowDimensions,
+  View
 } from 'react-native'
-import { Avatar } from 'react-native-elements'
+import { Avatar, ListItem } from 'react-native-elements'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { useDispatch, useSelector } from 'react-redux'
-import { ListItem } from 'react-native-elements'
-import BaseIcon from 'components/IconProfile/Icon'
+import { useSelector } from 'react-redux'
+import { uploadImage } from 'utils/helper'
 import { category } from 'utils/map/category'
-import { styles } from './styles'
 import ModalConfirm from './ModalConfirm'
+import { styles } from './styles'
 
 const CreateProductScreen = () => {
-  const dispatch = useDispatch()
   const navigation = useNavigation()
   const userState = useSelector(state => {
     return withObject('userState.userInfo', state)
@@ -130,9 +129,25 @@ const CreateProductScreen = () => {
     setData(prev => ({ ...prev, [name]: value }))
   }
 
-  const _submit = () => {
+  const _uploadImage = async () => {
+    let imgs = [],
+      bucket = Date.now()
+    await file.forEach(async f => {
+      console.log(f, 'file')
+      const response = await fetch(f.uri)
+      const blob = await response.blob()
+      const downloadURL = await uploadImage(
+        `images/${userState?.uid}/${bucket}/${f.fileName}.jpg`,
+        blob
+      )
+      imgs.push(downloadURL)
+    })
+    await setData(prev => ({ ...prev, images: imgs }))
     setShowModal(true)
-    console.log(data)
+  }
+
+  const _submit = async () => {
+    await _uploadImage()
   }
 
   if (!userState.email) return <ModalLogin />

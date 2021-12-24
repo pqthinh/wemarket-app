@@ -41,3 +41,4 @@ export const getImageMap = (
 export const GET_LIST_SEARCH_PRODUCT = ''
 export const GET_LIST_NEW_PRODUCT = '/product/new-post'
 export const GET_LIST_FAV_PRODUCT = '/product/top-view'
+export const CREATE_PRODUCT = '/product/create'
