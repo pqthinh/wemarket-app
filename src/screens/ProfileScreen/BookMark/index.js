@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Icon,
   View,
@@ -26,10 +26,12 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useNavigation } from '@react-navigation/native'
 import BookMarkItem from 'components/BookMarkItem'
+import { category } from 'utils/map/category'
 
 const BookmarkScreen = () => {
   const navigation = useNavigation()
   const [menuVisible, setMenuVisible] = useState(false)
+  const [changeCategory, setChangeCategory] = useState('Tất cả')
   const dispatch = useDispatch()
   const userReducer = useSelector(state => {
     return state.userState
@@ -40,6 +42,12 @@ const BookmarkScreen = () => {
   useEffect(() => {
     dispatch(getBookmarks(userReducer.userInfo.uid + '/all'))
   }, [])
+  const onPressCategory = useCallback(
+    id => {
+      dispatch(getBookmarks(userReducer.userInfo.uid + `/${id}`))
+    },
+    [dispatch]
+  )
   useEffect(() => {
     if (bookmarksReducer.listBookmark) {
       console.log(bookmarksReducer.listBookmark.length, 'length list')
@@ -65,15 +73,27 @@ const BookmarkScreen = () => {
             alignSelf: 'center'
           }}
         >
-          Tất cả
+          {changeCategory}
         </Text>
         <OverflowMenu
           anchor={renderMenuAction}
           visible={menuVisible}
           onBackdropPress={toggleMenu}
         >
-          <MenuItem title='Tất cả' />
-          <MenuItem title='Điện tử' />
+          <MenuItem title='Tất cả' onPress={() => set} />
+          {category.map(item => {
+            return (
+              <MenuItem
+                title={item.name}
+                onPress={() => {
+                  onPressCategory(item.id)
+                  setChangeCategory(item.name)
+                  toggleMenu()
+                }}
+              />
+            )
+          })}
+          {/* <MenuItem title='Điện tử' /> */}
         </OverflowMenu>
       </TouchableOpacity>
     </React.Fragment>
@@ -126,7 +146,7 @@ const BookmarkScreen = () => {
       </Layout>
 
       {bookmarksReducer.listBookmark != [] ? (
-        <Layout>
+        <Layout style={styles.container}>
           <FlatList
             data={bookmarksReducer.listBookmark}
             numColumns={2}
@@ -138,7 +158,7 @@ const BookmarkScreen = () => {
           />
         </Layout>
       ) : (
-        <Layout>
+        <Layout style={styles.container}>
           <Text category='h4'>Chưa có bài viết nào</Text>
         </Layout>
       )}
@@ -153,8 +173,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'row'
+    flex: 1
   }
 })

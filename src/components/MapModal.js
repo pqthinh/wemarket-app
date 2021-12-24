@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useDispatch, useSelector } from 'react-redux'
 import { firebase } from 'configs/firebaseConfig'
 import { addNewChat, findRoom } from 'actions/chatActions'
+import Toast from 'react-native-toast-message'
 import { useNavigation } from '@react-navigation/native'
 
 import {
@@ -51,6 +52,7 @@ export default MapModal = props => {
   const handlePressCreate = useCallback(
     (uid, id) => {
       dispatch(createBookmark({ uid: uid, productId: id }))
+      props.showToast()
     },
     [dispatch]
   )
