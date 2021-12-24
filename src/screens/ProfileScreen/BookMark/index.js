@@ -80,7 +80,10 @@ const BookmarkScreen = () => {
           visible={menuVisible}
           onBackdropPress={toggleMenu}
         >
-          <MenuItem title='Tất cả' onPress={() => set} />
+          <MenuItem
+            title='Tất cả'
+            onPress={() => setChangeCategory('Tất cả')}
+          />
           {category.map(item => {
             return (
               <MenuItem
