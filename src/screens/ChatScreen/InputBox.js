@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   View,
   TextInput,
@@ -7,33 +7,28 @@ import {
   Platform,
   StyleSheet
 } from 'react-native'
-
+import { Text } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
-// import Api from '../../Api/Api'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { firebase } from 'configs/firebaseConfig'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { sendMessage } from 'actions/chatActions'
-const InputBox = props => {
+import { sendMessage, onChatContent } from 'actions/chatActions'
+const InputBox = ({ chatRoomID }) => {
   const dispatch = useDispatch()
   const listMessageReducer = useSelector(state => {
     return state.manageChat
   })
-  const { chatRoomID } = props
-  const [messages, setMessages] = useState([])
-  const [users, setUsers] = useState([])
+  // const { chatRoomID } = props
+  const icon = '👍'
   const [message, setMessage] = useState('')
   const [uploading, setUploading] = useState(false)
 
   let user = firebase.auth().currentUser
+
   useEffect(() => {
-    setMessages(listMessageReducer.messages)
-    console.log(listMessageReducer.messages)
-    setUsers(listMessageReducer.users)
-  }, [listMessageReducer])
-  useEffect(() => {
-    return dispatch(onChatContent(chatRoomID))
+    dispatch(onChatContent(chatRoomID))
   }, [chatRoomID])
 
   const handleInputKeyUp = e => {
@@ -42,12 +37,21 @@ const InputBox = props => {
     }
   }
 
-  const handleSendClick = () => {
-    if (message !== '') {
-      sendMessage(chatRoomID, user.uid, 'text', message, users)
-      setMessage('')
-    }
-  }
+  const handleSendClick = useCallback(
+    (chatRoomID, user, type, message, users) => {
+      if (message !== '') {
+        dispatch(sendMessage(chatRoomID, user, type, message, users))
+        setMessage('')
+      }
+    },
+    [dispatch]
+  )
+  const handleSendLike = useCallback(
+    (chatRoomID, user, type, icon, users) => {
+      dispatch(sendMessage(chatRoomID, user, type, icon, users))
+    },
+    [dispatch]
+  )
 
   const launch_Camera = () => {
     let options = {
@@ -75,7 +79,15 @@ const InputBox = props => {
         let imageUri = pickerResult
           ? `data:image/jpg;base64,${pickerResult.assets[0].base64}`
           : null
-        sendMessage(chatRoomID, user.uid, 'photo', imageUri, users)
+        dispatch(
+          sendMessage(
+            chatRoomID,
+            user,
+            'photo',
+            imageUri,
+            listMessageReducer.users
+          )
+        )
         setMessage('')
       } else if (pickerResult.didCancel) {
         console.log('User cancelled image picker')
@@ -127,16 +139,38 @@ const InputBox = props => {
             )}
           </TouchableOpacity>
         </View>
-
-        <View style={styles.buttonContainer}>
-          {!message ? (
-            {}
-          ) : (
-            <TouchableOpacity onPress={handleSendClick}>
+        {!message ? (
+          <TouchableOpacity
+            style={styles.likeButton}
+            onPress={() =>
+              handleSendLike(
+                chatRoomID,
+                user,
+                'text',
+                icon,
+                listMessageReducer.users
+              )
+            }
+          >
+            <Text style={styles.textIcon}>👍</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={() =>
+                handleSendClick(
+                  chatRoomID,
+                  user,
+                  'text',
+                  message,
+                  listMessageReducer.users
+                )
+              }
+            >
               <MaterialIcons name='send' size={26} color='white' />
             </TouchableOpacity>
-          )}
-        </View>
+          </View>
+        )}
       </View>
     </KeyboardAvoidingView>
   )
@@ -154,7 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'white',
     padding: 10,
-    height: 60,
+    height: 50,
     borderRadius: 25,
     marginRight: 10,
     flex: 1,
@@ -162,7 +196,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    padding: 5
   },
   icon: {
     marginHorizontal: 5
@@ -174,5 +209,13 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  likeButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  textIcon: {
+    fontSize: 25
   }
 })

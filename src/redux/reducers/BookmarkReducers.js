@@ -24,7 +24,7 @@ const manageBookmarks = (state = {}, action) => {
       return {
         ...state,
         listBookmark: state.listBookmark.filter(eachBookmark => {
-          return eachBookmark.id !== action.payload
+          return eachBookmark.productId !== action.payload
         })
       }
     case CREATE_BOOKMARK_FAILED:
