@@ -60,5 +60,21 @@ export const styles = StyleSheet.create({
     width: 40,
     height: 40,
     resizeMode: 'contain'
-  }
+  },
+  tag: {
+    backgroundColor: '#f0f0f0',
+    fontSize: 16,
+    fontWeight: '700',
+    borderRadius: 10,
+    padding: 5,
+    margin: 10,
+    textAlignVertical: 'center'
+  },
+  tagWrapper: {
+    flex: 1,
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    flexDirection: 'row'
+  },
+  iconCommon: { width: 24, height: 24 }
 })

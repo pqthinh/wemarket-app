@@ -70,6 +70,7 @@ const CreateProductScreen = () => {
     images: [],
     uid: withEmpty('uid', userState)
   })
+  const [tagInput, setTagInput] = useState()
   const [selectedIndex, setSelectedIndex] = React.useState()
   const [selectedStatus, setSelectedStatus] = React.useState()
 
@@ -86,7 +87,6 @@ const CreateProductScreen = () => {
 
   const _handleImagePicked = pickerResult => {
     if (pickerResult.assets) {
-      console.log(file)
       setFile(prev => [...prev, ...withArray('assets', pickerResult)])
     } else if (pickerResult.didCancel) {
       console.log('User cancelled image picker')
@@ -332,15 +332,38 @@ const CreateProductScreen = () => {
               textStyle={{ minHeight: 64 }}
             />
 
-            <Input
-              name='tag'
-              multiline={true}
-              value={withEmpty('tag', data)}
-              label={() => <Text style={styles.label}>Thẻ</Text>}
-              placeholder='Thẻ tìm kiếm'
-              onChangeText={e => _handleChange('tag', e)}
-              style={styles.paddingVertical}
-            />
+            <Layout>
+              <Text style={styles.label}>Thẻ</Text>
+              <Layout style={styles.tagWrapper}>
+                {withArray('tag', data).map((item, index) => {
+                  return (
+                    <Text key={index} style={styles.tag}>
+                      {item}
+                    </Text>
+                  )
+                })}
+              </Layout>
+              <Input
+                value={tagInput}
+                placeholder='Thẻ tìm kiếm'
+                onChangeText={setTagInput}
+                style={styles.paddingVertical}
+                accessoryRight={() => (
+                  <Icon
+                    name='plus-square'
+                    fill='#E26740'
+                    style={styles.iconCommon}
+                    onPress={() => {
+                      setData(prev => ({
+                        ...prev,
+                        tag: [...prev.tag, tagInput]
+                      }))
+                      setTagInput('')
+                    }}
+                  />
+                )}
+              />
+            </Layout>
 
             <Select
               selectedIndex={selectedStatus}
@@ -363,15 +386,7 @@ const CreateProductScreen = () => {
           <Layout style={{ marginHorizontal: 10, marginVertical: 20 }}>
             <Text style={styles.label}>Giao hàng</Text>
             <ListItem containerStyle={styles.row}>
-              <BaseIcon
-                containerStyle={{
-                  backgroundColor: '#E26740'
-                }}
-                icon={{
-                  type: 'material',
-                  name: 'local_shipping'
-                }}
-              />
+              <Icon fill='#E26740' name='car' style={styles.iconCommon} />
               <ListItem.Content>
                 <ListItem.Title>Có giao hàng</ListItem.Title>
               </ListItem.Content>

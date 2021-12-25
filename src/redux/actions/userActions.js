@@ -48,11 +48,7 @@ export const signup =
             { merge: true }
           )
         })
-
-      console.log(res, 'res register')
       const uid = withNull('user.uid', res)
-
-      console.log(uid, 'uid')
       // add to database
       const registerUser = await axios.post(REGISTER_USER, {
         username: name,
@@ -152,4 +148,8 @@ export const getRadius = radius => async dispatch => {
 
 export const toggleBottom = hiddenBottom => async dispatch => {
   dispatch({ type: TOGGLE_BOTTOM, payload: hiddenBottom })
+}
+
+export const historySearch = data => async dispatch => {
+  dispatch({ type: 'SEARCH', payload: data })
 }

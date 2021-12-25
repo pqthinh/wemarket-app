@@ -29,6 +29,7 @@ import {
 } from './styled'
 import { IMAGES } from 'assets'
 import { useNavigation } from '@react-navigation/native'
+import SearchComponent from 'components/SearchComponent'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
@@ -253,7 +254,11 @@ const HomeScreen = ({}) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout level='3'>
-        <TopNavigation alignment='center' accessoryRight={renderRightActions} />
+        <TopNavigation
+          alignment='center'
+          accessoryLeft={() => <SearchComponent />}
+          accessoryRight={renderRightActions}
+        />
       </Layout>
       <Divider />
       <ScreenContainer>

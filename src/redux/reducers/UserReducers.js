@@ -121,4 +121,17 @@ const settingState = (
   }
 }
 
-export { userState, settingState }
+const history = (state = {}, action) => {
+  if (action.type == 'SEARCH') {
+    return {
+      ...state,
+      ...{
+        content: action.payload,
+        date: new Date()
+      }
+    }
+  }
+  return state
+}
+
+export { userState, settingState, history }
