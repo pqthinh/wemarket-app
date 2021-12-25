@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
   bottomScreen: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 40,
+    height: 50,
     position: 'absolute',
     bottom: 0,
     right: 0,
@@ -66,8 +66,6 @@ export const styles = StyleSheet.create({
   },
   flexRow: {
     flexDirection: 'row',
-    backgroundColor: '#59D843',
-    color: '#000',
     paddingHorizontal: 10,
     alignItems: 'center',
     paddingVertical: 10
@@ -82,10 +80,48 @@ export const styles = StyleSheet.create({
     fontWeight: '600'
   },
   sharing: {
-    marginVertical: 20
+    marginVertical: 20,
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+    height: 60
   },
   sharingContent: {
     fontSize: 16,
     fontWeight: '700'
+  },
+  iconSharing: {
+    height: 24,
+    width: 24,
+    marginRight: 5
+  },
+  rowSharing: {
+    flexDirection: 'row',
+    marginHorizontal: 10
+  },
+  rightIcon: {
+    fontSize: 14,
+    fontWeight: '700'
+  },
+  rightSharing: {
+    width: 50,
+    marginVertical: 5,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  offline: {
+    width: '30%',
+    backgroundColor: '#E26740'
+  },
+  titleBottomTab: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
+    marginHorizontal: 5
+  },
+  iconBottom: {
+    width: 24,
+    height: 24
   }
 })

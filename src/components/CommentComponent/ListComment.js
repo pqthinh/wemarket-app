@@ -7,7 +7,7 @@ import {
   Text,
   Layout
 } from '@ui-kitten/components'
-import { withEmpty } from 'exp-value'
+import { withEmpty, withNumber } from 'exp-value'
 import React from 'react'
 import { ImageBackground, View } from 'react-native'
 import { Constant } from 'utils/constants'
@@ -57,14 +57,20 @@ const renderItem = ({ item, index }) => {
   )
 }
 
-const ListComment = ({ listComments = new Array(3) }) => {
+const ListComment = ({ listComments }) => {
   return (
     <Layout style={{ marginBottom: 60 }}>
-      <List
-        style={styles.container}
-        data={listComments}
-        renderItem={renderItem}
-      />
+      {withNumber('length', listComments) > 0 ? (
+        <List
+          style={styles.container}
+          data={listComments}
+          renderItem={renderItem}
+        />
+      ) : (
+        <Text style={{ fontWeight: '700', textAlign: 'center' }}>
+          Chưa có bình luận nào về sản phẩm
+        </Text>
+      )}
       <Divider />
     </Layout>
   )

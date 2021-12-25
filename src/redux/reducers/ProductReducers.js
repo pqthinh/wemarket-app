@@ -92,4 +92,18 @@ const createProduct = (state = {}, action) => {
   }
 }
 
-export { productDetail, createProduct }
+const listBookmark = (state = { bookmark: [] }, action) => {
+  switch (action.type) {
+    case 'ADD_TO_BOOKMARK':
+      return {
+        ...state,
+        bookmark:
+          state.bookmark.filter(p => p == action.payload).length > 0
+            ? state.bookmark.filter(p => p != action.payload)
+            : [...state.bookmark, action.payload]
+      }
+    default:
+      return state
+  }
+}
+export { productDetail, createProduct, listBookmark }

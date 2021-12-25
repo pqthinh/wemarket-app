@@ -7,7 +7,11 @@ import {
   TopNavigation,
   TopNavigationAction
 } from '@ui-kitten/components'
-import { getProductDetail, getListComment } from 'actions/productActions'
+import {
+  getProductDetail,
+  getListComment,
+  addToBookmark
+} from 'actions/productActions'
 import { toggleBottom } from 'actions/userActions'
 import CommentInput from 'components/CommentComponent/CommentInput'
 import ListComment from 'components/CommentComponent/ListComment'
@@ -18,7 +22,6 @@ import { withArray, withEmpty, withNull, withNumber } from 'exp-value'
 import moment from 'moment'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
-  Alert,
   Linking,
   SafeAreaView,
   ScrollView,
@@ -27,6 +30,7 @@ import {
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { styles } from './styled'
+import { findRoom } from 'actions/chatActions'
 
 const ProductScreen = ({ route }) => {
   const dispatch = useDispatch()
@@ -34,9 +38,27 @@ const ProductScreen = ({ route }) => {
   const productState = useSelector(state => state.productDetail)
   const setting = useSelector(state => state.settingState)
   const userState = useSelector(state => state.userState.userInfo)
+  const bookmark = useSelector(state => state.listBookmark.bookmark)
+  const messageReducer = useSelector(state => state.manageChat)
+
   const [product, setProduct] = useState({})
   const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
+
+  const dispatchChat = useCallback(() => {
+    if (!userState) return
+    const friend = {
+      displayName: withEmpty('username', product),
+      photoURL: withEmpty('avatar', product),
+      uid: withEmpty('uid', product)
+    }
+    dispatch(findRoom(userState, friend))
+
+    return navigation.navigate('Chat', {
+      id: messageReducer.id,
+      name: messageReducer.name
+    })
+  }, [messageReducer, userState, product])
 
   useEffect(() => {
     const r = withNull('params.product', route)
@@ -46,7 +68,7 @@ const ProductScreen = ({ route }) => {
       lat: withEmpty('location.latitude', setting),
       lng: withEmpty('location.longitude', setting)
     }
-    // dispatch(getProductDetail(params))
+    dispatch(getProductDetail(params))
     dispatch(getListComment({ idProduct: r.id }))
     dispatch(toggleBottom(true))
     return null
@@ -54,8 +76,9 @@ const ProductScreen = ({ route }) => {
 
   useEffect(() => {
     setProduct(productState.product)
-    console.log(productState.product)
-  }, [productState.product])
+    setComments(product.listComment)
+  }, [productState.product, productState.listComment])
+
   useEffect(() => {
     return () => dispatch(toggleBottom(false))
   }, [])
@@ -136,26 +159,83 @@ const ProductScreen = ({ route }) => {
           </Text>
         </View>
 
-        <Layout style={styles.sharing}>
-          <View>
-            <Icon name='eye' size={24} style={styles.IconWrapper} />
-            <Text style={styles.sharingContent}>
-              {withEmpty('view', product)}
-            </Text>
+        <Layout style={[styles.row, { justifyContent: 'space-between' }]}>
+          <View style={styles.sharing}>
+            <View style={styles.rowSharing}>
+              <Icon
+                fill='#E26740'
+                name='eye'
+                size={24}
+                style={styles.iconSharing}
+              />
+              <Text style={styles.sharingContent}>
+                {withEmpty('view', product)}
+              </Text>
+            </View>
+            <View style={styles.rowSharing}>
+              <Icon
+                fill='#E26740'
+                name='heart'
+                size={24}
+                style={styles.iconSharing}
+              />
+              <Text style={styles.sharingContent}>
+                {withEmpty('like_num', product)}
+              </Text>
+            </View>
+            <View style={styles.rowSharing}>
+              <Icon
+                fill='#E26740'
+                name='message-square-outline'
+                size={24}
+                style={styles.iconSharing}
+              />
+              <Text style={styles.sharingContent}>
+                {withNumber('length', comments)}
+              </Text>
+            </View>
           </View>
-          <View>
-            <Icon name='heart' size={24} style={styles.IconWrapper} />
-            <Text style={styles.sharingContent}>
-              {withEmpty('like_num', product)}
-            </Text>
+          <View
+            style={[
+              styles.sharing,
+              { justifyContent: 'flex-end', marginHorizontal: 10 }
+            ]}
+          >
+            <View style={styles.rightSharing}>
+              <Icon
+                fill='#E26740'
+                name='paper-plane-outline'
+                size={24}
+                style={styles.iconSharing}
+                onPress={() => console.log('object')}
+              />
+              <Text style={styles.rightIcon}>Chia sẻ</Text>
+            </View>
+            <View style={styles.rightSharing}>
+              <Icon
+                fill='#E26740'
+                name='message-circle'
+                size={24}
+                style={styles.iconSharing}
+                onPress={() => dispatchChat()}
+              />
+              <Text style={styles.rightIcon}>Chat</Text>
+            </View>
+            <View style={styles.rightSharing}>
+              <Icon
+                fill='#E26740'
+                name={
+                  bookmark.includes(withEmpty('id', product))
+                    ? 'bookmark'
+                    : 'bookmark-outline'
+                }
+                size={24}
+                style={styles.iconSharing}
+                onPress={() => dispatch(addToBookmark(product.id))}
+              />
+              <Text style={styles.rightIcon}>Lưu</Text>
+            </View>
           </View>
-          <View>
-            <Icon name='message-circle' size={24} style={styles.IconWrapper} />
-            <Text style={styles.sharingContent}>
-              {withNumber('length', comments)}
-            </Text>
-          </View>
-          <Icon name='heart' size={24} style={styles.IconWrapper} />
         </Layout>
 
         <View>
@@ -188,47 +268,26 @@ const ProductScreen = ({ route }) => {
 
       <View style={styles.bottomScreen}>
         <TouchableOpacity
-          style={styles.flexRow}
+          style={[styles.flexRow, styles.offline]}
           onPress={() => Linking.openURL(`tel: ${product.phone}`)}
         >
-          <Text style={{ color: '#000' }}>Gọi điện</Text>
+          <Text style={styles.titleBottomTab}>Gọi điện</Text>
+          <Icon fill='#fff' name='phone-call' style={styles.iconBottom} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.flexRow} onPress={() => dispatchChat()}>
+          <Text style={{ fontWeight: '700', paddingHorizontal: 8 }}>
+            Chat online
+          </Text>
+          <Icon fill='#000' name='message-circle' style={styles.iconBottom} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.flexRow}
-          onPress={() => Linking.openURL(`sms: ${product.phone}`)}
+          style={[styles.flexRow, styles.offline]}
+          onPress={() => Linking.openURL(`sms: ${product?.phone}`)}
         >
-          <Text style={{ color: 'black' }}>Nhắn tin</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.flexRow}
-          onPress={() => {
-            Alert.alert('', 'Chat với người bán', [
-              {
-                text: 'Hủy',
-                onPress: () => {
-                  return
-                },
-                style: 'cancel'
-              },
-              {
-                text: 'Tiếp tục',
-                onPress: () => {
-                  navigation.navigate('ChatStack', {
-                    screen: 'ChatDetail',
-                    params: {
-                      title: `${withEmpty('username', product)}`,
-                      phone: `${withEmpty('phone', product)}`,
-                      id: product.id
-                    }
-                  })
-                }
-              }
-            ])
-          }}
-        >
-          <Text style={{ color: '#000' }}>Chat online</Text>
+          <Text style={styles.titleBottomTab}>Nhắn tin</Text>
+          <Icon fill='#fff' name='message-square' style={styles.iconBottom} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
