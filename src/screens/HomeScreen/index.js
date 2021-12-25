@@ -30,6 +30,7 @@ import {
 import { IMAGES } from 'assets'
 import { useNavigation } from '@react-navigation/native'
 import SearchComponent from 'components/SearchComponent'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
@@ -256,7 +257,11 @@ const HomeScreen = ({}) => {
       <Layout level='3'>
         <TopNavigation
           alignment='center'
-          accessoryLeft={() => <SearchComponent />}
+          accessoryLeft={() => (
+            <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+              <SearchComponent />
+            </TouchableOpacity>
+          )}
           accessoryRight={renderRightActions}
         />
       </Layout>
