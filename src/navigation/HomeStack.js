@@ -6,6 +6,7 @@ import ProductScreen from 'screens/ProductScreen'
 import SettingMap from '../screens/HomeScreen/SettingMap'
 import ChatStack from './ChatStack'
 import ChatScreen from 'screens/ChatScreen/ChatScreen'
+import SearchScreen from '../screens/SearchScreen'
 
 const Stack = createStackNavigator()
 
@@ -44,6 +45,13 @@ const HomeStack = () => (
         headerShown: true,
         title: route.params.name
       })}
+    />
+    <Stack.Screen
+      name='Search'
+      component={SearchScreen}
+      options={{
+        headerShown: false
+      }}
     />
   </Stack.Navigator>
 )
