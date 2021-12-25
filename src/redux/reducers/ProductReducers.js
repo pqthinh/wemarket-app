@@ -4,10 +4,13 @@ import {
   GET_DETAIL_PRODUCT_FAILED,
   CREATE_PRODUCT_REQUEST,
   CREATE_PRODUCT_SUCCESS,
-  CREATE_PRODUCT_FAILED
+  CREATE_PRODUCT_FAILED,
+  GET_COMMENT_FAILED,
+  GET_COMMENT_REQUEST,
+  GET_COMMENT_SUCCESS
 } from '../actionTypes/productActionTypes'
 
-const getProductDetails = (state = {}, action) => {
+const productDetail = (state = {}, action) => {
   switch (action.type) {
     case GET_DETAIL_PRODUCT_REQUEST:
       return {
@@ -32,6 +35,26 @@ const getProductDetails = (state = {}, action) => {
         product: {},
         message: action.payload,
         type: GET_DETAIL_PRODUCT_FAILED
+      }
+    case GET_COMMENT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        type: GET_COMMENT_REQUEST
+      }
+    case GET_COMMENT_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        listComment: action.payload,
+        type: GET_COMMENT_SUCCESS
+      }
+    case GET_COMMENT_FAILED:
+      return {
+        ...state,
+        loading: false,
+        listComment: [],
+        type: GET_COMMENT_FAILED
       }
     default:
       return state
@@ -69,4 +92,4 @@ const createProduct = (state = {}, action) => {
   }
 }
 
-export { getProductDetails, createProduct }
+export { productDetail, createProduct }

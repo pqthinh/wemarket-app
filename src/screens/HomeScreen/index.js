@@ -182,8 +182,11 @@ const HomeScreen = ({}) => {
 
   useEffect(() => {
     handleLocationPermission()
-    dispatch(toggleBottom(false))
   }, [])
+
+  useEffect(() => {
+    dispatch(toggleBottom(false))
+  }, [navigation])
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
