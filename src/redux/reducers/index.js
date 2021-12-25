@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { userState, settingState } from './UserReducers'
+import { userState, settingState, history } from './UserReducers'
 import { listTopViewProduct, listProduct, listNewProduct } from './HomeReducers'
 import { listProductMapFilter } from './MapReducers'
 import { manageChat } from './ChatReducers'
@@ -8,6 +8,7 @@ import { manageProfile } from './ProfileReducers'
 import { manageNotifies } from './NotifyReducers'
 import { manageBookmarks } from './BookmarkReducers'
 import { listProductSeenRecent } from './SeenRecentReducers'
+
 const appReducer = combineReducers({
   userState,
   listNewProduct,
@@ -22,7 +23,8 @@ const appReducer = combineReducers({
   manageNotifies,
   manageBookmarks,
   listProductSeenRecent,
-  listBookmark
+  listBookmark,
+  history
 })
 
 const rootReducer = (state, action) => {
