@@ -6,8 +6,7 @@ export const GET_LIST_PRODUCT = '/common/product'
 // filter product in map
 export const FILTER_LIST_PRODUCT = '/common/product/filter'
 // get product detail
-export const GET_PRODUCT_DETAIL = (idProduct, lat, lng) =>
-  `/common/product/${idProduct + lat && lng ? `?lat=${lat}&lng=${lng}` : ''}`
+export const GET_PRODUCT_DETAIL = '/common/product'
 // get post user
 export const GET_POST_USER = '/user/product'
 // get notifies user
@@ -42,3 +41,4 @@ export const GET_LIST_SEARCH_PRODUCT = ''
 export const GET_LIST_NEW_PRODUCT = '/product/new-post'
 export const GET_LIST_FAV_PRODUCT = '/product/top-view'
 export const CREATE_PRODUCT = '/product/create'
+export const GET_COMMENT = '/product/comment'

@@ -6,7 +6,13 @@ export const Icon = styled(IconAtoms)``
 
 export const styles = StyleSheet.create({
   container: { flex: 1 },
-  IconWrapper: { flexDirection: 'row', marginHorizontal: 5, color: '#000' },
+  IconWrapper: {
+    flexDirection: 'row',
+    marginHorizontal: 5,
+    color: '#000',
+    height: 24,
+    width: 24
+  },
   blockName: {
     paddingVertical: 10,
     paddingHorizontal: 10,
@@ -14,12 +20,11 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
     marginVertical: 5,
-    width: '85%',
     overflow: 'hidden'
   },
-  money: { color: 'red', textTransform: 'capitalize' },
+  money: { color: 'red', fontSize: 18, fontWeight: '700' },
   function: {
     display: 'flex',
     flexDirection: 'row',
@@ -40,7 +45,11 @@ export const styles = StyleSheet.create({
     fontSize: 10
   },
   description: {
-    padding: 10
+    padding: 10,
+    marginVertical: 10,
+    fontSize: 16,
+    fontWeight: '700',
+    lineHeight: 30
   },
   commentInput: {},
   listComment: {},
@@ -62,5 +71,21 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'center',
     paddingVertical: 10
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  time: {
+    fontWeight: '600'
+  },
+  sharing: {
+    marginVertical: 20
+  },
+  sharingContent: {
+    fontSize: 16,
+    fontWeight: '700'
   }
 })

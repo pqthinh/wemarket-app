@@ -1,14 +1,15 @@
-import React from 'react'
-import { StyleSheet, View, ImageBackground } from 'react-native'
 import {
   Avatar,
+  Divider,
+  Icon,
+  List,
   ListItem,
   Text,
-  List,
-  Icon,
-  Divider
+  Layout
 } from '@ui-kitten/components'
 import { withEmpty } from 'exp-value'
+import React from 'react'
+import { ImageBackground, View } from 'react-native'
 import { Constant } from 'utils/constants'
 import { styles } from './styles'
 
@@ -33,10 +34,16 @@ const ItemImage = ({ avatar, ...props }) => {
 }
 const renderItem = ({ item, index }) => {
   return (
-    <View style={styles.containerCommentItem} key={index}>
+    <Layout style={styles.containerCommentItem} key={index}>
       <ListItem
-        title='UI Kitten'
-        description='A set of React Native components A set of React Native componentsA set of React Native componentsA set of React Native componentsA set of React Native components'
+        title={() => (
+          <Text style={[styles.label, { marginLeft: 10 }]}>
+            {withEmpty('username', item) || 'UI Kitten'}{' '}
+          </Text>
+        )}
+        description={
+          withEmpty('comment', item) || 'A set of React Native components'
+        }
         accessoryLeft={props => (
           <ItemImage
             avatar={withEmpty('avatar', item) || Constant.defaultAvatar}
@@ -46,17 +53,20 @@ const renderItem = ({ item, index }) => {
         accessoryRight={() => <VoteStar star={withEmpty('star', item) || 4} />}
       />
       <Divider />
-    </View>
+    </Layout>
   )
 }
 
-const ListComment = ({ listComments = new Array(10) }) => {
+const ListComment = ({ listComments = new Array(3) }) => {
   return (
-    <List
-      style={styles.container}
-      data={listComments}
-      renderItem={renderItem}
-    />
+    <Layout style={{ marginBottom: 60 }}>
+      <List
+        style={styles.container}
+        data={listComments}
+        renderItem={renderItem}
+      />
+      <Divider />
+    </Layout>
   )
 }
 

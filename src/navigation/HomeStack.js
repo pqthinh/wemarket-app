@@ -17,7 +17,7 @@ const HomeStack = () => (
     />
     <Screen
       name='DETAIL_PRODUCT'
-      options={{ title: 'Chi tiết' }}
+      options={{ title: 'Chi tiết', headerShown: false }}
       component={ProductScreen}
     />
     <Screen
