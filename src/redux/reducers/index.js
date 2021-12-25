@@ -3,7 +3,7 @@ import { userState, settingState } from './UserReducers'
 import { listTopViewProduct, listProduct, listNewProduct } from './HomeReducers'
 import { listProductMapFilter } from './MapReducers'
 import { manageChat } from './ChatReducers'
-import { productDetail, createProduct } from './ProductReducers'
+import { productDetail, createProduct, listBookmark } from './ProductReducers'
 import { manageProfile } from './ProfileReducers'
 import { manageNotifies } from './NotifyReducers'
 import { manageBookmarks } from './BookmarkReducers'
@@ -21,7 +21,8 @@ const appReducer = combineReducers({
   settingState,
   manageNotifies,
   manageBookmarks,
-  listProductSeenRecent
+  listProductSeenRecent,
+  listBookmark
 })
 
 const rootReducer = (state, action) => {

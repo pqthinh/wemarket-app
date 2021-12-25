@@ -37,12 +37,11 @@ export const getProductDetail = params => async dispatch => {
 }
 
 export const getListComment = data => async dispatch => {
-  console.log(data)
   try {
     dispatch({ type: GET_COMMENT_REQUEST })
     const res = await axios.post(GET_COMMENT, data)
-    console.log(res, 'res')
-    if (res.status) dispatch({ type: GET_COMMENT_SUCCESS, payload: res.data })
+    if (res.status)
+      dispatch({ type: GET_COMMENT_SUCCESS, payload: res.data.result })
     else dispatch({ type: GET_COMMENT_FAILED, payload: 'Có lỗi xuất hiện' })
   } catch (error) {
     console.log(error)
@@ -61,4 +60,8 @@ export const createProduct = data => async dispatch => {
     console.log(error)
     dispatch({ type: CREATE_PRODUCT_FAILED, payload: 'Có lỗi xuất hiện' })
   }
+}
+
+export const addToBookmark = id => async dispatch => {
+  dispatch({ type: 'ADD_TO_BOOKMARK', payload: id })
 }
