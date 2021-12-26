@@ -68,12 +68,7 @@ export default MapModal = props => {
     >
       <View style={styles.Container}>
         <View style={styles.iconRow}>
-          <MaterialIcons
-            name='horizontal-rule'
-            size={50}
-            color='silver'
-            // onPress={toggleModal}
-          />
+          <MaterialIcons name='horizontal-rule' size={50} color='silver' />
         </View>
         <View style={styles.Row}>
           <Text numberOfLines={1} style={styles.TextBold}>

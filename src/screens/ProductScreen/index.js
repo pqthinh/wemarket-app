@@ -1,180 +1,293 @@
-import { withArray, withEmpty, withNull } from 'exp-value'
+import { useNavigation } from '@react-navigation/native'
+import {
+  Divider,
+  Icon,
+  Layout,
+  Text,
+  TopNavigation,
+  TopNavigationAction
+} from '@ui-kitten/components'
+import {
+  getProductDetail,
+  getListComment,
+  addToBookmark
+} from 'actions/productActions'
+import { toggleBottom } from 'actions/userActions'
+import CommentInput from 'components/CommentComponent/CommentInput'
+import ListComment from 'components/CommentComponent/ListComment'
+import UserPreviewComponent from 'components/CommentComponent/UserPreviewComponent'
+import NumberFormatComponent from 'components/NumberFormatComponent'
+import SliderImage from 'components/SliderImage'
+import { withArray, withEmpty, withNull, withNumber } from 'exp-value'
+import moment from 'moment'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
-  Alert,
   Linking,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
   SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
   View
 } from 'react-native'
-import { Text } from '@ui-kitten/components'
-import SliderImage from 'components/SliderImage'
-import { Icon } from './styled'
+import { useDispatch, useSelector } from 'react-redux'
+import { styles } from './styled'
+import { findRoom } from 'actions/chatActions'
 
-const ProductScreen = ({ navigation, route }) => {
-  const [news, setNews] = useState([])
+const ProductScreen = ({ route }) => {
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
+  const productState = useSelector(state => state.productDetail)
+  const setting = useSelector(state => state.settingState)
+  const userState = useSelector(state => state.userState.userInfo)
+  const bookmark = useSelector(state => state.listBookmark.bookmark)
+  const messageReducer = useSelector(state => state.manageChat)
+
+  const [product, setProduct] = useState({})
+  const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
 
-  useEffect(() => {
-    const r = withNull('params.news', route)
-    if (r) return setNews(r)
-    return setNews(fakeNews)
-  }, [])
+  const dispatchChat = useCallback(() => {
+    if (!userState) return
+    const friend = {
+      displayName: withEmpty('username', product),
+      photoURL: withEmpty('avatar', product),
+      uid: withEmpty('uid', product)
+    }
+    dispatch(findRoom(userState, friend))
 
-  const _renderComment = useCallback(() => {
-    return <Text>Comment component</Text>
-  }, [news])
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      title: <Text style={styles.title}>{news.ten}</Text>,
-      headerRight: () => (
-        <View style={styles.IconWrapper}>
-          <Icon
-            name='phone-call'
-            size={24}
-            style={styles.IconWrapper}
-            onPress={() =>
-              Linking.openURL(
-                `tel: ${withEmpty('user.phone', news) || '0866564502'}`
-              )
-            }
-          />
-          <Icon
-            name='more-vertical'
-            size={24}
-            style={styles.IconWrapper}
-            onPress={() => {
-              console.log('more')
-            }}
-          />
-        </View>
-      )
+    return navigation.navigate('Chat', {
+      id: messageReducer.id,
+      name: messageReducer.name
     })
+  }, [messageReducer, userState, product])
+
+  useEffect(() => {
+    const r = withNull('params.product', route)
+    const params = {
+      idProduct: r.id,
+      uid: withEmpty('uid', userState),
+      lat: withEmpty('location.latitude', setting),
+      lng: withEmpty('location.longitude', setting)
+    }
+    dispatch(getProductDetail(params))
+    dispatch(getListComment({ idProduct: r.id }))
+    dispatch(toggleBottom(true))
+    return null
+  }, [route, setting.location])
+
+  useEffect(() => {
+    setProduct(productState.product)
+    setComments(product.listComment)
+  }, [productState.product, productState.listComment])
+
+  useEffect(() => {
+    return () => dispatch(toggleBottom(false))
   }, [])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        <SliderImage style={{ width: '100%', height: 250 }} />
+        <Layout level={'3'}>
+          <TopNavigation
+            title={() => (
+              <Text
+                style={{ fontSize: 18, fontWeight: '700' }}
+                numberOfLines={1}
+              >
+                {withEmpty('name', product)}
+              </Text>
+            )}
+            accessoryLeft={
+              <TopNavigationAction
+                icon={<Icon name='arrow-back' size={24} />}
+                onPress={() => {
+                  dispatch(toggleBottom(false))
+                  navigation.goBack()
+                }}
+              />
+            }
+            accessoryRight={() => (
+              <>
+                <TopNavigationAction
+                  icon={<Icon name='shopping-cart' size={24} />}
+                  onPress={() => {
+                    Linking.openURL(
+                      `tel: ${withEmpty('phone', product) || '0866564502'}`
+                    )
+                  }}
+                />
+                <TopNavigationAction
+                  icon={
+                    <Icon
+                      name='more-vertical'
+                      size={24}
+                      style={styles.IconWrapper}
+                    />
+                  }
+                  onPress={() => {
+                    console.log(product)
+                  }}
+                />
+              </>
+            )}
+          />
+        </Layout>
+        <Divider />
+        <SliderImage
+          style={{ width: '100%', height: 250 }}
+          images={[
+            ...withArray('images', product),
+            withEmpty('image', product)
+          ]}
+        />
 
         <View style={styles.blockName}>
-          <Text style={styles.title}>{withEmpty('ten', news)}</Text>
-          <Text style={styles.money}>
-            Giá bán:
-            {withEmpty('giaban', news)}
+          <Text style={styles.title} numberOfLines={2}>
+            {withEmpty('name', product)}
+          </Text>
+          <NumberFormatComponent
+            style={styles.money}
+            value={withEmpty('price', product)}
+          />
+          <Text style={styles.time}>
+            {'Ngày đăng tin: ' +
+              moment(new Date(withEmpty('updatedAt', product))).format(
+                'hh:mm DD:MM:yyyy'
+              )}
           </Text>
           <Text style={styles.time}>
-            Ngày đăng tin: {' ' + withEmpty('ngaydangtin.slice(0, 10)', news)}
+            {'Địa chỉ: ' + withEmpty('address', product)}
           </Text>
-          <Text> Địa chỉ: {' ' + withEmpty('diadiem', news)}</Text>
-          <View style={styles.function}>
-            <View style={styles.IconWrapper}>
+        </View>
+
+        <Layout style={[styles.row, { justifyContent: 'space-between' }]}>
+          <View style={styles.sharing}>
+            <View style={styles.rowSharing}>
               <Icon
-                name='shopping-cart'
+                fill='#E26740'
+                name='eye'
                 size={24}
-                style={styles.IconWrapper}
-                onPress={() => {
-                  console.log('more')
-                }}
+                style={styles.iconSharing}
               />
+              <Text style={styles.sharingContent}>
+                {withEmpty('view', product)}
+              </Text>
             </View>
-            <View>
+            <View style={styles.rowSharing}>
               <Icon
+                fill='#E26740'
                 name='heart'
                 size={24}
-                style={styles.IconWrapper}
-                onPress={() => {
-                  console.log('more')
-                }}
+                style={styles.iconSharing}
               />
+              <Text style={styles.sharingContent}>
+                {withEmpty('like_num', product)}
+              </Text>
+            </View>
+            <View style={styles.rowSharing}>
+              <Icon
+                fill='#E26740'
+                name='message-square-outline'
+                size={24}
+                style={styles.iconSharing}
+              />
+              <Text style={styles.sharingContent}>
+                {withNumber('length', comments)}
+              </Text>
             </View>
           </View>
-        </View>
+          <View
+            style={[
+              styles.sharing,
+              { justifyContent: 'flex-end', marginHorizontal: 10 }
+            ]}
+          >
+            <View style={styles.rightSharing}>
+              <Icon
+                fill='#E26740'
+                name='paper-plane-outline'
+                size={24}
+                style={styles.iconSharing}
+                onPress={() => console.log('object')}
+              />
+              <Text style={styles.rightIcon}>Chia sẻ</Text>
+            </View>
+            <View style={styles.rightSharing}>
+              <Icon
+                fill='#E26740'
+                name='message-circle'
+                size={24}
+                style={styles.iconSharing}
+                onPress={() => dispatchChat()}
+              />
+              <Text style={styles.rightIcon}>Chat</Text>
+            </View>
+            <View style={styles.rightSharing}>
+              <Icon
+                fill='#E26740'
+                name={
+                  bookmark.includes(withEmpty('id', product))
+                    ? 'bookmark'
+                    : 'bookmark-outline'
+                }
+                size={24}
+                style={styles.iconSharing}
+                onPress={() => dispatch(addToBookmark(product.id))}
+              />
+              <Text style={styles.rightIcon}>Lưu</Text>
+            </View>
+          </View>
+        </Layout>
+
         <View>
-          <Text>user profile preview</Text>
+          <UserPreviewComponent
+            user={{
+              avatar: withEmpty('avatar', product),
+              username: withEmpty('username', product),
+              email: withEmpty('email', product),
+              star: withEmpty('star', product)
+            }}
+          />
         </View>
 
         <View style={styles.description}>
-          <Text>{withEmpty('mieuta', news)}</Text>
+          <Text
+            style={{ fontWeight: '800', paddingVertical: 10, fontSize: 18 }}
+          >
+            Thông tin về sản phẩm:
+          </Text>
+          <Text>{withEmpty('description', product)}</Text>
         </View>
 
-        <View>{_renderComment()}</View>
+        <View>
+          <CommentInput comment={comment} setComment={setComment} />
+        </View>
+        <View>
+          <ListComment listComments={comments} />
+        </View>
       </ScrollView>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          height: 40,
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          left: 0,
-          backgroundColor: '#fff'
-        }}
-      >
+
+      <View style={styles.bottomScreen}>
         <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            backgroundColor: '#aed581',
-            paddingHorizontal: 10,
-            alignItems: 'center',
-            paddingVertical: 10
-          }}
-          onPress={() => Linking.openURL(`tel: ${news.user.phone}`)}
+          style={[styles.flexRow, styles.offline]}
+          onPress={() => Linking.openURL(`tel: ${product.phone}`)}
         >
-          <Text style={{ color: '#000' }}>Gọi điện</Text>
+          <Text style={styles.titleBottomTab}>Gọi điện</Text>
+          <Icon fill='#fff' name='phone-call' style={styles.iconBottom} />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.flexRow} onPress={() => dispatchChat()}>
+          <Text style={{ fontWeight: '700', paddingHorizontal: 8 }}>
+            Chat online
+          </Text>
+          <Icon fill='#000' name='message-circle' style={styles.iconBottom} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            color: '#aed581',
-            paddingHorizontal: 10,
-            alignItems: 'center',
-            paddingVertical: 10
-          }}
-          onPress={() => Linking.openURL(`sms: ${news.user.phone}`)}
+          style={[styles.flexRow, styles.offline]}
+          onPress={() => Linking.openURL(`sms: ${product?.phone}`)}
         >
-          <Text style={{ color: 'black' }}>Nhắn tin</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            backgroundColor: '#aed581',
-            paddingHorizontal: 10,
-            alignItems: 'center',
-            paddingVertical: 10
-          }}
-          onPress={() => {
-            Alert.alert('', 'Chat với người bán', [
-              {
-                text: 'Hủy',
-                onPress: () => {
-                  return
-                },
-                style: 'cancel'
-              },
-              {
-                text: 'Tiếp tục',
-                onPress: () => {
-                  navigation.navigate('ChatStack', {
-                    screen: 'ChatDetail',
-                    params: {
-                      title: `${withEmpty('user.name', news)}`,
-                      phone: `${withEmpty('user.phone', news)}`,
-                      id: news.id
-                    }
-                  })
-                }
-              }
-            ])
-          }}
-        >
-          <Text style={{ color: '#000' }}>Chat online</Text>
+          <Text style={styles.titleBottomTab}>Nhắn tin</Text>
+          <Icon fill='#fff' name='message-square' style={styles.iconBottom} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -182,72 +295,3 @@ const ProductScreen = ({ navigation, route }) => {
 }
 
 export default ProductScreen
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  IconWrapper: { flexDirection: 'row', marginHorizontal: 5, color: '#000' },
-  blockName: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    position: 'relative'
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginVertical: 5
-  },
-  money: { color: 'red' },
-  function: {
-    display: 'flex',
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 10,
-    right: 5
-  },
-  moreInfoUser: {
-    borderColor: '#fe9900',
-    borderRadius: 10,
-    borderWidth: 1,
-    padding: 5,
-    width: 120,
-    flexDirection: 'row',
-    paddingHorizontal: 2,
-    justifyContent: 'center',
-    marginHorizontal: 5,
-    fontSize: 10
-  },
-  description: {
-    padding: 10
-  },
-  commentInput: {},
-  listComment: {},
-  userComment: { fontSize: 14 }
-})
-
-const fakeNews = {
-  anh: [
-    'https://picsum.photos/700',
-    'https://picsum.photos/700',
-    'https://picsum.photos/700'
-  ],
-  giaban: 1000000,
-  ten: 'Test product',
-  diadiem: 'Ha noi, Me tri ha',
-  ngaydangtin: new Date(),
-  ngaycapnhat: new Date(),
-  user: {
-    name: 'thinh',
-    place: 'Thai Binh',
-    star: '4',
-    phone: '0866564502',
-    avatar_url: 'https://picsum.photos/200'
-  },
-  mieuta: `Cấu hình : SURFACE LAPTOP 3 I5/ RAM 8GB/ SSD 256GB 13INCH NEW
--CPU: Intel® Core™ Core i5
--GPU: Intel Iris Plus Graphics
--RAM: 8GB 3733MHz DDR4
--Ổ lưu trữ: 256GB removable SSD
--Kích thước: 308.1 x 223.27 x 14.48 mm
--Trọng lượng: 1283g
--Hệ điều hành: Widows 10`
-}

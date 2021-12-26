@@ -1,24 +1,30 @@
 import { combineReducers } from 'redux'
-import UserReducers from './UserReducers'
-import { listTopViewProduct, listProduct } from './HomeReducers'
+import { userState, settingState, history } from './UserReducers'
+import { listTopViewProduct, listProduct, listNewProduct } from './HomeReducers'
 import { listProductMapFilter } from './MapReducers'
 import { manageChat } from './ChatReducers'
-import { getProductDetails } from './ProductReducers'
+import { productDetail, createProduct, listBookmark } from './ProductReducers'
 import { manageProfile } from './ProfileReducers'
 import { manageNotifies } from './NotifyReducers'
 import { manageBookmarks } from './BookmarkReducers'
 import { listProductSeenRecent } from './SeenRecentReducers'
+
 const appReducer = combineReducers({
-  userState: UserReducers,
+  userState,
+  listNewProduct,
   listTopViewProduct,
   listProduct,
   listProductMapFilter,
   manageChat,
-  getProductDetails,
+  productDetail,
+  createProduct,
   manageProfile,
+  settingState,
   manageNotifies,
   manageBookmarks,
-  listProductSeenRecent
+  listProductSeenRecent,
+  listBookmark,
+  history
 })
 
 const rootReducer = (state, action) => {

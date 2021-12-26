@@ -1,10 +1,16 @@
-import { getListProduct } from 'actions/homeActions'
+import {
+  getListProduct,
+  getNewProduct,
+  getTopViewProduct
+} from 'actions/homeActions'
+import { getLocation, toggleBottom } from 'actions/userActions'
 import Category from 'components/Category'
 import ProductItem from 'components/ProductItem'
 import WrapperContent from 'components/WrapperContent'
 import SliderImage from 'components/SliderImage'
-import { withArray, withBoolean, withNumber } from 'exp-value'
+import { withArray, withBoolean, withNumber, withEmpty } from 'exp-value'
 import React, { useCallback, useEffect, useState } from 'react'
+import Geolocation from 'react-native-geolocation-service'
 import {
   ActivityIndicator,
   FlatList,
@@ -13,8 +19,7 @@ import {
   View
 } from 'react-native'
 import { renderRightActions } from 'components/Header'
-import { TopNavigation, Layout } from '@ui-kitten/components'
-import { Divider } from '@ui-kitten/components'
+import { TopNavigation, Layout, Divider, Button } from '@ui-kitten/components'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   ScreenContainer,
@@ -23,43 +28,127 @@ import {
   ProductContainer
 } from './styled'
 import { IMAGES } from 'assets'
+import { useNavigation } from '@react-navigation/native'
+import SearchComponent from 'components/SearchComponent'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
   const listProductState = useSelector(state => {
     return state.listProduct || {}
   })
+  const listTopProductState = useSelector(state => {
+    return state.listTopViewProduct || {}
+  })
+  const listNewProductState = useSelector(state => {
+    return state.listNewProduct || []
+  })
+  const setting = useSelector(state => {
+    return state.settingState
+  })
   const [listProduct, setListProduct] = useState([])
-  const [listProductTop, setListProductTop] = useState([...Array(10).keys()])
+  const [listProductTop, setListProductTop] = useState([])
   const [listProductFav, setListProductFav] = useState([])
   const [listProductSuggestions, setListProductSuggestions] = useState([])
-
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(2)
   const [loadingLoadMore, setLoadingLoadMore] = useState(false)
+  const [location, setLocation] = useState(null)
+
+  const handleLocationPermission = useCallback(async () => {
+    let permissionCheck = ''
+    if (Platform.OS === 'ios') {
+      permissionCheck = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(
+          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+        )
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+
+    if (Platform.OS === 'android') {
+      permissionCheck = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+        )
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+  }, [])
 
   const handleLoadMoreInListProduct = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [page, dispatch, listProductState])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [page, dispatch, location, listProductState.listProduct])
 
   const handleLoadMoreProductTop = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [listProductState.listProduct, page, location])
 
   const handleLoadMoreInProductSuggestions = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [listProductState.listProduct, page, location])
 
   const handleLoadMoreInProductFav = useCallback(() => {
-    if (withNumber('listProduct.total', listProductState) / 10 + 1 <= page)
+    if (
+      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
+      !location
+    )
       return
-    dispatch(getListProduct({ offset: page - 1 }))
-  }, [])
+    dispatch(
+      getListProduct({
+        offset: page - 1,
+        lat: location.latitude,
+        lng: location.longitude
+      })
+    )
+  }, [listProductState.listProduct, page, location])
 
   const _onScroll = event => {
     let y = Math.ceil(event.nativeEvent.contentOffset.y)
@@ -94,26 +183,86 @@ const HomeScreen = ({}) => {
   }, [])
 
   useEffect(() => {
-    dispatch(getListProduct())
+    handleLocationPermission()
   }, [])
+
+  useEffect(() => {
+    dispatch(toggleBottom(false))
+  }, [navigation])
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords
+        dispatch(getLocation({ latitude, longitude }))
+        setLocation({ latitude, longitude })
+      },
+      error => {},
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+    )
+  }, [])
+
+  useEffect(() => {
+    if (!location) return
+    dispatch(
+      getNewProduct({
+        lat: location.latitude,
+        lng: location.longitude,
+        range: 100
+      })
+    )
+    dispatch(
+      getTopViewProduct({
+        lat: location.latitude,
+        lng: location.longitude,
+        range: 100
+      })
+    )
+    dispatch(
+      getListProduct({
+        offset: 0,
+        lat: location.latitude,
+        lng: location.longitude,
+        range: 100
+      })
+    )
+  }, [location])
+  useEffect(() => {
+    setListProductFav(
+      withArray('listTopViewProduct.result', listTopProductState)
+    )
+    setListProductSuggestions(
+      withArray('listTopViewProduct.result', listTopProductState)
+    )
+  }, [listTopProductState])
+  useEffect(() => {
+    setListProductTop(withArray('listNewProduct.result', listNewProductState))
+  }, [listNewProductState])
 
   useEffect(() => {
     const loadListProduct = withArray('listProduct.result', listProductState)
     setLoadingLoadMore(withBoolean('loading', listProductState))
+    if (page == 1) {
+      setListProduct(loadListProduct)
+      return
+    }
     if (loadListProduct.length > 0) {
       setListProduct([...listProduct, ...loadListProduct])
       setPage(page + 1)
     }
-  }, [listProductState])
+  }, [listProductState.listProduct])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout level='3'>
         <TopNavigation
           alignment='center'
-          //title='Eva Application'
+          accessoryLeft={() => (
+            <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+              <SearchComponent />
+            </TouchableOpacity>
+          )}
           accessoryRight={renderRightActions}
-          // style={{ backgroundColor: '#F2F3F7' }}
         />
       </Layout>
       <Divider />
@@ -123,17 +272,15 @@ const HomeScreen = ({}) => {
 
           <Category />
 
-          <WrapperContent
-            name={'Sản phẩm mới'}
-            horizontal={true}
-            loadMoreAction={() => console.log('Hello world ')}
-          >
+          <WrapperContent name={'Sản phẩm mới'} horizontal={true}>
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
               data={listProductTop}
               keyExtractor={(_, index) => index.toString()}
-              renderItem={({ _ }) => <ProductItem style={{ width: 150 }} />}
+              renderItem={({ item }) => (
+                <ProductItem style={{ width: 150 }} product={item} />
+              )}
               ListFooterComponent={_renderFooter}
               onEndReached={handleLoadMoreProductTop}
               onEndReachedThreshold={0.5}
@@ -170,7 +317,20 @@ const HomeScreen = ({}) => {
             />
           </WrapperContent>
 
-          <Section>
+          <Button
+            onPress={() => {
+              navigation.navigate('FilterHome')
+            }}
+          >
+            Vị trí hiện tại:{' '}
+            {withEmpty('location.latitude', setting) +
+              ', ' +
+              withEmpty('location.longitude', setting) +
+              '| ' +
+              (withEmpty('radius', setting) || 10 + 'km')}
+          </Button>
+
+          <Section style={{ paddingBottom: 40 }}>
             <SectionName>{'Gợi ý hôm nay'}</SectionName>
             <SliderImage images={IMAGES.LIST_PRODUCT} style={{ height: 100 }} />
             <ProductContainer>
