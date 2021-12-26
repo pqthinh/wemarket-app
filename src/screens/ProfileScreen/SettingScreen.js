@@ -1,45 +1,18 @@
-import React, { Component, useCallback, useEffect, useState } from 'react'
-import { ScrollView, Switch, StyleSheet, Text, View } from 'react-native'
-import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
-import { ListItem } from 'react-native-elements'
-import BaseIcon from 'components/IconProfile/Icon'
-import Chevron from 'components/IconProfile/Chevron'
-import InfoText from 'components/IconProfile/InfoText'
-import { Button } from '@ui-kitten/components'
-import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
+import { Button } from '@ui-kitten/components'
 import { logout } from 'actions/userActions'
-const styles = StyleSheet.create({
-  scroll: {
-    backgroundColor: 'white'
-    //flexShrink: 2
-    // flex: 1
-  },
-  userRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingBottom: 8,
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 6
-  },
-  userImage: {
-    marginRight: 12
-  },
-  listItemContainer: {
-    height: 55,
-    borderWidth: 0.5,
-    borderColor: '#ECECEC'
-  },
-  logoutButton: {
-    margin: 20
-  }
-})
+import Chevron from 'components/IconProfile/Chevron'
+import BaseIcon from 'components/IconProfile/Icon'
+import InfoText from 'components/IconProfile/InfoText'
+import React, { useCallback, useState } from 'react'
+import { ScrollView, StyleSheet, Switch, View } from 'react-native'
+import { ListItem } from 'react-native-elements'
+import { useDispatch } from 'react-redux'
+import { SIGN_IN_SCREEN } from 'utils/ScreenName'
 
 const Setting = ({ user }) => {
   const dispatch = useDispatch()
   const navigation = useNavigation()
-  const [userDetails, setUserDetails] = useState({})
   const [pushNotifications, setPushNotifications] = useState(true)
 
   const onChangePushNotifications = () => {
@@ -246,3 +219,28 @@ const Setting = ({ user }) => {
 }
 
 export default Setting
+
+const styles = StyleSheet.create({
+  scroll: {
+    backgroundColor: 'white'
+  },
+  userRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingBottom: 8,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 6
+  },
+  userImage: {
+    marginRight: 12
+  },
+  listItemContainer: {
+    height: 55,
+    borderWidth: 0.5,
+    borderColor: '#ECECEC'
+  },
+  logoutButton: {
+    margin: 20
+  }
+})

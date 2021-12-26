@@ -1,5 +1,8 @@
-import { useTheme } from '@react-navigation/native'
-import React, { useState, useEffect } from 'react'
+import { Button, Input, Text } from '@ui-kitten/components'
+import { login } from 'actions/userActions'
+import { IMAGES } from 'assets'
+import React, { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import {
   Image,
   KeyboardAvoidingView,
@@ -9,18 +12,12 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import { Input, Button, Text } from '@ui-kitten/components'
-import { useDispatch, useSelector } from 'react-redux'
-import { IMAGES } from 'assets'
-import { SIGN_UP_SCREEN, HOME_SCREEN } from 'utils/ScreenName'
-import { login } from 'actions/userActions'
-import { useForm, Controller } from 'react-hook-form'
 import Toast from 'react-native-toast-message'
+import { useDispatch, useSelector } from 'react-redux'
+import { HOME_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import { Container } from './styled'
 
 export default function SignIn({ navigation }) {
-  const { colors } = useTheme()
-  const styles = makeStyles(colors)
   const dispatch = useDispatch()
   const userInfo = useSelector(state => {
     return state.userState
@@ -153,51 +150,49 @@ export default function SignIn({ navigation }) {
   )
 }
 
-const makeStyles = colors =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 60
-    },
-    scroll: {
-      width: '90%',
-      height: '100%'
-    },
-    image: {
-      alignSelf: 'center',
-      height: 100,
-      width: 150
-    },
-    logo: {
-      marginVertical: 40
-    },
-    content: {
-      flex: 1,
-      marginTop: 10
-    },
-    error: {
-      position: 'absolute',
-      top: '100%',
-      color: colors.red,
-      fontWeight: '500'
-    },
-    signUp: {
-      marginVertical: 20,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    signUpText: {
-      color: colors.primary,
-      fontWeight: '900',
-      padding: 0,
-      margin: 0
-    },
-    input: {
-      position: 'relative',
-      height: 40,
-      marginVertical: 20
-    }
-  })
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  scroll: {
+    width: '90%',
+    height: '100%'
+  },
+  image: {
+    alignSelf: 'center',
+    height: 100,
+    width: 150
+  },
+  logo: {
+    marginVertical: 20
+  },
+  content: {
+    flex: 1,
+    marginTop: 10
+  },
+  error: {
+    position: 'absolute',
+    top: '100%',
+    color: '#EB5757',
+    fontWeight: '500'
+  },
+  signUp: {
+    marginVertical: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  signUpText: {
+    color: '#E26740',
+    fontWeight: '900',
+    padding: 0,
+    margin: 0
+  },
+  input: {
+    position: 'relative',
+    height: 40,
+    marginVertical: 20
+  }
+})

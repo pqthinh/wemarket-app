@@ -11,6 +11,7 @@ import { renderRightActions } from 'components/Header'
 import NotifyItems from './notifyItems'
 import { useDispatch, useSelector } from 'react-redux'
 import { getNotifies, updateNotify, deleteNotify } from 'actions/notifyActions'
+import { withEmpty } from 'exp-value'
 
 const NotifyScreen = () => {
   const dispatch = useDispatch()
@@ -21,7 +22,7 @@ const NotifyScreen = () => {
     return state.manageNotifies
   })
   useEffect(() => {
-    dispatch(getNotifies(userReducer.userInfo.uid))
+    dispatch(getNotifies(withEmpty('userInfo.uid', userReducer)))
   }, [])
   useEffect(() => {
     if (notifiesReducer.listNotify) {
@@ -68,7 +69,7 @@ const NotifyScreen = () => {
         />
       </Layout>
 
-      {notifiesReducer.listNotify ? (
+      {notifiesReducer?.listNotify ? (
         <Layout>
           <FlatList
             data={notifiesReducer.listNotify}

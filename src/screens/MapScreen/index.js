@@ -177,21 +177,9 @@ const MapScreen = () => {
   const showToast = () => {
     Toast.show({
       type: 'success',
-      //text1: 'Success',
       text2: 'Bài viết đã được lưu' + '  👋'
     })
   }
-  // const onMapReady = () => {
-  //   setIsMapReady(true)
-  //   // setTimeout(() => map.Mapview.animateToRegion(region), 10)
-  //   setMarginTop(0)
-  //   mapRef.current.animateToRegion({
-  //     latitude: location?.latitude || 21.0541883,
-  //     longitude: location?.longitude || 105.8263367,
-  //     latitudeDelta: 0.005,
-  //     longitudeDelta: 0.005
-  //   })
-  // }
   if (loading) {
     return (
       <View style={styles.spinnerView}>

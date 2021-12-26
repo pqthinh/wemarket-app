@@ -1,5 +1,7 @@
 {
   "strict": {
-    "text-font-family": "OpenSans"
+    "text-font-family": "OpenSans",
+    "text-font-size": 16,
+    "text-font-weight": "600"
   }
 }

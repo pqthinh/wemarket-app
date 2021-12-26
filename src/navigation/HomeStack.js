@@ -1,27 +1,58 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import HomeScreen from 'screens/HomeScreen'
+import MapSelect from 'screens/MapSelect'
 import ProductScreen from 'screens/ProductScreen'
+import SettingMap from '../screens/HomeScreen/SettingMap'
 import ChatStack from './ChatStack'
-const { Navigator, Screen } = createStackNavigator()
+import ChatScreen from 'screens/ChatScreen/ChatScreen'
+import SearchScreen from '../screens/SearchScreen'
+
+const Stack = createStackNavigator()
 
 const HomeStack = () => (
-  <Navigator>
-    <Screen
+  <Stack.Navigator>
+    <Stack.Screen
       name='HOME'
       options={{ title: 'Trang chủ', headerShown: false }}
       component={HomeScreen}
     />
-    <Screen
+    <Stack.Screen
       name='DETAIL_PRODUCT'
-      options={{ title: 'Chi tiết' }}
+      options={{ title: 'Chi tiết', headerShown: false }}
       component={ProductScreen}
     />
-    <Screen
+    <Stack.Screen
       name='ChatScreen'
       component={ChatStack}
       options={{ headerShown: false, title: 'Chat' }}
     />
-  </Navigator>
+    <Stack.Screen
+      name='FilterHome'
+      component={SettingMap}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name='MapSelect'
+      component={MapSelect}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name='Chat'
+      component={ChatScreen}
+      options={({ route }) => ({
+        headerTitleAlign: 'center',
+        headerShown: true,
+        title: route.params.name
+      })}
+    />
+    <Stack.Screen
+      name='Search'
+      component={SearchScreen}
+      options={{
+        headerShown: false
+      }}
+    />
+  </Stack.Navigator>
 )
 export default HomeStack

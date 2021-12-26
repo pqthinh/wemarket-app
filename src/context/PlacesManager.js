@@ -5,7 +5,8 @@ export const initialState = {
     description: '',
     placeId: '',
     latitude: '',
-    longitude: ''
+    longitude: '',
+    address: ''
   }
 }
 
@@ -18,7 +19,8 @@ export const placeReducer = (prevState, action) => {
           description: action.description,
           placeId: action.placeId,
           latitude: action.latitude,
-          longitude: action.longitude
+          longitude: action.longitude,
+          address: action.description
         }
       }
   }
