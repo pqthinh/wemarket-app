@@ -51,7 +51,7 @@ const CreateProductScreen = () => {
   const [file, setFile] = useState([])
   const [isModalVisible, toggleImageModal] = useShowState()
   const [showModal, setShowModal] = useState(false)
-  const [data, setData] = useState({
+  const initialData = {
     title: '',
     description: '',
     price: '',
@@ -69,10 +69,11 @@ const CreateProductScreen = () => {
     highlight: false,
     images: [],
     uid: withEmpty('uid', userState)
-  })
+  }
+  const [data, setData] = useState(initialData)
   const [tagInput, setTagInput] = useState()
-  const [selectedIndex, setSelectedIndex] = React.useState()
-  const [selectedStatus, setSelectedStatus] = React.useState()
+  const [selectedIndex, setSelectedIndex] = useState()
+  const [selectedStatus, setSelectedStatus] = useState()
 
   useEffect(() => {
     setData(prev => ({
@@ -137,7 +138,7 @@ const CreateProductScreen = () => {
       const response = await fetch(f.uri)
       const blob = await response.blob()
       const downloadURL = await uploadImage(
-        `images/${userState?.uid}/${bucket}/${f.fileName}.jpg`,
+        `images/${userState?.uid}/${bucket}/${f.fileName}`,
         blob
       )
       imgs.push(downloadURL)
@@ -353,13 +354,17 @@ const CreateProductScreen = () => {
                     name='plus-square'
                     fill='#E26740'
                     style={styles.iconCommon}
-                    onPress={() => {
-                      setData(prev => ({
-                        ...prev,
-                        tag: [...prev.tag, tagInput]
-                      }))
-                      setTagInput('')
-                    }}
+                    onPress={
+                      tagInput
+                        ? () => {
+                            setData(prev => ({
+                              ...prev,
+                              tag: [...prev.tag, tagInput]
+                            }))
+                            setTagInput('')
+                          }
+                        : null
+                    }
                   />
                 )}
               />
@@ -411,6 +416,12 @@ const CreateProductScreen = () => {
           visible={showModal}
           setVisible={setShowModal}
           data={data}
+          setData={setData}
+          setFile={setFile}
+          setTagInput={setTagInput}
+          setSelectedIndex={setSelectedIndex}
+          setSelectedStatus={setSelectedStatus}
+          initialData={initialData}
         />
         <EditModal
           isModalVisible={isModalVisible}

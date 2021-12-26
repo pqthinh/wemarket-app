@@ -76,7 +76,7 @@ const ProductScreen = ({ route }) => {
 
   useEffect(() => {
     setProduct(productState.product)
-    setComments(product.listComment)
+    setComments(productState.listComment)
   }, [productState.product, productState.listComment])
 
   useEffect(() => {

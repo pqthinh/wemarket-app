@@ -1,6 +1,8 @@
 // user detail
 export const API_GET_USER_DETAIL = uid => `/user/info/${uid}`
 export const REGISTER_USER = `/user/create`
+// update user
+export const UPDATE_USER = `/user/update`
 // get product
 export const GET_LIST_PRODUCT = '/common/product'
 // filter product in map
