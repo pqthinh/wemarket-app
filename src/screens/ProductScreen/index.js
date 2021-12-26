@@ -18,7 +18,13 @@ import ListComment from 'components/CommentComponent/ListComment'
 import UserPreviewComponent from 'components/CommentComponent/UserPreviewComponent'
 import NumberFormatComponent from 'components/NumberFormatComponent'
 import SliderImage from 'components/SliderImage'
-import { withArray, withEmpty, withNull, withNumber } from 'exp-value'
+import {
+  withArray,
+  withEmpty,
+  withNull,
+  withNumber,
+  withObject
+} from 'exp-value'
 import moment from 'moment'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
@@ -75,8 +81,8 @@ const ProductScreen = ({ route }) => {
   }, [route, setting.location])
 
   useEffect(() => {
-    setProduct(productState.product)
-    setComments(product.listComment)
+    setProduct(withObject('product', productState))
+    setComments(withArray('listComment', productState))
   }, [productState.product, productState.listComment])
 
   useEffect(() => {
