@@ -38,6 +38,7 @@ const SearchScreen = () => {
   const setting = useSelector(state => {
     return state.settingState
   })
+  const location = withObject('location', setting)
   const [loadingLoadMore, setLoadingLoadMore] = useState(false)
   const [page, setPage] = useState(1)
   const [listProduct, setListProduct] = useState([])
@@ -45,6 +46,7 @@ const SearchScreen = () => {
   const searchInput = useDebounce(search, 3000)
   const [filterModal, setFilterModal] = useState(false)
   const [radius, setRadius] = useState(null)
+
   const [region, setRegion] = useState({
     latitude: location?.latitude || 21.0541883,
     longitude: location?.longitude || 105.8263367,
@@ -53,7 +55,6 @@ const SearchScreen = () => {
   })
 
   const handleLoadMoreInListProduct = useCallback(() => {
-    const location = withObject('location', setting)
     if (
       withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
       !location
