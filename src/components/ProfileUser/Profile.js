@@ -32,35 +32,7 @@ const Profile = ({ navigation }) => {
     console.log(userReducer.userInfo, 'user')
     setUserDetails(userReducer.userInfo)
   }, [userReducer])
-  // useEffect(() => {
-  //   fetchUserDetails()
-  // }, [userDetails])
 
-  // const fetchUserDetails = async () => {
-  //   try {
-  //     const user = await Api.getUserDetails()
-  //     setUserDetails(user)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // const onPressPlace = () => {
-  //   console.log('place')
-  // }
-
-  // const onPressTel = number => {
-  //   Linking.openURL(`tel://${number}`).catch(err => console.log('Error:', err))
-  // }
-
-  // const onPressSms = () => {
-  //   console.log('sms')
-  // }
-
-  // const onPressEmail = email => {
-  //   Linking.openURL(`mailto://${email}?subject=subject&body=body`).catch(err =>
-  //     console.log('Error:', err)
-  //   )
-  // }
   const onImageLibraryPress = useCallback(() => {
     const options = {
       selectionLimit: 1,
@@ -92,15 +64,13 @@ const Profile = ({ navigation }) => {
       console.log('ImagePicker Error: ', pickerResult.error)
     }
   }
-  const image = pickerResponse?.assets && pickerResponse?.assets[0]
-  console.log(image, 'image-picker')
 
   useEffect(() => {
-    console.log(pickerResponse, 'uri')
+    // console.log(pickerResponse, 'uri')
     {
       pickerResponse &&
         navigation.navigate('Xem trước ảnh đại diện', {
-          uri: pickerResponse.uri
+          image: pickerResponse
         })
     }
   }, [pickerResponse])
@@ -142,7 +112,7 @@ const Profile = ({ navigation }) => {
               <View>
                 <Avatar
                   rounded
-                  size='xlarge'
+                  size='large'
                   source={{
                     uri:
                       avatar ||

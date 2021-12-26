@@ -44,7 +44,7 @@ const SeenRecentScreen = () => {
       {seenRecentReducer.listSeenRecent != [] ? (
         <Layout style={styles.container}>
           <FlatList
-            data={seenRecentReducer.listSeenRecent}
+            data={seenRecentReducer.listSeenRecent.reverse()}
             numColumns={2}
             //inverted={true}
             renderItem={({ item, key }) => (
