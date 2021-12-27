@@ -4,23 +4,36 @@ import {
   FETCH_POST_SUCCESS,
   FETCH_POST_FAILED,
   UPDATE_AVATAR_SUCCESS,
-  UPDATE_AVATAR_FAILED
+  UPDATE_AVATAR_FAILED,
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAILED
 } from '../actionTypes/profileActionType'
-import { GET_POST_USER, UPDATE_USER } from 'configs/api/apiPath'
+import { GET_POST_USER, UPDATE_USER, DELETE_PRODUCT } from 'configs/api/apiPath'
+import { withEmpty, withNull, withObject, withBoolean } from 'exp-value'
 import axios from 'configs/api/baseUrl'
 import useFirebase from 'hooks/useFirebase'
 const db = firebase.firestore()
 
 export const getPostUser = params => async dispatch => {
-  console.log(params)
   try {
     dispatch({ type: FETCH_POST_REQUEST })
     const res = await axios.post(GET_POST_USER, params)
     if (res && res.data) {
-      dispatch({ type: FETCH_POST_SUCCESS, payload: res.data })
+      dispatch({ type: FETCH_POST_SUCCESS, payload: res.data.result })
     } else dispatch({ type: FETCH_POST_FAILED, payload: 'Có lỗi xuất hiện' })
   } catch (error) {
     dispatch({ type: FETCH_POST_FAILED, payload: error })
+  }
+}
+export const deletePost = params => async dispatch => {
+  try {
+    const res = await axios.post(DELETE_PRODUCT, params)
+    if (res && res.data.status) {
+      dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: params.idProduct })
+    } else
+      dispatch({ type: DELETE_PRODUCT_FAILED, payload: 'Có lỗi xuất hiện' })
+  } catch (error) {
+    dispatch({ type: DELETE_PRODUCT_FAILED, payload: error })
   }
 }
 export const updateAvatar = (avatarImage, user) => async dispatch => {

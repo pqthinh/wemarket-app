@@ -17,7 +17,7 @@ function ListChat() {
     dispatch(getChatList(user))
   }, [])
 
-  if (listChatReducer.chatList == '')
+  if (!listChatReducer.chatList.length)
     return (
       <Layout style={styles.container}>
         <Text category='h4'>Không có lịch sử chat</Text>

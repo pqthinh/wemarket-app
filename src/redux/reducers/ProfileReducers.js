@@ -2,7 +2,7 @@ import {
   FETCH_POST_REQUEST,
   FETCH_POST_SUCCESS,
   FETCH_POST_FAILED,
-  UPDATE_AVATAR_SUCCESS
+  DELETE_PRODUCT_SUCCESS
 } from '../actionTypes/profileActionType'
 
 const manageProfile = (state = {}, action) => {
@@ -13,10 +13,13 @@ const manageProfile = (state = {}, action) => {
       return { ...state, loading: false, listPost: action.payload }
     case FETCH_POST_FAILED:
       return { ...state, loading: false, error: action.payload }
-    case UPDATE_AVATAR_SUCCESS:
-      return { ...state, uri: action.payload }
-    case UPDATE_AVATAR_SUCCESS:
-      return { ...state, error: action.payload }
+    case DELETE_PRODUCT_SUCCESS:
+      return {
+        state,
+        listPost: state.listPost.reverse().filter(eachProduct => {
+          return eachProduct.id != action.payload
+        })
+      }
     default:
       return state
   }

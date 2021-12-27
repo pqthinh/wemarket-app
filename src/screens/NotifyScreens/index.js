@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {
+  Dimensions,
+  Image,
   View,
   FlatList,
   SafeAreaView,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  ImageStore
 } from 'react-native'
 import { Layout, TopNavigation, Text } from '@ui-kitten/components'
 import { renderRightActions } from 'components/Header'
@@ -26,7 +29,7 @@ const NotifyScreen = () => {
   }, [])
   useEffect(() => {
     if (notifiesReducer.listNotify) {
-      console.log(notifiesReducer.listNotify.length, 'length list')
+      console.log(notifiesReducer.listNotify, 'list')
     }
   }, [notifiesReducer])
 
@@ -55,7 +58,7 @@ const NotifyScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Layout level='3'>
+      <Layout level='3' style={{ flex: 1 }}>
         <TopNavigation
           alignment='center'
           title={() => (
@@ -68,8 +71,7 @@ const NotifyScreen = () => {
           }}
         />
       </Layout>
-
-      {notifiesReducer?.listNotify ? (
+      {notifiesReducer.listNotify.length ? (
         <Layout>
           <FlatList
             data={notifiesReducer.listNotify}
@@ -81,8 +83,13 @@ const NotifyScreen = () => {
           />
         </Layout>
       ) : (
-        <Layout>
-          <Text category='h4'>Chưa có thông báo nào</Text>
+        <Layout
+          style={{ justifyContent: 'center', alignItems: 'center', flex: 7 }}
+        >
+          <Image
+            source={require('images/no_notify.png')}
+            style={styles.imageNotify}
+          />
         </Layout>
       )}
     </SafeAreaView>
@@ -94,5 +101,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  imageNotify: {
+    width: Dimensions.get('screen').height / 1.5,
+    height: Dimensions.get('screen').height / 1.3
   }
 })
