@@ -31,7 +31,7 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate(SIGN_UP_SCREEN)
   }
 
-  if (withBoolean('userInfo', userReducer))
+  if (withBoolean('userInfo.uid', userReducer))
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>

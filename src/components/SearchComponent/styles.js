@@ -2,10 +2,11 @@ import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   Container: {
-    flex: 0.5,
+    flex: 0.6,
     backgroundColor: `#ffffff`,
     paddingVertical: 20,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    borderTopWidth: 1
   },
   slider: {
     width: 300,
@@ -50,7 +51,7 @@ export const styles = StyleSheet.create({
   BookNow: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 0.3,
+    flex: 1,
     justifyContent: 'flex-end'
   },
   BookNowButton: {
@@ -73,7 +74,9 @@ export const styles = StyleSheet.create({
     marginLeft: -10
   },
   ButtonCancelText: {
-    color: `#000000`,
-    fontSize: 14
+    color: `#000`,
+    fontSize: 14,
+    fontWeight: '700',
+    textAlign: 'right'
   }
 })

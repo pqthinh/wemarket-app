@@ -29,12 +29,12 @@ const ChatMessage = props => {
         {(() => {
           if (message.type === 'text' || message.type === 'document') {
             return (
-              <Text style={styles.message}>
-                {message.body} {'   '}{' '}
-                <Text style={{ fontSize: 12 }}>
+              <View style={styles.message}>
+                <Text style={styles.message}>{message.body}</Text>
+                <Text style={[styles.time, { position: 'relative' }]}>
                   {moment(message.date).fromNow()}
                 </Text>
-              </Text>
+              </View>
             )
           } else if (message.type === 'photo') {
             return (
@@ -56,26 +56,28 @@ export default ChatMessage
 const styles = StyleSheet.create({
   container: {
     marginVertical: 5,
-    maxWidth: Dimensions.get('window').width / 2 + 10
+    maxWidth: Dimensions.get('window').width / 2 + 20,
+    marginHorizontal: 10
   },
   messageBox: {
-    borderRadius: 20
+    borderRadius: 10
   },
   name: {
     color: '#0C6157',
     fontWeight: 'bold',
     marginBottom: 5
   },
-  message: { padding: 10, fontSize: 16, fontWeight: 'bold' },
+  message: { padding: 5, fontSize: 16, fontWeight: 'bold' },
   image: {
-    width: Dimensions.get('window').width / 2 + 10,
+    width: Dimensions.get('window').width / 2 + 20,
     height: 150,
-    resizeMode: 'stretch',
-    borderRadius: 30
+    resizeMode: 'contain',
+    borderRadius: 10
   },
   time: {
     fontSize: 12,
     position: 'absolute',
+    marginHorizontal: 10,
     bottom: 5,
     right: 5
   }

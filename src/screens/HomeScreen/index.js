@@ -259,7 +259,9 @@ const HomeScreen = ({}) => {
           alignment='center'
           accessoryLeft={() => (
             <TouchableOpacity onPress={() => navigation.navigate('Search')}>
-              <SearchComponent />
+              <SearchComponent
+                onPressIn={() => navigation.navigate('Search')}
+              />
             </TouchableOpacity>
           )}
           accessoryRight={renderRightActions}
