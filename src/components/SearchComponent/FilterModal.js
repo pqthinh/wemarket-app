@@ -12,7 +12,6 @@ const FilterModal = ({ close, handleSearch, modalVisible }) => {
   const location = useSelector(state =>
     withObject('settingState.location', state)
   )
-  console.log(location, 'location')
   const [categoryId, setCategoryId] = useState({
     electric: false,
     device: false,

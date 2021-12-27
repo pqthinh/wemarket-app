@@ -41,8 +41,11 @@ const SearchScreen = () => {
   const [loadingMore, setLoadingMore] = useState(true)
   const [selectedIndex, setSelectedIndex] = React.useState()
   const [selectedSort, setSelectedSort] = React.useState()
-  const [fieldSort, setFieldSort] = useState('')
-  const [sort, setSort] = useState('')
+  const [fieldSort, setFieldSort] = useState({
+    id: 'orderByDate',
+    title: 'Ngày đăng sản phẩm'
+  })
+  const [sort, setSort] = useState({ id: 'desc', title: 'Giảm dần' })
   const typeSort = React.useMemo(() => {
     return [
       { id: 'desc', title: 'Giảm dần' },
@@ -53,7 +56,7 @@ const SearchScreen = () => {
     return [
       { id: 'orderByDate', title: 'Ngày đăng sản phẩm' },
       { id: 'orderByPrice', title: 'Giá sản phẩm' },
-      { id: 'orderByLike', title: 'Giá sản phẩm' },
+      { id: 'orderByLike', title: 'Số lượt thích' },
       { id: 'orderByView', title: 'Số lượt xem' }
     ]
   }, [])
@@ -91,7 +94,6 @@ const SearchScreen = () => {
 
   useEffect(() => {
     dispatch(toggleBottom(true))
-    console.log(searchInput, 'searchInput')
     if (searchInput) {
       dispatch(historySearch(searchInput))
       dispatch(searchProduct({ search: searchInput }))
@@ -99,13 +101,11 @@ const SearchScreen = () => {
   }, [searchInput])
 
   useEffect(() => {
-    console.log(resultSearch)
     if (condition || searchInput)
       setListProduct(withArray('products', resultSearch))
   }, [resultSearch.products])
 
   useEffect(() => {
-    console.log(condition, 'condition')
     if (condition) dispatch(searchProduct(condition))
   }, [condition])
 
@@ -164,6 +164,10 @@ const SearchScreen = () => {
               onSelect={item => {
                 setSelectedSort(item)
                 setSort(typeSort[item.row])
+                setCondition(prev => ({
+                  ...prev,
+                  [fieldSort.id]: typeSort[item.row].id
+                }))
               }}
               label={() => <Text style={styles.title}>Thứ tự</Text>}
               placeholder='Thứ tự'
