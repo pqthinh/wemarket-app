@@ -12,6 +12,7 @@ const FilterModal = ({ close, handleSearch, modalVisible }) => {
   const location = useSelector(state =>
     withObject('settingState.location', state)
   )
+  console.log(location, 'location')
   const [categoryId, setCategoryId] = useState({
     electric: false,
     device: false,
@@ -30,7 +31,10 @@ const FilterModal = ({ close, handleSearch, modalVisible }) => {
   const [dataSearch, setDataSearch] = useState({
     categoryId: [],
     radius: 1,
-    location: location,
+    location: {
+      lat: location.latitude,
+      lng: location.longitude
+    },
     price: [1000000, 100000000],
     search: ''
   })

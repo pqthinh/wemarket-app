@@ -74,11 +74,10 @@ export const searchProduct = params => async dispatch => {
   try {
     dispatch({ type: SEARCH_REQUEST })
     const res = await axios.post(SEARCH_PRODUCT, params)
-    console.log(params, 'params')
-    if (res.status)
+    if (withBoolean('data.status', res))
       dispatch({
         type: SEARCH_SUCCESS,
-        payload: withArray('data.products.result', res)
+        payload: withArray('data.result', res)
       })
     else dispatch({ type: SEARCH_FAILED, payload: 'Có lỗi xuất hiện' })
   } catch (error) {
