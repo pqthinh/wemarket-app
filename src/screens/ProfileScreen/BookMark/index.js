@@ -67,10 +67,12 @@ const BookmarkScreen = () => {
     <React.Fragment>
       <TouchableOpacity style={{ flexDirection: 'row' }} onPress={toggleMenu}>
         <Text
+          numberOfLines={1}
           style={{
             color: '#52A4FF',
-
-            alignSelf: 'center'
+            width: 100,
+            alignSelf: 'center',
+            paddingLeft: 45
           }}
         >
           {changeCategory}
@@ -82,7 +84,11 @@ const BookmarkScreen = () => {
         >
           <MenuItem
             title='Tất cả'
-            onPress={() => setChangeCategory('Tất cả')}
+            onPress={() => {
+              setChangeCategory('Tất cả')
+              dispatch(getBookmarks(userReducer.userInfo.uid + '/all'))
+              toggleMenu()
+            }}
           />
           {category.map(item => {
             return (
@@ -148,7 +154,7 @@ const BookmarkScreen = () => {
         />
       </Layout>
 
-      {bookmarksReducer.listBookmark != [] ? (
+      {bookmarksReducer.listBookmark.length ? (
         <Layout style={styles.container}>
           <FlatList
             data={bookmarksReducer.listBookmark}

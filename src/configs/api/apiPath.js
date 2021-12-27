@@ -11,6 +11,8 @@ export const FILTER_LIST_PRODUCT = '/common/product/filter'
 export const GET_PRODUCT_DETAIL = '/common/product'
 // get post user
 export const GET_POST_USER = '/user/product'
+// delete product
+export const DELETE_PRODUCT = 'product/delete'
 // get notifies user
 export const GET_LIST_NOTIFY = uid => `/common/notify/${uid}`
 // update notifies user

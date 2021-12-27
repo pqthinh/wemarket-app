@@ -23,11 +23,6 @@ const SeenRecentScreen = () => {
   useEffect(() => {
     dispatch(getSeenRecent(userReducer.userInfo.uid))
   }, [])
-  useEffect(() => {
-    if (seenRecentReducer.listSeenRecent) {
-      console.log(seenRecentReducer.listSeenRecent.length, 'length list')
-    }
-  }, [seenRecentReducer])
 
   if (seenRecentReducer.loading) {
     return (
@@ -41,7 +36,7 @@ const SeenRecentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {seenRecentReducer.listSeenRecent != [] ? (
+      {seenRecentReducer.listSeenRecent.length ? (
         <Layout style={styles.container}>
           <FlatList
             data={seenRecentReducer.listSeenRecent.reverse()}

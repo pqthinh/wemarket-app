@@ -18,20 +18,19 @@ import Separator from './Separator'
 import Tel from './Tel'
 import Address from './Address'
 import EditModal from './EditModal'
+import { getUserDetail } from 'actions/profileActions'
 
 const Profile = ({ navigation }) => {
   const userReducer = useSelector(state => {
     return state.userState
   })
-  const [userDetails, setUserDetails] = useState({})
+  const dispatch = useDispatch()
   const [pickerResponse, setPickerResponse] = useState(null)
-
   const [isModalVisible, toggleImageModal] = useShowState()
 
-  useEffect(() => {
-    console.log(userReducer.userInfo, 'user')
-    setUserDetails(userReducer.userInfo)
-  }, [userReducer])
+  // useEffect(() => {
+  //   dispatch(getUserDetail(userReducer.userInfo.uid))
+  // }, [])
 
   const onImageLibraryPress = useCallback(() => {
     const options = {
@@ -76,7 +75,7 @@ const Profile = ({ navigation }) => {
   }, [pickerResponse])
 
   //const uri = pickerResponse?.assets && pickerResponse.assets[0].uri
-  const { avatar, username, email, phone, address } = userDetails
+  const { avatar, username, email, phone, address } = userReducer.userInfo
   // if (uri) {
   //   return (
   //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

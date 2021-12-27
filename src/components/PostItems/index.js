@@ -1,23 +1,70 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
-import { Layout, Avatar, Button, Text, Divider } from '@ui-kitten/components'
+import {
+  Layout,
+  Avatar,
+  Icon,
+  Button,
+  Text,
+  Divider,
+  OverflowMenu,
+  MenuItem
+} from '@ui-kitten/components'
+import { useSelector, useDispatch } from 'react-redux'
 import NumberFormat from 'react-number-format'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { deletePost } from 'actions/profileActions'
 const PostItems = ({ item }) => {
+  const dispatch = useDispatch()
+  const [menuVisible, setMenuVisible] = useState(false)
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible)
+  }
+  const EditIcon = props => (
+    <AntDesign {...props} name='edit' color='black' size={20} />
+  )
+
+  const DeleteIcon = props => (
+    <AntDesign {...props} name='delete' color='black' size={20} />
+  )
+  const onPressDelete = useCallback(
+    id => {
+      dispatch(deletePost({ idProduct: id }))
+    },
+    [dispatch]
+  )
   return (
     <Layout style={styles.container}>
       <View style={styles.Row}>
-        <Avatar rounded size='medium' source={{ uri: item.avatar }} />
-        <Text style={styles.userName}>{item.username}</Text>
+        {/* <Avatar rounded size='medium' source={{ uri: item.avatar }} />
+        <Text style={styles.userName}>{item.username}</Text> */}
         <Text style={styles.status}>
-          {' '}
           {item.status == 'active' ? 'Đã kiểm duyệt' : 'Đang chờ duyệt'}
         </Text>
-        <TouchableOpacity
-          style={styles.options}
-          onPress={() => console.log('...')}
-        >
-          <SimpleLineIcons name='options' size={20} color='black' />
+        <TouchableOpacity style={styles.options} onPress={toggleMenu}>
+          <OverflowMenu
+            anchor={() => (
+              <SimpleLineIcons name='options' size={20} color='black' />
+            )}
+            visible={menuVisible}
+            onBackdropPress={toggleMenu}
+          >
+            {item.status == 'pending' && (
+              <MenuItem accessoryLeft={EditIcon} title='Sửa' />
+            )}
+
+            <MenuItem
+              accessoryLeft={DeleteIcon}
+              title='Xóa'
+              onPress={() => {
+                onPressDelete(item.id)
+                toggleMenu()
+              }}
+            />
+
+            {/* <MenuItem title='Điện tử' /> */}
+          </OverflowMenu>
         </TouchableOpacity>
       </View>
       <View style={styles.Row}>
@@ -55,7 +102,9 @@ const styles = StyleSheet.create({
   },
   Row: {
     flexDirection: 'row',
-    margin: 5
+    margin: 5,
+    flex: 1,
+    flexWrap: 'wrap'
   },
   name: {
     fontWeight: 'bold',
@@ -66,14 +115,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   status: {
-    marginLeft: 50,
+    marginLeft: 10,
     alignSelf: 'center',
-    color: '#E26740'
+    color: '#E26740',
+    flex: 9
   },
   options: {
-    marginLeft: 60,
-
-    justifyContent: 'center'
+    flex: 1
   },
   imageProduct: {
     width: 100,
