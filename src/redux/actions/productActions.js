@@ -74,6 +74,7 @@ export const searchProduct = params => async dispatch => {
   try {
     dispatch({ type: SEARCH_REQUEST })
     const res = await axios.post(SEARCH_PRODUCT, params)
+    console.log(params, 'params')
     if (res.status)
       dispatch({
         type: SEARCH_SUCCESS,

@@ -17,7 +17,6 @@ import SearchComponent from 'components/SearchComponent'
 import FilterModal from 'components/SearchComponent/FilterModal'
 import SliderImage from 'components/SliderImage'
 import { withArray, withEmpty, withNumber } from 'exp-value'
-import { useDebounce } from 'hooks'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, FlatList, SafeAreaView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,8 +35,8 @@ const SearchScreen = () => {
   const [listProduct, setListProduct] = useState(
     withArray('listProduct.result', listProductState)
   )
-  const [search, setSearch] = useState('')
-  const searchInput = useDebounce(search, 3000)
+  const [searchInput, setSearchInput] = useState('')
+
   const [filterModal, setFilterModal] = useState(false)
   const [loadingMore, setLoadingMore] = useState(true)
   const [selectedIndex, setSelectedIndex] = React.useState()
@@ -78,14 +77,11 @@ const SearchScreen = () => {
 
   const _renderFooter = useCallback(() => {
     return (
-      <>
-        <Divider />
-        <View style={styles.loading}>
-          {loadingMore ? (
-            <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
-          ) : null}
-        </View>
-      </>
+      <View style={{ flex: 1, width: 350, justifyContent: 'center' }}>
+        {loadingMore ? (
+          <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
+        ) : null}
+      </View>
     )
   }, [loadingMore])
 
@@ -95,15 +91,21 @@ const SearchScreen = () => {
 
   useEffect(() => {
     dispatch(toggleBottom(true))
-    dispatch(historySearch(searchInput))
+    console.log(searchInput, 'searchInput')
+    if (searchInput) {
+      dispatch(historySearch(searchInput))
+      dispatch(searchProduct({ search: searchInput }))
+    }
   }, [searchInput])
 
   useEffect(() => {
-    if (condition) setListProduct(withArray('products', resultSearch))
+    console.log(resultSearch)
+    if (condition || searchInput)
+      setListProduct(withArray('products', resultSearch))
   }, [resultSearch.products])
 
   useEffect(() => {
-    console.log(condition)
+    console.log(condition, 'condition')
     if (condition) dispatch(searchProduct(condition))
   }, [condition])
 
@@ -129,7 +131,11 @@ const SearchScreen = () => {
               />
             }
             title={() => (
-              <SearchComponent value={search} onChangeData={setSearch} />
+              <SearchComponent
+                init={searchInput}
+                onChangeData={setSearchInput}
+                onSearch={e => dispatch(searchProduct(e))}
+              />
             )}
           />
         </Layout>
@@ -169,7 +175,7 @@ const SearchScreen = () => {
             </Select>
           </View>
         </Layout>
-        <Layout style={{ flex: 1 }}>
+        <Layout style={{ flex: 1, marginBottom: 60 }}>
           <FlatList
             data={listProduct}
             contentContainerStyle={{
