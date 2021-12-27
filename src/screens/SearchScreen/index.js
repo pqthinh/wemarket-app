@@ -66,7 +66,7 @@ const SearchScreen = () => {
         categoryId: withArray('categoryId', data),
         minPrice: withArray('price', data)[0],
         maxPrice: withArray('price', data)[1],
-        distance: withNumber('radius', data),
+        distance: withNumber('radius', data)[0],
         lat: withEmpty('location.lat', data),
         lng: withEmpty('location.lng', data),
         [fieldSort.id]: sort.id
