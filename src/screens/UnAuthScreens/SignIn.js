@@ -1,6 +1,7 @@
 import { Button, Input, Text } from '@ui-kitten/components'
 import { login } from 'actions/userActions'
 import { IMAGES } from 'assets'
+import { withBoolean } from 'exp-value'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import {
@@ -52,8 +53,9 @@ export default function SignIn({ navigation }) {
       })
     } else Toast.hide()
   }, [error, userInfo])
+
   React.useEffect(() => {
-    if (userInfo.userInfo) {
+    if (withBoolean('userInfo.uid', userInfo)) {
       navigation.reset({
         index: 0,
         routes: [{ name: HOME_SCREEN }]

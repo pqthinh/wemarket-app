@@ -11,7 +11,6 @@ import {
   Toggle,
   TopNavigation
 } from '@ui-kitten/components'
-import BaseIcon from 'components/IconProfile/Icon'
 import ModalLogin from 'components/ModalLogin'
 import EditModal from 'components/ProfileUser/EditModal'
 import { useShowState } from 'core/hooks'

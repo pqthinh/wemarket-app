@@ -7,7 +7,10 @@ import {
   CREATE_PRODUCT_FAILED,
   GET_COMMENT_FAILED,
   GET_COMMENT_REQUEST,
-  GET_COMMENT_SUCCESS
+  GET_COMMENT_SUCCESS,
+  SEARCH_FAILED,
+  SEARCH_REQUEST,
+  SEARCH_SUCCESS
 } from '../actionTypes/productActionTypes'
 
 const productDetail = (state = {}, action) => {
@@ -106,4 +109,35 @@ const listBookmark = (state = { bookmark: [] }, action) => {
       return state
   }
 }
-export { productDetail, createProduct, listBookmark }
+
+const resSearchProduct = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case SEARCH_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        products: [],
+        message: '',
+        type: SEARCH_REQUEST
+      }
+    case SEARCH_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        products: action.payload,
+        message: '',
+        type: SEARCH_SUCCESS
+      }
+    case SEARCH_FAILED:
+      return {
+        ...state,
+        loading: false,
+        products: [],
+        message: action.payload,
+        type: SEARCH_FAILED
+      }
+    default:
+      return state
+  }
+}
+export { productDetail, createProduct, listBookmark, resSearchProduct }

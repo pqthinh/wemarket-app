@@ -1,39 +1,46 @@
-import React, { useState, useEffect } from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, Layout, Text } from '@ui-kitten/components'
-import ChatListItem from './ChatListItem'
-import { firebase } from 'configs/firebaseConfig'
+import { Layout, Text } from '@ui-kitten/components'
 import { getChatList } from 'actions/chatActions'
+import { toggleBottom } from 'actions/userActions'
+import { firebase } from 'configs/firebaseConfig'
+import React, { useEffect } from 'react'
+import { FlatList, StyleSheet } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import ChatListItem from './ChatListItem'
+
 function ListChat() {
   const dispatch = useDispatch()
   const listChatReducer = useSelector(state => {
     return state.manageChat
   })
 
-  let user = firebase.auth().currentUser
+  useEffect(() => {
+    dispatch(toggleBottom(true))
+    return () => dispatch(toggleBottom(false))
+  }, [])
 
   useEffect(() => {
+    const user = firebase.auth().currentUser
+    if (!user) return
     dispatch(getChatList(user))
   }, [])
 
   if (listChatReducer.chatList == '')
     return (
       <Layout style={styles.container}>
-        <Text category='h4'>Không có lịch sử chat</Text>
+        <Text category='h5'>Không có lịch sử chat</Text>
       </Layout>
     )
-  else
-    return (
-      <FlatList
-        style={{ width: '100%' }}
-        data={listChatReducer.chatList}
-        renderItem={({ item, index }) => (
-          <ChatListItem chatRoom={item} index={index} />
-        )}
-        keyExtractor={item => item.chatId}
-      />
-    )
+
+  return (
+    <FlatList
+      style={{ width: '100%' }}
+      data={listChatReducer.chatList}
+      renderItem={({ item, index }) => (
+        <ChatListItem chatRoom={item} index={index} />
+      )}
+      keyExtractor={item => item.chatId}
+    />
+  )
 }
 
 export default ListChat

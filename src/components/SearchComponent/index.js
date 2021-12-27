@@ -23,7 +23,6 @@ const SearchComponent = ({ value, onChangeData = () => {}, ...other }) => {
         <Icon name='search' fill='#E26740' style={styles.icon} />
       )}
       style={styles.input}
-      // onPressIn={() => navigation.navigate('Search', {})}
       {...other}
     />
   )

@@ -3,30 +3,25 @@ import {
   Divider,
   Icon,
   Layout,
+  Select,
+  SelectItem,
   Text,
   TopNavigation,
   TopNavigationAction
 } from '@ui-kitten/components'
-import { getListProduct } from 'actions/homeActions'
-import { getViewProductMap } from 'actions/mapActions'
+import { searchProduct } from 'actions/productActions'
 import { historySearch, toggleBottom } from 'actions/userActions'
 import { IMAGES } from 'assets'
 import ProductItem from 'components/ProductItem'
 import SearchComponent from 'components/SearchComponent'
 import FilterModal from 'components/SearchComponent/FilterModal'
 import SliderImage from 'components/SliderImage'
-import { withArray, withBoolean, withNumber, withObject } from 'exp-value'
+import { withArray, withEmpty, withNumber } from 'exp-value'
 import { useDebounce } from 'hooks'
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  ScrollView,
-  View,
-  Dimensions
-} from 'react-native'
+import { ActivityIndicator, FlatList, SafeAreaView, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import { ProductContainer, Section, SectionName } from './styled'
+import { SectionName } from './styled'
 import { styles } from './styles'
 
 const SearchScreen = () => {
@@ -35,98 +30,82 @@ const SearchScreen = () => {
   const listProductState = useSelector(state => {
     return state.listProduct
   })
-  const setting = useSelector(state => {
-    return state.settingState
+  const resultSearch = useSelector(state => {
+    return state.resSearchProduct
   })
-  const location = withObject('location', setting)
-  const [loadingLoadMore, setLoadingLoadMore] = useState(false)
-  const [page, setPage] = useState(1)
-  const [listProduct, setListProduct] = useState([])
+  const [listProduct, setListProduct] = useState(
+    withArray('listProduct.result', listProductState)
+  )
   const [search, setSearch] = useState('')
   const searchInput = useDebounce(search, 3000)
   const [filterModal, setFilterModal] = useState(false)
-  const [radius, setRadius] = useState(null)
+  const [loadingMore, setLoadingMore] = useState(true)
+  const [selectedIndex, setSelectedIndex] = React.useState()
+  const [selectedSort, setSelectedSort] = React.useState()
+  const [fieldSort, setFieldSort] = useState('')
+  const [sort, setSort] = useState('')
+  const typeSort = React.useMemo(() => {
+    return [
+      { id: 'desc', title: 'Giảm dần' },
+      { id: 'asc', title: 'Tăng dần' }
+    ]
+  }, [])
+  const type = React.useMemo(() => {
+    return [
+      { id: 'orderByDate', title: 'Ngày đăng sản phẩm' },
+      { id: 'orderByPrice', title: 'Giá sản phẩm' },
+      { id: 'orderByLike', title: 'Giá sản phẩm' },
+      { id: 'orderByView', title: 'Số lượt xem' }
+    ]
+  }, [])
+  const [condition, setCondition] = useState()
 
-  const [region, setRegion] = useState({
-    latitude: location?.latitude || 21.0541883,
-    longitude: location?.longitude || 105.8263367,
-    latitudeDelta: (Math.PI * radius) / 111.045,
-    longitudeDelta: 0.01
-  })
-
-  const handleLoadMoreInListProduct = useCallback(() => {
-    if (
-      withNumber('listProduct.total', listProductState) / 10 + 1 <= page ||
-      !location
-    )
-      return
-    dispatch(
-      getListProduct({
-        offset: page - 1,
-        lat: location.latitude,
-        lng: location.longitude
+  const combine = useCallback(
+    data => {
+      setCondition({
+        search: searchInput,
+        categoryId: withArray('categoryId', data),
+        minPrice: withArray('price', data)[0],
+        maxPrice: withArray('price', data)[1],
+        distance: withNumber('radius', data),
+        lat: withEmpty('location.lat', data),
+        lng: withEmpty('location.lng', data),
+        [fieldSort.id]: sort.id
       })
-    )
-  }, [page, setting.location, listProductState.listProduct])
-
-  const _onScroll = event => {
-    let y = Math.ceil(event.nativeEvent.contentOffset.y)
-    let height = Math.round(event.nativeEvent.layoutMeasurement.height)
-    let contentHeight = Math.round(event.nativeEvent.contentSize.height)
-    if (y + height >= contentHeight) handleLoadMoreInListProduct()
-  }
+    },
+    [searchInput, fieldSort, sort]
+  )
 
   const _renderFooter = useCallback(() => {
     return (
-      <View style={styles.loading}>
-        {loadingLoadMore ? (
-          <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
-        ) : null}
-      </View>
+      <>
+        <Divider />
+        <View style={styles.loading}>
+          {loadingMore ? (
+            <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
+          ) : null}
+        </View>
+      </>
     )
-  }, [loadingLoadMore])
+  }, [loadingMore])
 
-  const _renderListProduct = useCallback(listProduct => {
-    if (listProduct.length < 1)
-      return <Text style={styles.noData}>Không tìm thấy sản phẩm phù hợp</Text>
-    return [...listProduct].map((item, index) => {
-      return <ProductItem product={item} key={index + 'listProduct'} />
-    })
+  useEffect(() => {
+    return () => dispatch(toggleBottom(false))
   }, [])
-  const dispatchSettingMap = useCallback(
-    (getRadius, categoryId, lat, lng) =>
-      dispatch(
-        getViewProductMap({
-          lat: lat || 21.0541883,
-          lng: lng || 105.8263367,
-          distance: getRadius,
-          categoryId: categoryId
-        })
-      ),
-    []
-  )
 
   useEffect(() => {
     dispatch(toggleBottom(true))
-  }, [])
-
-  useEffect(() => {
-    console.log(searchInput, 'searchInput')
     dispatch(historySearch(searchInput))
   }, [searchInput])
 
   useEffect(() => {
-    const loadListProduct = withArray('listProduct.result', listProductState)
-    setLoadingLoadMore(withBoolean('loading', listProductState))
-    if (page == 1) {
-      setListProduct(loadListProduct)
-      return
-    }
-    if (loadListProduct.length > 0) {
-      setListProduct([...listProduct, ...loadListProduct])
-      setPage(page + 1)
-    }
-  }, [listProductState.listProduct])
+    if (condition) setListProduct(withArray('products', resultSearch))
+  }, [resultSearch.products])
+
+  useEffect(() => {
+    console.log(condition)
+    if (condition) dispatch(searchProduct(condition))
+  }, [condition])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -155,26 +134,77 @@ const SearchScreen = () => {
           />
         </Layout>
         <Divider />
-        <ScrollView onScroll={_onScroll} scrollEventThrottle={50}>
-          <Section style={{ paddingBottom: 40 }}>
-            <SliderImage images={IMAGES.LIST_PRODUCT} style={{ height: 120 }} />
-            <SectionName>{'Kết quả tìm kiếm'}</SectionName>
-            <ProductContainer>
-              {_renderListProduct(listProduct)}
-              <Divider />
-              {_renderFooter()}
-            </ProductContainer>
-          </Section>
-        </ScrollView>
+        <Layout style={{ marginVertical: 10, paddingHorizontal: 10 }}>
+          <View style={styles.Row}>
+            <Select
+              selectedIndex={selectedIndex}
+              value={withEmpty('title', fieldSort)}
+              onSelect={item => {
+                setSelectedIndex(item)
+                setFieldSort(type[item.row])
+              }}
+              label={() => <Text style={styles.title}>Sắp xếp</Text>}
+              placeholder='Sắp xếp'
+              style={{ flex: 1, marginRight: 10 }}
+            >
+              {type.map((item, index) => {
+                return <SelectItem key={index} title={item.title} />
+              })}
+            </Select>
+
+            <Select
+              selectedIndex={selectedSort}
+              value={withEmpty('title', sort)}
+              onSelect={item => {
+                setSelectedSort(item)
+                setSort(typeSort[item.row])
+              }}
+              label={() => <Text style={styles.title}>Thứ tự</Text>}
+              placeholder='Thứ tự'
+              style={{ flex: 1, marginLeft: 10 }}
+            >
+              {typeSort.map((item, index) => {
+                return <SelectItem key={index} title={item.title} />
+              })}
+            </Select>
+          </View>
+        </Layout>
+        <Layout style={{ flex: 1 }}>
+          <FlatList
+            data={listProduct}
+            contentContainerStyle={{
+              flexDirection: 'row',
+              flexWrap: 'wrap'
+            }}
+            ListHeaderComponent={() => (
+              <>
+                <SliderImage
+                  images={IMAGES.LIST_PRODUCT}
+                  style={{ height: 120 }}
+                />
+                <SectionName>{'Kết quả tìm kiếm'}</SectionName>
+              </>
+            )}
+            renderItem={({ item, key }) => (
+              <ProductItem product={item} index={key} />
+            )}
+            ListFooterComponent={_renderFooter}
+            ListEmptyComponent={() => (
+              <Text style={styles.noData}>Không tìm thấy sản phẩm phù hợp</Text>
+            )}
+            keyExtractor={(_, index) => index.toString()}
+            initialNumToRender={5}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              setLoadingMore(false)
+            }}
+          />
+        </Layout>
 
         <FilterModal
           modalVisible={filterModal}
           close={() => setFilterModal(false)}
-          sliderValue={radius}
-          setSliderValue={setRadius}
-          location={location}
-          setRegion={setRegion}
-          settingMap={dispatchSettingMap}
+          handleSearch={e => combine(e)}
         />
       </View>
     </SafeAreaView>

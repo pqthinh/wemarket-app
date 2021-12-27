@@ -1,10 +1,11 @@
 import {
   CREATE_PRODUCT,
   GET_PRODUCT_DETAIL,
-  GET_COMMENT
+  GET_COMMENT,
+  SEARCH_PRODUCT
 } from 'configs/api/apiPath'
 import axios from 'configs/api/baseUrl'
-import { withBoolean, withObject } from 'exp-value'
+import { withArray, withBoolean, withObject } from 'exp-value'
 import {
   CREATE_PRODUCT_FAILED,
   CREATE_PRODUCT_REQUEST,
@@ -14,7 +15,10 @@ import {
   GET_DETAIL_PRODUCT_SUCCESS,
   GET_COMMENT_FAILED,
   GET_COMMENT_REQUEST,
-  GET_COMMENT_SUCCESS
+  GET_COMMENT_SUCCESS,
+  SEARCH_FAILED,
+  SEARCH_REQUEST,
+  SEARCH_SUCCESS
 } from '../actionTypes/productActionTypes'
 
 export const getProductDetail = params => async dispatch => {
@@ -64,4 +68,20 @@ export const createProduct = data => async dispatch => {
 
 export const addToBookmark = id => async dispatch => {
   dispatch({ type: 'ADD_TO_BOOKMARK', payload: id })
+}
+
+export const searchProduct = params => async dispatch => {
+  try {
+    dispatch({ type: SEARCH_REQUEST })
+    const res = await axios.post(SEARCH_PRODUCT, params)
+    if (res.status)
+      dispatch({
+        type: SEARCH_SUCCESS,
+        payload: withArray('data.products.result', res)
+      })
+    else dispatch({ type: SEARCH_FAILED, payload: 'Có lỗi xuất hiện' })
+  } catch (error) {
+    console.log(error)
+    dispatch({ type: SEARCH_FAILED, payload: 'Có lỗi xuất hiện' })
+  }
 }

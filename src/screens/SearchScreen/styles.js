@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
     height: 30
   },
   loading: {
+    display: 'flex',
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -13,11 +14,24 @@ export const styles = StyleSheet.create({
   },
   noData: {
     fontSize: 16,
-    fontWeight: '700'
+    fontWeight: '700',
+    textAlign: 'center',
+    width: '100%',
+    marginHorizontal: 10
   },
   container: {
     display: 'flex',
     height: Dimensions.get('screen').height,
     width: Dimensions.get('screen').width
+  },
+  title: {
+    marginVertical: 2,
+    fontSize: 15,
+    fontWeight: 'bold'
+  },
+  Row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10
   }
 })

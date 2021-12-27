@@ -6,7 +6,8 @@ const { dispatch } = store
 let loginAlert = false
 
 const instance = axios.create({
-  baseURL: 'https://wemarket-api.herokuapp.com/api'
+  baseURL:
+    'http://192.168.1.6:8080/api' || 'https://wemarket-api.herokuapp.com/api'
 })
 
 instance.interceptors.request.use(
