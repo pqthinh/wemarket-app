@@ -8,6 +8,7 @@ import EditProfileStack from './EditProfileStack'
 import ChatStack from './ChatStack'
 import BookmarkScreen from 'screens/ProfileScreen/BookMark'
 import SeenRecentScreen from 'screens/ProfileScreen/SeenRecent'
+import ProductScreen from 'screens/ProductScreen'
 const { Navigator, Screen } = createStackNavigator()
 
 const screenOptions = {
@@ -47,6 +48,11 @@ export default function ProfileStack() {
         name='SeenRecent Screen'
         component={SeenRecentScreen}
         options={{ headerShown: true, title: 'Đã xem gần đây' }}
+      />
+      <Screen
+        name='DETAIL_PRODUCT'
+        options={{ title: 'Chi tiết', headerShown: false }}
+        component={ProductScreen}
       />
     </Navigator>
   )

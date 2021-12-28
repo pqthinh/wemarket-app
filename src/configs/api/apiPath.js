@@ -46,3 +46,9 @@ export const GET_LIST_NEW_PRODUCT = '/product/new-post'
 export const GET_LIST_FAV_PRODUCT = '/product/top-view'
 export const CREATE_PRODUCT = '/product/create'
 export const GET_COMMENT = '/product/comment'
+
+// GET list order product user
+export const GET_LIST_ORDER_BY_BUYER = '/order/list-of-buyer'
+
+// delete order
+export const DELETE_ORDER = '/order/delete'

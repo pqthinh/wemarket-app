@@ -16,11 +16,16 @@ const ChatIcon = props => (
 const CartIcon = props => (
   <AntDesign {...props} name='shoppingcart' size={26} color={'#E26740'} />
 )
-const renderRightActions = () => {
+const renderRightActions = order => {
   const navigation = useNavigation()
   return (
     <React.Fragment>
-      <TopNavigationAction icon={CartIcon} />
+      {!order ? null : (
+        <TopNavigationAction
+          icon={CartIcon}
+          onPress={() => navigation.navigate('OrderScreen')}
+        />
+      )}
       <TopNavigationAction
         icon={ChatIcon}
         onPress={() => navigation.navigate('ChatScreen')}
