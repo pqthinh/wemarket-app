@@ -2,7 +2,8 @@ import {
   FETCH_POST_REQUEST,
   FETCH_POST_SUCCESS,
   FETCH_POST_FAILED,
-  DELETE_PRODUCT_SUCCESS
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAILED
 } from '../actionTypes/profileActionType'
 
 const manageProfile = (state = {}, action) => {
@@ -20,6 +21,8 @@ const manageProfile = (state = {}, action) => {
           return eachProduct.id != action.payload
         })
       }
+    case DELETE_PRODUCT_FAILED:
+      return { ...state, error: action.payload }
     default:
       return state
   }

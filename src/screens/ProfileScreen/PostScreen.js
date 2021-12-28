@@ -18,30 +18,43 @@ const PostScreen = ({ user }) => {
   const listPostReducer = useSelector(state => {
     return state.manageProfile
   })
-
-  const _renderFooter = useCallback(() => {
-    return (
-      <View
-        style={{
-          padding: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-          flex: 1
-        }}
-      >
-        <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
-      </View>
-    )
-  }, [])
+  const [loading, setLoading] = useState(true)
+  const [dataSource, setDataSource] = useState([])
+  const [offset, setOffset] = useState(1)
+  const handleLoadMore = useCallback(() => {
+    dispatch(getPostUser(user.uid, offset))
+    setOffset(offset + 1)
+    //After the response increasing the offset for the next API call.
+    setDataSource([...dataSource, ...listPostReducer.listPost])
+    setLoading(false)
+  }, [listPostReducer.listPost, offset])
+  const _renderFooter = () => {
+    if (loading) {
+      return (
+        <View
+          style={{
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            flex: 1
+          }}
+        >
+          <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
+        </View>
+      )
+    } else return null
+  }
   useEffect(() => {
     dispatch(
       getPostUser({
-        uid: user.uid
-        //limit: 10
+        uid: user.uid,
+        offset: 0
       })
     )
+    setDataSource(listPostReducer.listPost)
   }, [user.uid])
+
   if (listPostReducer.loading) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -62,7 +75,7 @@ const PostScreen = ({ user }) => {
         <Layout level='3' style={{ flex: 1 }}>
           <FlatList
             nestedScrollEnabled
-            data={listPostReducer.listPost.reverse()}
+            data={dataSource.reverse()}
             renderItem={({ item, key }) => (
               <PostItems item={item} index={key} />
             )}
@@ -71,6 +84,8 @@ const PostScreen = ({ user }) => {
             //onEndReached={handleLoadMorePost}
             ListFooterComponent={_renderFooter}
             onEndReachedThreshold={0.5}
+            enableEmptySections={true}
+            onEndReached={handleLoadMore}
           />
         </Layout>
       )}
