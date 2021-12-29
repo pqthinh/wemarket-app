@@ -8,6 +8,7 @@ import {
   GET_CONTENT_CHAT,
   SEND_MESSAGE
 } from '../actionTypes/chatActionType'
+import axios from 'configs/api/baseUrl'
 
 const db = firebase.firestore()
 
@@ -35,48 +36,6 @@ export const fetchUser = async user => {
       })
   }
 }
-//   getUserDetails: async () => {
-//     let user = firebase.auth().currentUser
-//     return db
-//       .collection('users')
-//       .doc(user.uid)
-//       .get()
-//       .then(function (doc) {
-//         let userDetails = doc.data()
-//         return userDetails
-//       })
-//       .catch(function (error) {
-//         console.log('Error getting documents: ', error)
-//       })
-//   },
-//   uploadAvatar: async avatarImage => {
-//     let user = firebase.auth().currentUser
-
-//     await db.collection('users').doc(user.uid).update({
-//       avatar: avatarImage
-//     })
-//     firebase.auth().currentUser.updateProfile({
-//       photoURL: avatarImage
-//     })
-//     let results = await db.collection('users').get()
-//     results.forEach(result => {
-//       let data = result.data()
-//       if (result.id !== user.uid) {
-//         if (data.chats) {
-//           let chats = [...data.chats]
-//           for (let e in chats) {
-//             if (chats[e].with == user.uid) {
-//               chats[e].image = avatarImage
-//             }
-//           }
-
-//           db.collection('users').doc(result.id).update({
-//             chats
-//           })
-//         }
-//       }
-//     })
-//   },
 export const checkUser = async me => {
   let results = await db.collection('users').get()
   results.forEach(result => {
@@ -85,22 +44,6 @@ export const checkUser = async me => {
     } else return false
   })
 }
-//   getContactList: async userId => {
-//     let list = []
-
-//     let results = await db.collection('users').get()
-//     results.forEach(result => {
-//       let data = result.data()
-//       if (result.id !== userId) {
-//         list.push({
-//           id: result.id,
-//           name: data.name,
-//           avatar: data.avatar
-//         })
-//       }
-//     })
-//     return list
-//   },
 export const getChatList = me => async dispatch => {
   let chatList = []
   await db
@@ -130,10 +73,6 @@ export const findRoom = (me, friend) => async dispatch => {
     let chats = [...uData.chats]
     for (let e in chats) {
       if (chats[e].with == friend.uid) {
-        // return navigation.navigate('Chat', {
-        //     id: chats[e].chatId,
-        //     name: chats[e].title,
-        //   });
         return dispatch({
           type: FETCH_ROOM_SUCCESS,
           id: chats[e].chatId,
@@ -174,11 +113,6 @@ export const findRoom = (me, friend) => async dispatch => {
     name: friend.displayName
   })
 }
-// export const addNewChat = (me, friend) => async dispatch => {
-
-//   // await Api.addNewChat(user, user2);
-// }
-
 export const onChatContent = chatId => async dispatch => {
   return db
     .collection('chats')
@@ -186,8 +120,6 @@ export const onChatContent = chatId => async dispatch => {
     .onSnapshot(doc => {
       if (doc.exists) {
         let data = doc.data()
-        //   setList(data.messages.reverse())
-        //   setUsers(data.users)
 
         dispatch({
           type: GET_CONTENT_CHAT,
@@ -201,7 +133,11 @@ export const onChatContent = chatId => async dispatch => {
 export const sendMessage =
   (chatId, me, type, body, users) => async dispatch => {
     let now = new Date().toJSON()
-
+    const tmp = await axios.post('/fcm/chat', {
+      title: 'thinhpq',
+      content: 'test'
+    })
+    console.log(tmp, 'result of push noti')
     db.collection('chats')
       .doc(chatId)
       .update({

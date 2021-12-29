@@ -13,7 +13,6 @@ instance.interceptors.request.use(
   async config => {
     try {
       const ss = await firebase.auth().currentUser
-
       const token = ss ? ss?.getIdToken(true) : ''
       config.headers = {
         'Content-Type': 'application/json',

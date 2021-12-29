@@ -17,6 +17,7 @@ import { store, persistor } from 'stores/store'
 import LoadingAtoms from 'components/LoadingAtoms'
 import { default as themeEva } from 'configs/theme/theme.json'
 import { default as mapping } from 'configs/theme/mapping.json'
+import PushNotifications from './PushNotifications'
 
 LogBox.ignoreLogs([`Setting a timer for a long period`])
 LogBox.ignoreAllLogs()
@@ -37,6 +38,7 @@ const App = props => {
     <Provider store={store}>
       <ThemeProvider theme={themeColors}>
         <PersistGate loading={<LoadingAtoms />} persistor={persistor}>
+          <PushNotifications />
           <IconRegistry icons={[EvaIconsPack, IonIconsPack]} />
           <AppProvider>
             <ThemeContext.Provider
