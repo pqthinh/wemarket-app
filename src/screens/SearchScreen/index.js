@@ -89,11 +89,11 @@ const SearchScreen = () => {
   }, [loadingMore])
 
   useEffect(() => {
+    dispatch(toggleBottom(true))
     return () => dispatch(toggleBottom(false))
   }, [])
 
   useEffect(() => {
-    dispatch(toggleBottom(true))
     if (searchInput) {
       dispatch(historySearch(searchInput))
       dispatch(searchProduct({ search: searchInput }))
@@ -110,7 +110,7 @@ const SearchScreen = () => {
   }, [condition])
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, marginBottom: 20 }}>
       <View style={styles.container}>
         <Layout level='3'>
           <TopNavigation
