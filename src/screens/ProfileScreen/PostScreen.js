@@ -87,7 +87,7 @@ const PostScreen = ({ user }) => {
 
   return (
     <Layout style={{ flex: 1 }}>
-      {dataSource ? (
+      {!dataSource ? (
         <Layout style={styles.container}>
           <Image source={require('images/no-post.jpg')} style={styles.image} />
           <Text category='h6' style={styles.textPost}>

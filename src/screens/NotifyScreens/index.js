@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   imageNotify: {
     width: Dimensions.get('screen').width / 2,
-    height: Dimensions.get('screen').height / 5,
+    height: Dimensions.get('screen').height / 7,
     resizeMode: 'contain'
   },
   textNotify: {
