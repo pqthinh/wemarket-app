@@ -6,7 +6,8 @@ import {
   UPDATE_AVATAR_SUCCESS,
   UPDATE_AVATAR_FAILED,
   DELETE_PRODUCT_SUCCESS,
-  DELETE_PRODUCT_FAILED
+  DELETE_PRODUCT_FAILED,
+  RESET_POST
 } from '../actionTypes/profileActionType'
 import { GET_POST_USER, UPDATE_USER, DELETE_PRODUCT } from 'configs/api/apiPath'
 
@@ -17,13 +18,17 @@ const db = firebase.firestore()
 export const getPostUser = params => async dispatch => {
   try {
     dispatch({ type: FETCH_POST_REQUEST })
+    console.log(params, 'params')
     const res = await axios.post(GET_POST_USER, params)
     if (res && res.data) {
-      dispatch({ type: FETCH_POST_SUCCESS, payload: res.data.result })
+      dispatch({ type: FETCH_POST_SUCCESS, payload: res.data })
     } else dispatch({ type: FETCH_POST_FAILED, payload: 'Có lỗi xuất hiện' })
   } catch (error) {
     dispatch({ type: FETCH_POST_FAILED, payload: error })
   }
+}
+export const resetPost = () => dispatch => {
+  dispatch({ type: RESET_POST })
 }
 export const deletePost = params => async dispatch => {
   try {

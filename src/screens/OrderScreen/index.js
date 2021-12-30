@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import {
+  Dimensions,
+  Image,
   StyleSheet,
   FlatList,
   ScrollView,
@@ -31,23 +33,7 @@ const OrderScreen = () => {
     return state.manageOrder
   })
   const [hasScrolled, setHasScrolled] = useState(false)
-  const _renderFooter = () => {
-    if (hasScrolled) {
-      return (
-        <View
-          style={{
-            padding: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-            flex: 1
-          }}
-        >
-          <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
-        </View>
-      )
-    } else return null
-  }
+
   useEffect(() => {
     dispatch(
       getOrderBuyer({
@@ -67,6 +53,20 @@ const OrderScreen = () => {
   if (listOrderReducer.loading) {
     return (
       <SafeAreaView style={{ flex: 1 }}>
+        <Layout level='3'>
+          <TopNavigation
+            alignment='center'
+            title={() => (
+              <Text style={{ fontSize: 20, color: 'black' }}>Giỏ hàng</Text>
+            )}
+            accessoryRight={() => renderRightActions(false)}
+            accessoryLeft={renderBackAction}
+            style={{
+              borderBottomColor: '#F8F8F8',
+              borderBottomWidth: 3
+            }}
+          />
+        </Layout>
         <View style={styles.spinnerView}>
           <ActivityIndicator size='large' color='#E26740' />
         </View>
@@ -75,7 +75,7 @@ const OrderScreen = () => {
   }
 
   return (
-    <Layout>
+    <Layout style={{ flex: 1 }}>
       <Layout level='3'>
         <TopNavigation
           alignment='center'
@@ -84,12 +84,18 @@ const OrderScreen = () => {
           )}
           accessoryRight={() => renderRightActions(false)}
           accessoryLeft={renderBackAction}
-          style={{ backgroundColor: '#F2F3F7' }}
+          style={{
+            borderBottomColor: '#F8F8F8',
+            borderBottomWidth: 3
+          }}
         />
       </Layout>
-      {!listOrderReducer.listOrder ? (
+      {!listOrderReducer.listOrder.length ? (
         <Layout style={styles.container}>
-          <Text category='h4'>Chưa có bài viết nào</Text>
+          <Image source={require('images/no-post.jpg')} style={styles.image} />
+          <Text category='h6' style={styles.text}>
+            Giỏ hàng của bạn còn trống
+          </Text>
         </Layout>
       ) : (
         <FlatList
@@ -113,5 +119,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  image: {
+    width: Dimensions.get('screen').width / 2,
+    height: Dimensions.get('screen').height / 5,
+    resizeMode: 'contain'
+  },
+  text: {
+    textAlign: 'center'
+    // marginBottom: 100
   }
 })

@@ -16,7 +16,10 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { deletePost } from 'actions/profileActions'
 import { useNavigation } from '@react-navigation/native'
-const PostItems = ({ item }) => {
+import { DELETE_PRODUCT } from 'configs/api/apiPath'
+
+import axios from 'configs/api/baseUrl'
+const PostItems = ({ item, data, setData }) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const [menuVisible, setMenuVisible] = useState(false)
@@ -30,12 +33,23 @@ const PostItems = ({ item }) => {
   const DeleteIcon = props => (
     <AntDesign {...props} name='delete' color='black' size={20} />
   )
-  const onPressDelete = useCallback(
-    id => {
-      dispatch(deletePost({ idProduct: id }))
-    },
-    [dispatch]
-  )
+  const onPressDelete = async () => {
+    try {
+      console.log(item.id, 'id')
+      const res = await axios.post(DELETE_PRODUCT, { idProduct: item.id })
+
+      if (res && res.data.status) {
+        setData(
+          data.filter(eachProduct => {
+            return eachProduct.id != item.id
+          })
+        )
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const handleNavigateToDetail = () => {
     navigation.navigate('DETAIL_PRODUCT', { product: item })
   }
@@ -64,7 +78,7 @@ const PostItems = ({ item }) => {
                 accessoryLeft={DeleteIcon}
                 title='Xóa'
                 onPress={() => {
-                  onPressDelete(item.id)
+                  onPressDelete()
                   toggleMenu()
                 }}
               />

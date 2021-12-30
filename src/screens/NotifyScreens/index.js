@@ -58,7 +58,7 @@ const NotifyScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Layout level='3' style={{ flex: 1 }}>
+      <Layout level='3'>
         <TopNavigation
           alignment='center'
           title={() => (
@@ -84,12 +84,17 @@ const NotifyScreen = () => {
         </Layout>
       ) : (
         <Layout
-          style={{ justifyContent: 'center', alignItems: 'center', flex: 7 }}
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1
+          }}
         >
           <Image
-            source={require('images/no_notify.png')}
+            source={require('images/no-notify.png')}
             style={styles.imageNotify}
           />
+          <Text category='h6'>Chưa có thông báo</Text>
         </Layout>
       )}
     </SafeAreaView>
@@ -103,7 +108,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   imageNotify: {
-    width: Dimensions.get('screen').height / 1.5,
-    height: Dimensions.get('screen').height / 1.3
+    width: Dimensions.get('screen').width / 2,
+    height: Dimensions.get('screen').height / 5,
+    resizeMode: 'contain'
+  },
+  textNotify: {
+    textAlign: 'center',
+    marginBottom: 100
   }
 })

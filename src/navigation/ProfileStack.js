@@ -9,6 +9,7 @@ import ChatStack from './ChatStack'
 import BookmarkScreen from 'screens/ProfileScreen/BookMark'
 import SeenRecentScreen from 'screens/ProfileScreen/SeenRecent'
 import ProductScreen from 'screens/ProductScreen'
+import OrderScreen from 'screens/OrderScreen'
 const { Navigator, Screen } = createStackNavigator()
 
 const screenOptions = {
@@ -53,6 +54,11 @@ export default function ProfileStack() {
         name='DETAIL_PRODUCT'
         options={{ title: 'Chi tiết', headerShown: false }}
         component={ProductScreen}
+      />
+      <Screen
+        name='OrderScreen'
+        component={OrderScreen}
+        options={{ headerShown: false }}
       />
     </Navigator>
   )

@@ -36,6 +36,8 @@ const BookMarkItem = ({
   isTopLike = true,
   isReputation = true
 }) => {
+  const id = product.productId
+  product = { ...product, id }
   const navigation = useNavigation()
 
   const dispatch = useDispatch()
