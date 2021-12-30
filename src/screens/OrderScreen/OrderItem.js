@@ -24,7 +24,7 @@ const OrderItems = ({ item }) => {
     setMenuVisible(!menuVisible)
   }
   const EditIcon = props => (
-    <AntDesign {...props} name='heart' color='black' size={20} />
+    <AntDesign {...props} name='hearto' color='black' size={20} />
   )
 
   const DeleteIcon = props => (

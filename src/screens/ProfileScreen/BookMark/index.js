@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import {
-  Icon,
+  Dimensions,
+  Image,
   View,
   FlatList,
   SafeAreaView,
@@ -168,7 +169,10 @@ const BookmarkScreen = () => {
         </Layout>
       ) : (
         <Layout style={styles.container}>
-          <Text category='h4'>Chưa có bài viết nào</Text>
+          <Image source={require('images/no-post.jpg')} style={styles.image} />
+          <Text category='h6' style={styles.textBookmark}>
+            Bạn chưa lưu sản phẩm nào
+          </Text>
         </Layout>
       )}
     </SafeAreaView>
@@ -183,5 +187,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1
+  },
+  textBookmark: {
+    textAlign: 'center'
+  },
+  image: {
+    justifyContent: 'center',
+    height: Dimensions.get('screen').height / 3,
+    resizeMode: 'contain',
+    marginTop: Dimensions.get('screen').height / 6
   }
 })

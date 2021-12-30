@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Layout, Text } from '@ui-kitten/components'
 import ChatListItem from './ChatListItem'
@@ -20,7 +20,10 @@ function ListChat() {
   if (!listChatReducer.chatList.length)
     return (
       <Layout style={styles.container}>
-        <Text category='h4'>Không có lịch sử chat</Text>
+        <Image
+          source={require('images/no-room-chat-bg.png')}
+          style={styles.image}
+        />
       </Layout>
     )
   else
@@ -48,5 +51,8 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginVertical: 8
+  },
+  image: {
+    resizeMode: 'contain'
   }
 })
