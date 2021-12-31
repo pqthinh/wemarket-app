@@ -1,6 +1,8 @@
 // user detail
 export const API_GET_USER_DETAIL = uid => `/user/info/${uid}`
 export const REGISTER_USER = `/user/create`
+// update user
+export const UPDATE_USER = `/user/update`
 // get product
 export const GET_LIST_PRODUCT = '/common/product'
 // filter product in map
@@ -9,6 +11,8 @@ export const FILTER_LIST_PRODUCT = '/common/product/filter'
 export const GET_PRODUCT_DETAIL = '/common/product'
 // get post user
 export const GET_POST_USER = '/user/product'
+// delete product
+export const DELETE_PRODUCT = 'product/delete'
 // get notifies user
 export const GET_LIST_NOTIFY = uid => `/common/notify/${uid}`
 // update notifies user
@@ -44,3 +48,9 @@ export const CREATE_PRODUCT = '/product/create'
 export const GET_COMMENT = '/product/comment'
 export const SEARCH_PRODUCT = '/common/product/filter'
 export const PUSH_NOTIFY = '/fcm/chat'
+
+// GET list order product user
+export const GET_LIST_ORDER_BY_BUYER = '/order/list-of-buyer'
+
+// delete order
+export const DELETE_ORDER = '/order/delete'

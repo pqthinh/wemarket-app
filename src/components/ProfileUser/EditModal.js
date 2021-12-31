@@ -30,7 +30,10 @@ export default EditModal = ({
           />
         </View>
         <TouchableHighlight
-          onPress={onImageLibraryPress}
+          onPress={() => {
+            onImageLibraryPress()
+            toggleModal()
+          }}
           underlayColor='lightgrey'
         >
           <View style={styles.Row}>
@@ -43,7 +46,13 @@ export default EditModal = ({
             <Text>Tải ảnh lên</Text>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={onCameraPress} underlayColor='lightgrey'>
+        <TouchableHighlight
+          onPress={() => {
+            onCameraPress()
+            toggleModal()
+          }}
+          underlayColor='lightgrey'
+        >
           <View style={styles.Row}>
             <Icon
               name='camera'

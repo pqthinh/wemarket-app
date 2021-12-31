@@ -38,6 +38,7 @@ export default SettingModal = props => {
       .map(e => {
         return category.filter(c => c.type === e[0])[0].id
       })
+
     props.settingMap(
       props.sliderValue,
       listCategory,

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {
+  Dimensions,
+  Image,
   View,
   FlatList,
   SafeAreaView,
@@ -23,11 +25,6 @@ const SeenRecentScreen = () => {
   useEffect(() => {
     dispatch(getSeenRecent(userReducer.userInfo.uid))
   }, [])
-  useEffect(() => {
-    if (seenRecentReducer.listSeenRecent) {
-      console.log(seenRecentReducer.listSeenRecent.length, 'length list')
-    }
-  }, [seenRecentReducer])
 
   if (seenRecentReducer.loading) {
     return (
@@ -41,10 +38,10 @@ const SeenRecentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {seenRecentReducer.listSeenRecent != [] ? (
+      {seenRecentReducer.listSeenRecent.length ? (
         <Layout style={styles.container}>
           <FlatList
-            data={seenRecentReducer.listSeenRecent}
+            data={seenRecentReducer.listSeenRecent.reverse()}
             numColumns={2}
             //inverted={true}
             renderItem={({ item, key }) => (
@@ -55,7 +52,10 @@ const SeenRecentScreen = () => {
         </Layout>
       ) : (
         <Layout style={styles.container}>
-          <Text category='h4'>Chưa có bài viết nào</Text>
+          <Image source={require('images/no-post.jpg')} style={styles.image} />
+          <Text category='h6' style={styles.textBookmark}>
+            Bạn chưa xem sản phẩm nào
+          </Text>
         </Layout>
       )}
     </SafeAreaView>
@@ -70,5 +70,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1
+  },
+  textBookmark: {
+    textAlign: 'center'
+  },
+  image: {
+    justifyContent: 'center',
+    height: Dimensions.get('screen').height / 3,
+    resizeMode: 'contain',
+    marginTop: Dimensions.get('screen').height / 6
   }
 })

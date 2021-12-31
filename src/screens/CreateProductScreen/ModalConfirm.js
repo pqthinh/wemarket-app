@@ -5,7 +5,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createProduct } from 'actions/productActions'
 import { withBoolean } from 'exp-value'
 
-const ModalConfirm = ({ data, visible, setVisible }) => {
+const ModalConfirm = ({
+  data,
+  visible,
+  setVisible,
+  setData,
+  setFile,
+  setTagInput,
+  setSelectedIndex,
+  setSelectedStatus,
+  initialData
+}) => {
   const dispatch = useDispatch()
 
   const createProductState = useSelector(state => state.createProduct)
@@ -26,6 +36,11 @@ const ModalConfirm = ({ data, visible, setVisible }) => {
           style={{ marginTop: 40 }}
           onPress={() => {
             dispatch(createProduct(data))
+            setData(initialData)
+            setFile([])
+            setTagInput()
+            setSelectedIndex()
+            setSelectedStatus()
           }}
         >
           Xác nhận

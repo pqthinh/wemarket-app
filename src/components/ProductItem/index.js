@@ -27,7 +27,9 @@ const ProductItem = ({ product, style, isReputation = true }) => {
   const handleNavigateToDetail = () => {
     navigation.navigate('DETAIL_PRODUCT', { product })
   }
-
+  if (product.productId) {
+    product = { ...product, id: product.productId }
+  }
   return (
     <TouchableOpacity onPress={() => handleNavigateToDetail()}>
       <Container style={style}>
