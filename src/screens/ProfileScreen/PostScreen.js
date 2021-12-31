@@ -109,7 +109,6 @@ const PostScreen = ({ user }) => {
             )}
             keyExtractor={(_, index) => index.toString()}
             initialNumToRender={10}
-            //onEndReached={handleLoadMorePost}
             ListFooterComponent={_renderFooter}
             onEndReachedThreshold={0.1}
             enableEmptySections={true}

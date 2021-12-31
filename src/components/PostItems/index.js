@@ -1,27 +1,23 @@
-import React, { useState, useCallback } from 'react'
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
-import {
-  Layout,
-  Avatar,
-  Icon,
-  Button,
-  Text,
-  Divider,
-  OverflowMenu,
-  MenuItem
-} from '@ui-kitten/components'
-import { useSelector, useDispatch } from 'react-redux'
-import NumberFormat from 'react-number-format'
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { deletePost } from 'actions/profileActions'
 import { useNavigation } from '@react-navigation/native'
+import {
+  Button,
+  Divider,
+  Layout,
+  MenuItem,
+  OverflowMenu,
+  Text
+} from '@ui-kitten/components'
 import { DELETE_PRODUCT } from 'configs/api/apiPath'
-
 import axios from 'configs/api/baseUrl'
+import React, { useState } from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import NumberFormat from 'react-number-format'
+import ImageComponent from '../Image'
+
 const PostItems = ({ item, data, setData }) => {
   const navigation = useNavigation()
-  const dispatch = useDispatch()
   const [menuVisible, setMenuVisible] = useState(false)
   const toggleMenu = () => {
     setMenuVisible(!menuVisible)
@@ -57,8 +53,6 @@ const PostItems = ({ item, data, setData }) => {
     <Layout style={styles.container}>
       <TouchableOpacity onPress={handleNavigateToDetail}>
         <View style={styles.Row}>
-          {/* <Avatar rounded size='medium' source={{ uri: item.avatar }} />
-        <Text style={styles.userName}>{item.username}</Text> */}
           <Text style={styles.status}>
             {item.status == 'active' ? 'Đã kiểm duyệt' : 'Đang chờ duyệt'}
           </Text>
@@ -82,18 +76,19 @@ const PostItems = ({ item, data, setData }) => {
                   toggleMenu()
                 }}
               />
-
-              {/* <MenuItem title='Điện tử' /> */}
             </OverflowMenu>
           </TouchableOpacity>
         </View>
         <View style={styles.Row}>
-          <Image source={{ uri: item.image }} style={styles.imageProduct} />
+          <ImageComponent
+            source={{ uri: item.image }}
+            style={styles.imageProduct}
+          />
           <View style={styles.infoPost}>
             <Text style={styles.name} numberOfLines={1}>
               {item.name}
             </Text>
-            <Text style={styles.quantity}>{item.quantity} sản phẩm</Text>
+            <Text style={styles.quantity}>{item?.quantity} sản phẩm</Text>
             <Text style={styles.price}>
               <NumberFormat
                 value={item.price}
@@ -129,8 +124,9 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
-    marginLeft: 10,
-    marginTop: 5
+    marginHorizontal: 10,
+    marginVertical: 5,
+    textAlign: 'right'
   },
   userName: {
     alignSelf: 'center'
@@ -147,9 +143,10 @@ const styles = StyleSheet.create({
   imageProduct: {
     width: 100,
     height: 100,
+    borderRadius: 10,
+    marginHorizontal: 5,
     resizeMode: 'cover',
-    flex: 0.3,
-    marginLeft: 5
+    flex: 0.3
   },
   infoPost: {
     flex: 0.7
