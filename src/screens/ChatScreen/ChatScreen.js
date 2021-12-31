@@ -10,11 +10,14 @@ import { onChatContent } from 'actions/chatActions'
 function ChatScreen({ navigation }) {
   const route = useRoute()
   const id = route.params.id
+  const [data, setData] = useState([])
+  const [users, setUsers] = useState([])
 
-  const dispatch = useDispatch()
-  const listMessageReducer = useSelector(state => {
-    return state.manageChat
-  })
+  useEffect(() => {
+    setData([])
+    let unsub = onChatContent(id, setData, setUsers)
+    return unsub
+  }, [id])
 
   let user = firebase.auth().currentUser
 
@@ -25,7 +28,7 @@ function ChatScreen({ navigation }) {
       <FlatList
         ref={yourRef}
         inverted={true}
-        data={listMessageReducer.messages}
+        data={data}
         renderItem={({ item, key }) => (
           <ChatMessage myId={user.uid} message={item} index={key} />
         )}

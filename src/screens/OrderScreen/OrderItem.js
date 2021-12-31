@@ -26,6 +26,9 @@ const OrderItems = ({ item }) => {
   const EditIcon = props => (
     <AntDesign {...props} name='hearto' color='black' size={20} />
   )
+  if (item.product_id) {
+    item = { ...item, id: item.product_id, productId: item.product_id }
+  }
 
   const DeleteIcon = props => (
     <AntDesign {...props} name='delete' color='black' size={20} />
@@ -38,6 +41,9 @@ const OrderItems = ({ item }) => {
   )
   const handleNavigateToDetail = () => {
     navigation.navigate('DETAIL_PRODUCT', { product: item })
+  }
+  const handleNavigateToSameProduct = () => {
+    navigation.navigate('SameProductScreen', { product: item })
   }
   return (
     <Layout style={styles.container}>
@@ -64,7 +70,14 @@ const OrderItems = ({ item }) => {
                   toggleMenu()
                 }}
               />
-              <MenuItem accessoryLeft={EditIcon} title='Sản phẩm tương tự' />
+              <MenuItem
+                accessoryLeft={EditIcon}
+                title='Sản phẩm tương tự'
+                onPress={() => {
+                  handleNavigateToSameProduct()
+                  toggleMenu()
+                }}
+              />
 
               {/* <MenuItem title='Điện tử' /> */}
             </OverflowMenu>

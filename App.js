@@ -6,6 +6,7 @@ import * as eva from '@eva-design/eva'
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
 import { IonIconsPack } from './ion-icons'
+import { MaterialIconsPack } from './material-icons'
 import { AppNavigator } from './src/AppNavigator'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import LightTheme from 'configs/theme/LightTheme'
@@ -37,7 +38,9 @@ const App = props => {
     <Provider store={store}>
       <ThemeProvider theme={themeColors}>
         <PersistGate loading={<LoadingAtoms />} persistor={persistor}>
-          <IconRegistry icons={[EvaIconsPack, IonIconsPack]} />
+          <IconRegistry
+            icons={[EvaIconsPack, IonIconsPack, MaterialIconsPack]}
+          />
           <AppProvider>
             <ThemeContext.Provider
               value={{ theme: theme, toggleTheme: () => toggleTheme() }}

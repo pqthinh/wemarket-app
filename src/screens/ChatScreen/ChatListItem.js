@@ -12,23 +12,19 @@ const ChatListItem = ({ chatRoom }) => {
 
   let authorName = chatRoom.author == chatRoom.with ? chatRoom.title : 'You'
 
-  const onClick = useCallback(
-    id => {
-      dispatch(onChatContent(id))
-      navigation.navigate('Chat', {
-        id: chatRoom.chatId,
-        name: chatRoom.title
-      })
-    },
-    [dispatch]
-  )
+  const onClick = () => {
+    navigation.navigate('Chat', {
+      id: chatRoom.chatId,
+      name: chatRoom.title
+    })
+  }
 
   if (!chatRoom.with) {
     return null
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => onClick(chatRoom.chatId)}>
+    <TouchableWithoutFeedback onPress={onClick}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
           <Image source={{ uri: chatRoom.image }} style={styles.avatar} />
