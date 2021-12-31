@@ -1,19 +1,12 @@
-import React, { useCallback, useRef, useEffect } from 'react'
-import { Avatar, Layout, Text, Divider } from '@ui-kitten/components'
-import {
-  FlatList,
-  View,
-  StyleSheet,
-  Image,
-  I18nManager,
-  Animated
-} from 'react-native'
-import { RectButton, TouchableOpacity } from 'react-native-gesture-handler'
+import { Avatar, Divider, Text } from '@ui-kitten/components'
+import { deleteNotify, updateNotify } from 'actions/notifyActions'
+import { withEmpty } from 'exp-value'
 import moment from 'moment'
+import React, { useCallback, useRef } from 'react'
+import { Animated, I18nManager, Image, StyleSheet, View } from 'react-native'
+import { RectButton, TouchableOpacity } from 'react-native-gesture-handler'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { useDispatch, useSelector } from 'react-redux'
-import { getNotifies, updateNotify, deleteNotify } from 'actions/notifyActions'
-import { update } from 'lodash'
 const image = require('images/logo.png')
 
 const NotifyItems = ({ item }) => {
@@ -73,14 +66,9 @@ const NotifyItems = ({ item }) => {
     >
       <TouchableOpacity
         style={item.isRead == 1 ? styles.container : styles.container_2}
-        // onStartShouldSetResponder={() => {
-        //   item.isRead == 0
-        //     ? handlePressUpdate(userState.userInfo.uid, item.id)
-        //     : null
-        // }}
         onPress={() => {
           !item.isRead
-            ? handlePressUpdate(userReducer.userInfo.uid, item.id)
+            ? handlePressUpdate(withEmpty('userInfo.uid', userReducer), item.id)
             : null
         }}
       >
@@ -132,9 +120,13 @@ const styles = StyleSheet.create({
   },
   imageProduct: {
     width: 50,
-    height: 50,
+    height: '90%',
     resizeMode: 'cover',
-    flex: 2
+    flex: 2,
+    margin: 10,
+    borderRadius: 10,
+    paddingVertical: 20,
+    marginBottom: 20
   },
   Row: {
     flexDirection: 'row',

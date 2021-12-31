@@ -134,7 +134,7 @@ export const sendMessage =
   (chatId, me, type, body, users) => async dispatch => {
     let now = new Date().toJSON()
     const tmp = await axios.post('/fcm/chat', {
-      title: 'thinhpq',
+      title: 'Tin nhắn mới',
       content: 'test'
     })
     console.log(tmp, 'result of push noti')
