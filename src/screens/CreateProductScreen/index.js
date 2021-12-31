@@ -50,25 +50,27 @@ const CreateProductScreen = () => {
   const [file, setFile] = useState([])
   const [isModalVisible, toggleImageModal] = useShowState()
   const [showModal, setShowModal] = useState(false)
-  const initialData = {
-    title: '',
-    description: '',
-    price: '',
-    categoryId: 0,
-    categoryName: '',
-    location: {
-      lat: withEmpty('location.latitude', setting),
-      lng: withEmpty('location.longitude', setting),
-      address: withEmpty('location.address', setting) || 'Hà Nội'
-    },
-    tag: [],
-    ship: false,
-    quality: '',
-    quantity: 0,
-    highlight: false,
-    images: [],
-    uid: withEmpty('uid', userState)
-  }
+  const initialData = React.useMemo(() => {
+    return {
+      title: '',
+      description: '',
+      price: '',
+      categoryId: 0,
+      categoryName: '',
+      location: {
+        lat: withEmpty('location.latitude', setting),
+        lng: withEmpty('location.longitude', setting),
+        address: withEmpty('location.address', setting) || 'Hà Nội'
+      },
+      tag: [],
+      ship: false,
+      quality: '',
+      quantity: 0,
+      highlight: false,
+      images: [],
+      uid: withEmpty('uid', userState)
+    }
+  }, [])
   const [data, setData] = useState(initialData)
   const [tagInput, setTagInput] = useState()
   const [selectedIndex, setSelectedIndex] = useState()
@@ -133,7 +135,6 @@ const CreateProductScreen = () => {
     let imgs = [],
       bucket = Date.now()
     await file.forEach(async f => {
-      console.log(f, 'file')
       const response = await fetch(f.uri)
       const blob = await response.blob()
       const downloadURL = await uploadImage(
@@ -143,7 +144,7 @@ const CreateProductScreen = () => {
       imgs.push(downloadURL)
     })
     await setData(prev => ({ ...prev, images: imgs }))
-    setShowModal(true)
+    await setShowModal(true)
   }
 
   const _submit = async () => {

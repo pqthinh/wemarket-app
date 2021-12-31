@@ -20,7 +20,14 @@ const ModalConfirm = ({
 
   const createProductState = useSelector(state => state.createProduct)
   useEffect(() => {
-    if (withBoolean('product', createProductState)) setVisible(false)
+    if (withBoolean('product', createProductState)) {
+      setVisible(false)
+      setData(initialData)
+      setFile([])
+      setTagInput()
+      setSelectedIndex()
+      setSelectedStatus()
+    }
   }, [createProductState])
 
   return (
@@ -36,11 +43,6 @@ const ModalConfirm = ({
           style={{ marginTop: 40 }}
           onPress={() => {
             dispatch(createProduct(data))
-            setData(initialData)
-            setFile([])
-            setTagInput()
-            setSelectedIndex()
-            setSelectedStatus()
           }}
         >
           Xác nhận

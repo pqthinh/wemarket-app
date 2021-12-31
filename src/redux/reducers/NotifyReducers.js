@@ -7,11 +7,7 @@ import {
   UPDATE_NOTIFY_SUCCESS,
   UPDATE_NOTIFY_FAILED
 } from '../actionTypes/notifyActionTypes'
-// const INITIAL = {
-//   loading: true,
-//   listNotify: [],
-//   error: {}
-// }
+
 const manageNotifies = (state = {}, action) => {
   switch (action.type) {
     case FETCH_NOTIFY_REQUEST:

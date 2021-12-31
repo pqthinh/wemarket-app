@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { FlatList, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import { useRoute } from '@react-navigation/native'
 import { firebase } from 'configs/firebaseConfig'
+import { withArray } from 'exp-value'
+import React, { useRef } from 'react'
+import { FlatList, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import ChatMessage from './ChatMessage'
 import InputBox from './InputBox'
-import { onChatContent } from 'actions/chatActions'
 //const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
 function ChatScreen({ navigation }) {
   const route = useRoute()
@@ -25,12 +25,11 @@ function ChatScreen({ navigation }) {
       <FlatList
         ref={yourRef}
         inverted={true}
-        data={listMessageReducer.messages}
+        data={withArray('messages', listMessageReducer)}
         renderItem={({ item, key }) => (
           <ChatMessage myId={user.uid} message={item} index={key} />
         )}
         keyExtractor={(_, index) => index.toString()}
-        // Changing the key of the flatlist otherwise it doesn't update
       />
 
       <InputBox chatRoomID={id} />

@@ -1,20 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import { Layout, Text, TopNavigation } from '@ui-kitten/components'
+import { getNotifies } from 'actions/notifyActions'
+import { renderRightActions } from 'components/Header'
+import { withArray, withEmpty, withNumber } from 'exp-value'
+import React, { useEffect } from 'react'
 import {
+  ActivityIndicator,
   Dimensions,
-  Image,
-  View,
   FlatList,
+  Image,
   SafeAreaView,
   StyleSheet,
-  ActivityIndicator,
-  ImageStore
+  View
 } from 'react-native'
-import { Layout, TopNavigation, Text } from '@ui-kitten/components'
-import { renderRightActions } from 'components/Header'
-import NotifyItems from './notifyItems'
 import { useDispatch, useSelector } from 'react-redux'
-import { getNotifies, updateNotify, deleteNotify } from 'actions/notifyActions'
-import { withEmpty } from 'exp-value'
+import NotifyItems from './notifyItems'
 
 const NotifyScreen = () => {
   const dispatch = useDispatch()
@@ -27,11 +26,6 @@ const NotifyScreen = () => {
   useEffect(() => {
     dispatch(getNotifies(withEmpty('userInfo.uid', userReducer)))
   }, [])
-  useEffect(() => {
-    if (notifiesReducer.listNotify) {
-      console.log(notifiesReducer.listNotify, 'list')
-    }
-  }, [notifiesReducer])
 
   if (notifiesReducer.loading) {
     return (
@@ -71,10 +65,10 @@ const NotifyScreen = () => {
           }}
         />
       </Layout>
-      {notifiesReducer.listNotify.length ? (
+      {withNumber('listNotify.length', notifiesReducer) ? (
         <Layout>
           <FlatList
-            data={notifiesReducer.listNotify}
+            data={withArray('listNotify', notifiesReducer)}
             inverted={true}
             renderItem={({ item, key }) => (
               <NotifyItems item={item} index={key} />
