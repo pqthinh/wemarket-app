@@ -4,6 +4,7 @@ import CreateProductScreen from 'screens/CreateProductScreen'
 import ProductScreen from 'screens/ProductScreen'
 import SignIn from 'screens/UnAuthScreens/SignIn'
 import SignUp from 'screens/UnAuthScreens/SignUp'
+
 import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
 import MapSelect from 'screens/MapSelect'
 
@@ -36,6 +37,11 @@ const PostStack = () => {
         name={SIGN_UP_SCREEN}
         component={SignUp}
         options={{ headerShown: true, title: 'Đăng ký' }}
+      />
+      <Screen
+        name='DETAIL_PRODUCT'
+        options={{ title: 'Chi tiết', headerShown: false }}
+        component={ProductScreen}
       />
     </Navigator>
   )

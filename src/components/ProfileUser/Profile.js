@@ -18,49 +18,20 @@ import Separator from './Separator'
 import Tel from './Tel'
 import Address from './Address'
 import EditModal from './EditModal'
+import { getUserDetail } from 'actions/profileActions'
 
 const Profile = ({ navigation }) => {
   const userReducer = useSelector(state => {
     return state.userState
   })
-  const [userDetails, setUserDetails] = useState({})
+  const dispatch = useDispatch()
   const [pickerResponse, setPickerResponse] = useState(null)
-
   const [isModalVisible, toggleImageModal] = useShowState()
 
-  useEffect(() => {
-    console.log(userReducer.userInfo, 'user')
-    setUserDetails(userReducer.userInfo)
-  }, [userReducer])
   // useEffect(() => {
-  //   fetchUserDetails()
-  // }, [userDetails])
+  //   dispatch(getUserDetail(userReducer.userInfo.uid))
+  // }, [])
 
-  // const fetchUserDetails = async () => {
-  //   try {
-  //     const user = await Api.getUserDetails()
-  //     setUserDetails(user)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-  // const onPressPlace = () => {
-  //   console.log('place')
-  // }
-
-  // const onPressTel = number => {
-  //   Linking.openURL(`tel://${number}`).catch(err => console.log('Error:', err))
-  // }
-
-  // const onPressSms = () => {
-  //   console.log('sms')
-  // }
-
-  // const onPressEmail = email => {
-  //   Linking.openURL(`mailto://${email}?subject=subject&body=body`).catch(err =>
-  //     console.log('Error:', err)
-  //   )
-  // }
   const onImageLibraryPress = useCallback(() => {
     const options = {
       selectionLimit: 1,
@@ -92,21 +63,19 @@ const Profile = ({ navigation }) => {
       console.log('ImagePicker Error: ', pickerResult.error)
     }
   }
-  const image = pickerResponse?.assets && pickerResponse?.assets[0]
-  console.log(image, 'image-picker')
 
   useEffect(() => {
-    console.log(pickerResponse, 'uri')
+    // console.log(pickerResponse, 'uri')
     {
       pickerResponse &&
         navigation.navigate('Xem trước ảnh đại diện', {
-          uri: pickerResponse.uri
+          image: pickerResponse
         })
     }
   }, [pickerResponse])
 
   //const uri = pickerResponse?.assets && pickerResponse.assets[0].uri
-  const { avatar, username, email, phone, address } = userDetails
+  const { avatar, username, email, phone, address } = userReducer.userInfo
   // if (uri) {
   //   return (
   //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -142,7 +111,7 @@ const Profile = ({ navigation }) => {
               <View>
                 <Avatar
                   rounded
-                  size='xlarge'
+                  size='large'
                   source={{
                     uri:
                       avatar ||

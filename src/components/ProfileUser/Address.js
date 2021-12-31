@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 })
 
 const Address = ({ onPressAddress, address }) => (
-  <TouchableOpacity onPress={() => onPressAddress(address)}>
+  <TouchableOpacity>
     <View style={[styles.container]}>
       <View style={styles.iconRow}>
         <MaterialIcons
@@ -73,7 +73,7 @@ const Address = ({ onPressAddress, address }) => (
           name='edit'
           underlayColor='transparent'
           style={styles.smsIcon}
-          onPress={() => onPressAddress(address)}
+          // onPress={() => onPressAddress(address)}
         />
       </View>
     </View>

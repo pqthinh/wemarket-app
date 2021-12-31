@@ -23,7 +23,6 @@ const ProfileScreen = ({ navigation }) => {
   const userReducer = useSelector(state => {
     return state.userState
   })
-
   const signIn = () => {
     navigation.navigate(SIGN_IN_SCREEN)
   }
@@ -53,9 +52,7 @@ const ProfileScreen = ({ navigation }) => {
                 rounded
                 size='large'
                 source={{
-                  uri:
-                    withEmpty('userInfo.avatar', userReducer) ||
-                    'https://thelifetank.com/wp-content/uploads/2018/08/avatar-default-icon.png'
+                  uri: withEmpty('userInfo.avatar', userReducer)
                 }}
               />
             </View>
@@ -82,7 +79,7 @@ const ProfileScreen = ({ navigation }) => {
             <Tab title='Tài khoản' />
             <Tab title='Bài viết' />
           </TabBar>
-          {selectedIndex == 0 ? (
+          {!selectedIndex ? (
             <Setting user={withObject('userInfo', userReducer)} />
           ) : (
             <PostScreen user={withObject('userInfo', userReducer)} />
@@ -104,22 +101,30 @@ const ProfileScreen = ({ navigation }) => {
               onPress={signIn}
             />
           </View>
-
-          <Button size='small' style={styles.buttonLogin} onPress={signIn}>
-            Đăng nhập
-          </Button>
-          <Button size='small' style={styles.buttonLogin} onPress={signUp}>
-            Đăng ký
-          </Button>
+          <View style={styles.button}>
+            <Button size='small' style={styles.buttonLogin} onPress={signIn}>
+              Đăng nhập
+            </Button>
+            <Button size='small' style={styles.buttonLogin} onPress={signUp}>
+              Đăng ký
+            </Button>
+          </View>
         </View>
-        <Setting user={withObject('userInfo', userReducer)} />
+        <Setting user={userReducer.userInfo} />
       </ScrollView>
     )
 }
 export default ProfileScreen
 const styles = StyleSheet.create({
   loginRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    flex: 1
+  },
+  button: {
+    flex: 4.5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   buttonLogin: {
     marginRight: 5,
@@ -128,7 +133,7 @@ const styles = StyleSheet.create({
   userIcon: {
     alignItems: 'flex-start',
     marginLeft: 15,
-    marginRight: 120
+    flex: 5
   },
   userRow: {
     alignItems: 'center',
