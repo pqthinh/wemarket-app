@@ -13,6 +13,10 @@ import {
   SET_CATEGORY,
   TOGGLE_BOTTOM
 } from '../actionTypes/userActionTypes'
+import {
+  UPDATE_AVATAR_SUCCESS,
+  UPDATE_AVATAR_FAILED
+} from '../actionTypes/profileActionType'
 
 const userState = (state = { loading: false, userInfo: {} }, action) => {
   switch (action.type) {
@@ -63,6 +67,13 @@ const userState = (state = { loading: false, userInfo: {} }, action) => {
         type: action.type,
         message: ''
       }
+    case UPDATE_AVATAR_SUCCESS:
+      return {
+        ...state,
+        userInfo: { ...state.userInfo, avatar: action.payload }
+      }
+    case UPDATE_AVATAR_FAILED:
+      return { ...state, error: action.payload }
     default:
       return state
   }

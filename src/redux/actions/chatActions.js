@@ -91,8 +91,8 @@ export const findRoom = (me, friend) => async dispatch => {
     .update({
       chats: firebase.firestore.FieldValue.arrayUnion({
         chatId: newChat.id,
-        title: friend.displayName,
-        image: friend.photoURL,
+        title: friend.username,
+        image: friend.avatar,
         with: friend.uid
       })
     })
@@ -102,15 +102,15 @@ export const findRoom = (me, friend) => async dispatch => {
     .update({
       chats: firebase.firestore.FieldValue.arrayUnion({
         chatId: newChat.id,
-        title: me.displayName,
-        image: me.photoURL,
+        title: me.username,
+        image: me.avatar,
         with: me.uid
       })
     })
   return dispatch({
     type: REGISTER_ROOM,
     id: newChat.id,
-    name: friend.displayName
+    name: friend.username
   })
 }
 export const onChatContent = chatId => async dispatch => {
@@ -134,7 +134,7 @@ export const sendMessage =
   (chatId, me, type, body, users) => async dispatch => {
     let now = new Date().toJSON()
     const tmp = await axios.post('/fcm/chat', {
-      title: 'thinhpq',
+      title: 'Tin nhắn mới',
       content: 'test'
     })
     console.log(tmp, 'result of push noti')

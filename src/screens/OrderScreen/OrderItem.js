@@ -1,51 +1,41 @@
-import { useNavigation } from '@react-navigation/native'
+import React, { useState, useCallback } from 'react'
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
 import {
-  Button,
-  Divider,
   Layout,
-  MenuItem,
+  Avatar,
+  Icon,
+  Button,
+  Text,
+  Divider,
   OverflowMenu,
-  Text
+  MenuItem
 } from '@ui-kitten/components'
-import { DELETE_PRODUCT } from 'configs/api/apiPath'
-import axios from 'configs/api/baseUrl'
-import React, { useState } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import { useSelector, useDispatch } from 'react-redux'
 import NumberFormat from 'react-number-format'
-import ImageComponent from '../Image'
-
-const PostItems = ({ item, data, setData }) => {
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { deleteOrder } from 'actions/orderActions'
+import { useNavigation } from '@react-navigation/native'
+const OrderItems = ({ item }) => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
   const [menuVisible, setMenuVisible] = useState(false)
   const toggleMenu = () => {
     setMenuVisible(!menuVisible)
   }
   const EditIcon = props => (
-    <AntDesign {...props} name='edit' color='black' size={20} />
+    <AntDesign {...props} name='hearto' color='black' size={20} />
   )
 
   const DeleteIcon = props => (
     <AntDesign {...props} name='delete' color='black' size={20} />
   )
-  const onPressDelete = async () => {
-    try {
-      console.log(item.id, 'id')
-      const res = await axios.post(DELETE_PRODUCT, { idProduct: item.id })
-
-      if (res && res.data.status) {
-        setData(
-          data.filter(eachProduct => {
-            return eachProduct.id != item.id
-          })
-        )
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
+  const onPressDelete = useCallback(
+    id => {
+      dispatch(deleteOrder({ idOrder: id }))
+    },
+    [dispatch]
+  )
   const handleNavigateToDetail = () => {
     navigation.navigate('DETAIL_PRODUCT', { product: item })
   }
@@ -53,9 +43,11 @@ const PostItems = ({ item, data, setData }) => {
     <Layout style={styles.container}>
       <TouchableOpacity onPress={handleNavigateToDetail}>
         <View style={styles.Row}>
-          <Text style={styles.status}>
-            {item.status == 'active' ? 'Đã kiểm duyệt' : 'Đang chờ duyệt'}
-          </Text>
+          <View style={styles.userInfo}>
+            <Avatar rounded size='medium' source={{ uri: item.sellerAvatar }} />
+            <Text style={styles.userName}>{item.sellerUsername}</Text>
+          </View>
+
           <TouchableOpacity style={styles.options} onPress={toggleMenu}>
             <OverflowMenu
               anchor={() => (
@@ -64,31 +56,27 @@ const PostItems = ({ item, data, setData }) => {
               visible={menuVisible}
               onBackdropPress={toggleMenu}
             >
-              {item.status == 'pending' && (
-                <MenuItem accessoryLeft={EditIcon} title='Sửa' />
-              )}
-
               <MenuItem
                 accessoryLeft={DeleteIcon}
                 title='Xóa'
                 onPress={() => {
-                  onPressDelete()
+                  onPressDelete(item.id)
                   toggleMenu()
                 }}
               />
+              <MenuItem accessoryLeft={EditIcon} title='Sản phẩm tương tự' />
+
+              {/* <MenuItem title='Điện tử' /> */}
             </OverflowMenu>
           </TouchableOpacity>
         </View>
         <View style={styles.Row}>
-          <ImageComponent
-            source={{ uri: item.image }}
-            style={styles.imageProduct}
-          />
+          <Image source={{ uri: item.image }} style={styles.imageProduct} />
           <View style={styles.infoPost}>
             <Text style={styles.name} numberOfLines={1}>
               {item.name}
             </Text>
-            <Text style={styles.quantity}>{item?.quantity} sản phẩm</Text>
+            <Text style={styles.quantity}>{item.quantity} sản phẩm</Text>
             <Text style={styles.price}>
               <NumberFormat
                 value={item.price}
@@ -104,13 +92,10 @@ const PostItems = ({ item, data, setData }) => {
         </View>
       </TouchableOpacity>
       <Divider style={styles.divider} />
-      <View style={styles.acceptButton}>
-        <Button size='small'>Đánh dấu là đã bán</Button>
-      </View>
     </Layout>
   )
 }
-export default PostItems
+export default OrderItems
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -124,14 +109,16 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: 'bold',
-    marginHorizontal: 10,
-    marginVertical: 5,
-    textAlign: 'right'
+    marginLeft: 10,
+    marginTop: 5
   },
   userName: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginLeft: 10,
+    fontWeight: 'bold'
   },
-  status: {
+  userInfo: {
+    flexDirection: 'row',
     marginLeft: 10,
     alignSelf: 'center',
     color: '#E26740',
@@ -143,20 +130,19 @@ const styles = StyleSheet.create({
   imageProduct: {
     width: 100,
     height: 100,
-    borderRadius: 10,
-    marginHorizontal: 5,
     resizeMode: 'cover',
-    flex: 0.3
+    flex: 0.3,
+    marginLeft: 5
   },
   infoPost: {
     flex: 0.7
   },
   quantity: {
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     margin: 10
   },
   price: {
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     margin: 10
   },
   divider: {

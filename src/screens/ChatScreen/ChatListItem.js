@@ -1,16 +1,17 @@
-import React, { useCallback } from 'react'
-import { useDispatch } from 'react-redux'
-import { StyleSheet, View, Image, TouchableWithoutFeedback } from 'react-native'
-import { Text } from '@ui-kitten/components'
-import moment from 'moment'
 import { useNavigation } from '@react-navigation/native'
+import { Text } from '@ui-kitten/components'
 import { onChatContent } from 'actions/chatActions'
+import moment from 'moment'
+import React, { useCallback } from 'react'
+import { Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
+import { useDispatch } from 'react-redux'
+
 const ChatListItem = ({ chatRoom }) => {
   const dispatch = useDispatch()
   let message = chatRoom.lastMessage
   const navigation = useNavigation()
 
-  let authorName = chatRoom.author == chatRoom.with ? chatRoom.title : 'You'
+  let authorName = chatRoom?.author == chatRoom.with ? chatRoom?.title : 'Bạn'
 
   const onClick = useCallback(
     id => {
@@ -31,17 +32,17 @@ const ChatListItem = ({ chatRoom }) => {
     <TouchableWithoutFeedback onPress={() => onClick(chatRoom.chatId)}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
-          <Image source={{ uri: chatRoom.image }} style={styles.avatar} />
+          <Image source={{ uri: chatRoom?.image }} style={styles.avatar} />
 
           <View style={styles.midContainer}>
-            <Text style={styles.username}>{chatRoom.title}</Text>
+            <Text style={styles.username}>{chatRoom?.title}</Text>
             <Text numberOfLines={2} style={styles.lastMessage}>
               {(() => {
                 if (String(message).includes('data:image/jpg')) {
                   return `${authorName} sent a photo`
                 } else if (!message) return ' '
                 else {
-                  return `${authorName}: ${chatRoom.lastMessage}`
+                  return `${authorName}: ${chatRoom?.lastMessage}`
                 }
               })()}
             </Text>

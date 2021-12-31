@@ -54,13 +54,13 @@ const styles = StyleSheet.create({
 
 const Tel = ({ phoneNumber, onPressTel }) => {
   return (
-    <TouchableOpacity onPress={() => onPressTel(phoneNumber)}>
+    <TouchableOpacity>
       <View style={[styles.container]}>
         <View style={styles.iconRow}>
           <MaterialIcons
             name='call'
             style={styles.telIcon}
-            onPress={() => onPressTel(phoneNumber)}
+            // onPress={() => onPressTel(phoneNumber)}
           />
         </View>
         <View style={styles.telRow}>
@@ -72,7 +72,7 @@ const Tel = ({ phoneNumber, onPressTel }) => {
           <MaterialIcons
             name='edit'
             style={styles.smsIcon}
-            onPress={() => onPressTel(phoneNumber)}
+            // onPress={() => onPressTel(phoneNumber)}
           />
         </View>
       </View>

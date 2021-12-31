@@ -5,12 +5,29 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createProduct } from 'actions/productActions'
 import { withBoolean } from 'exp-value'
 
-const ModalConfirm = ({ data, visible, setVisible }) => {
+const ModalConfirm = ({
+  data,
+  visible,
+  setVisible,
+  setData,
+  setFile,
+  setTagInput,
+  setSelectedIndex,
+  setSelectedStatus,
+  initialData
+}) => {
   const dispatch = useDispatch()
 
   const createProductState = useSelector(state => state.createProduct)
   useEffect(() => {
-    if (withBoolean('product', createProductState)) setVisible(false)
+    if (withBoolean('product', createProductState)) {
+      setVisible(false)
+      setData(initialData)
+      setFile([])
+      setTagInput()
+      setSelectedIndex()
+      setSelectedStatus()
+    }
   }, [createProductState])
 
   return (

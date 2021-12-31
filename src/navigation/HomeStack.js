@@ -3,11 +3,11 @@ import React from 'react'
 import HomeScreen from 'screens/HomeScreen'
 import MapSelect from 'screens/MapSelect'
 import ProductScreen from 'screens/ProductScreen'
-import SettingMap from '../screens/HomeScreen/SettingMap'
+import SettingMap from 'screens/HomeScreen/SettingMap'
 import ChatStack from './ChatStack'
 import ChatScreen from 'screens/ChatScreen/ChatScreen'
-import SearchScreen from '../screens/SearchScreen'
-
+import SearchScreen from 'screens/SearchScreen'
+import OrderScreen from 'screens/OrderScreen'
 const Stack = createStackNavigator()
 
 const HomeStack = () => (
@@ -37,14 +37,11 @@ const HomeStack = () => (
       component={MapSelect}
       options={{ headerShown: false }}
     />
+
     <Stack.Screen
-      name='Chat'
-      component={ChatScreen}
-      options={({ route }) => ({
-        headerTitleAlign: 'center',
-        headerShown: true,
-        title: route.params.name
-      })}
+      name='OrderScreen'
+      component={OrderScreen}
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name='Search'
