@@ -1,111 +1,145 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import {
   StyleSheet,
   FlatList,
-  ScrollView,
+  Dimensions,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from 'react-native'
-
+import { withArray, withNumber } from 'exp-value'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button, Layout, Text } from '@ui-kitten/components'
-import { getPostUser } from 'actions/profileActions'
-import { withArray, withNumber, withBoolean } from 'exp-value'
+import { getPostUser, resetPost } from 'actions/profileActions'
 import PostItems from 'components/PostItems'
-
+import { GET_POST_USER, UPDATE_USER, DELETE_PRODUCT } from 'configs/api/apiPath'
+import axios from 'configs/api/baseUrl'
 const PostScreen = ({ user }) => {
-  const [listPost, setListPost] = useState([])
-  const dispatch = useDispatch()
-  const [page, setPage] = useState(1)
-  const [loadingLoadMore, setLoadingLoadMore] = useState(false)
-  const listPostReducer = useSelector(state => {
-    return state.manageProfile || {}
-  })
+  // const dispatch = useDispatch()
+  // const listPostReducer = useSelector(state => {
+  //   return state.manageProfile
+  // })
+  const [loading, setLoading] = useState(false)
+  const [dataSource, setDataSource] = useState([])
+  const [offset, setOffset] = useState(0)
+  const [isListEnd, setIsListEnd] = useState(false)
 
-  // console.log(listPost, 'list post user')
-  const handleLoadMorePost = useCallback(() => {
-    if (withNumber('listPost.total', listPostReducer) / 10 + 1 <= page) return
-    dispatch(getPostUser({ uid: user.uid, limit: 10, offset: page - 1 }))
-  }, [page, dispatch, listPostReducer])
+  const handleLoadMore = async () => {
+    // if (offset >= withNumber('listPost.total', listPostReducer) / 20 + 1) {
+    //   setLoading(false)
+    // } else {
 
-  const _renderFooter = useCallback(() => {
-    return (
-      <View
-        style={{
-          padding: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-          flex: 1
-        }}
-      >
-        {loadingLoadMore ? (
-          <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
-        ) : null}
-      </View>
-    )
-  }, [loadingLoadMore])
-  useEffect(() => {
-    dispatch(
-      getPostUser({
-        uid: user.uid
-        //limit: 10
-      })
-    )
-  }, [user.uid])
-  useEffect(() => {
-    if (listPostReducer.listPost.result) {
-      // const loadListPost = withArray('listPost.result', listPostReducer)
-      // setLoadingLoadMore(withBoolean('loading', listPostReducer))
-      setListPost(withArray('listPost.result', listPostReducer))
-      // if (loadListPost.length > 0) {
-      //   console.log(1, listPost.length, loadListPost.length)
-      //   setListPost([...listPost, ...loadListPost])
-      //   setPage(page + 1)
-      // }
+    if (!isListEnd) {
+      try {
+        setLoading(true)
+        const res = await axios.post(GET_POST_USER, {
+          offset: offset,
+          uid: user.uid
+        })
+        // console.log(res.data.result)
+        if (Array.isArray(res.data) && res.data.result.length == 0) {
+          // setDataSource([])
+          // setLoading(false)
+          return
+        }
+
+        if (res.data.result.length > 0) {
+          //After the response increasing the offset for the next API call.
+          setDataSource(dataSource.concat(...res.data.result))
+          setOffset(res.data.page)
+        } else {
+          setIsListEnd(true)
+          setLoading(false)
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
-  }, [listPostReducer])
-  if (loadingLoadMore) {
-    return (
-      <View style={styles.spinnerView}>
-        <ActivityIndicator size='large' color='#E26740' />
-      </View>
-    )
-  } else {
-    return (
-      <Layout>
-        {listPost == [] ? (
-          <Layout style={styles.container}>
-            <Text category='h4'>Chưa có bài viết nào</Text>
-          </Layout>
-        ) : (
-          <Layout level='3' style={{ flex: 1 }}>
-            <FlatList
-              nestedScrollEnabled
-              data={listPost}
-              renderItem={({ item, key }) => (
-                <PostItems item={item} index={key} />
-              )}
-              keyExtractor={(_, index) => index.toString()}
-              initialNumToRender={7}
-              //onEndReached={handleLoadMorePost}
-              ListFooterComponent={_renderFooter}
-              onEndReachedThreshold={0.5}
-            />
-          </Layout>
-        )}
-      </Layout>
-    )
   }
+
+  useEffect(() => {
+    // dispatch(getPostUser({ uid: user.uid, offset: 0 }))
+
+    handleLoadMore()
+
+    // setDataSource(listPostReducer.listPost.result)
+    // setLoading(true)
+    // setIsLoading(listPostReducer.loading)
+  }, [])
+
+  const _renderFooter = () => {
+    if (loading) {
+      return (
+        <View
+          style={{
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+            flex: 1
+          }}
+        >
+          <ActivityIndicator color='#E26740' style={{ margin: 15 }} />
+        </View>
+      )
+    } else return null
+  }
+
+  return (
+    <Layout style={{ flex: 1 }}>
+      {!dataSource ? (
+        <Layout style={styles.container}>
+          <Image source={require('images/no-post.jpg')} style={styles.image} />
+          <Text category='h6' style={styles.textPost}>
+            Chưa có bài viết nào
+          </Text>
+        </Layout>
+      ) : (
+        <Layout level='3' style={{ flex: 1 }}>
+          <FlatList
+            nestedScrollEnabled
+            data={dataSource}
+            renderItem={({ item, key }) => (
+              <PostItems
+                item={item}
+                data={dataSource}
+                setData={setDataSource}
+                index={key}
+              />
+            )}
+            keyExtractor={(_, index) => index.toString()}
+            initialNumToRender={10}
+            //onEndReached={handleLoadMorePost}
+            ListFooterComponent={_renderFooter}
+            onEndReachedThreshold={0.1}
+            enableEmptySections={true}
+            onEndReached={handleLoadMore}
+          />
+        </Layout>
+      )}
+    </Layout>
+  )
 }
 export default PostScreen
 const styles = StyleSheet.create({
   spinnerView: {
-    top: '150%',
-    left: '50%',
-
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    position: 'absolute'
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50
+  },
+  image: {
+    justifyContent: 'center',
+    height: Dimensions.get('screen').height / 3,
+    resizeMode: 'contain'
+  },
+  textPost: {
+    textAlign: 'center',
+    marginBottom: Dimensions.get('screen').height / 6
   }
 })

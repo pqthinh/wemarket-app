@@ -1,9 +1,9 @@
-import { Layout, Text } from '@ui-kitten/components'
+import { Layout } from '@ui-kitten/components'
 import { getChatList } from 'actions/chatActions'
 import { toggleBottom } from 'actions/userActions'
 import { firebase } from 'configs/firebaseConfig'
 import React, { useEffect } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { FlatList, Image, StyleSheet } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import ChatListItem from './ChatListItem'
 
@@ -24,10 +24,13 @@ function ListChat() {
     dispatch(getChatList(user))
   }, [])
 
-  if (listChatReducer.chatList == '')
+  if (!listChatReducer.chatList.length)
     return (
       <Layout style={styles.container}>
-        <Text category='h5'>Không có lịch sử chat</Text>
+        <Image
+          source={require('images/no-room-chat-bg.png')}
+          style={styles.image}
+        />
       </Layout>
     )
 
@@ -55,5 +58,8 @@ const styles = StyleSheet.create({
   },
   addButton: {
     marginVertical: 8
+  },
+  image: {
+    resizeMode: 'contain'
   }
 })

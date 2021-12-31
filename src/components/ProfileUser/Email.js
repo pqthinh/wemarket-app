@@ -48,7 +48,7 @@ const Email = ({ onPressEmail, email }) => (
       <MaterialIcons
         name='email'
         style={styles.emailIcon}
-        onPress={() => onPressEmail()}
+        // onPress={() => onPressEmail()}
       />
     </View>
     <View style={styles.emailRow}>

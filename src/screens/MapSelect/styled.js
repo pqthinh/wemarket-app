@@ -33,7 +33,7 @@ export default styles = StyleSheet.create({
   btnContainer: {
     width: Dimensions.get('window').width - 30,
     position: 'absolute',
-    bottom: 145,
+    bottom: 130,
     borderRadius: 20,
     backgroundColor: '#197CFF',
     marginLeft: 'auto',

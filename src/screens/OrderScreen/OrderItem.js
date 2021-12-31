@@ -14,12 +14,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import NumberFormat from 'react-number-format'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { deletePost } from 'actions/profileActions'
+import { deleteOrder } from 'actions/orderActions'
 import { useNavigation } from '@react-navigation/native'
-import { DELETE_PRODUCT } from 'configs/api/apiPath'
-
-import axios from 'configs/api/baseUrl'
-const PostItems = ({ item, data, setData }) => {
+const OrderItems = ({ item }) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const [menuVisible, setMenuVisible] = useState(false)
@@ -27,29 +24,18 @@ const PostItems = ({ item, data, setData }) => {
     setMenuVisible(!menuVisible)
   }
   const EditIcon = props => (
-    <AntDesign {...props} name='edit' color='black' size={20} />
+    <AntDesign {...props} name='hearto' color='black' size={20} />
   )
 
   const DeleteIcon = props => (
     <AntDesign {...props} name='delete' color='black' size={20} />
   )
-  const onPressDelete = async () => {
-    try {
-      console.log(item.id, 'id')
-      const res = await axios.post(DELETE_PRODUCT, { idProduct: item.id })
-
-      if (res && res.data.status) {
-        setData(
-          data.filter(eachProduct => {
-            return eachProduct.id != item.id
-          })
-        )
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
+  const onPressDelete = useCallback(
+    id => {
+      dispatch(deleteOrder({ idOrder: id }))
+    },
+    [dispatch]
+  )
   const handleNavigateToDetail = () => {
     navigation.navigate('DETAIL_PRODUCT', { product: item })
   }
@@ -57,11 +43,11 @@ const PostItems = ({ item, data, setData }) => {
     <Layout style={styles.container}>
       <TouchableOpacity onPress={handleNavigateToDetail}>
         <View style={styles.Row}>
-          {/* <Avatar rounded size='medium' source={{ uri: item.avatar }} />
-        <Text style={styles.userName}>{item.username}</Text> */}
-          <Text style={styles.status}>
-            {item.status == 'active' ? 'Đã kiểm duyệt' : 'Đang chờ duyệt'}
-          </Text>
+          <View style={styles.userInfo}>
+            <Avatar rounded size='medium' source={{ uri: item.sellerAvatar }} />
+            <Text style={styles.userName}>{item.sellerUsername}</Text>
+          </View>
+
           <TouchableOpacity style={styles.options} onPress={toggleMenu}>
             <OverflowMenu
               anchor={() => (
@@ -70,18 +56,15 @@ const PostItems = ({ item, data, setData }) => {
               visible={menuVisible}
               onBackdropPress={toggleMenu}
             >
-              {item.status == 'pending' && (
-                <MenuItem accessoryLeft={EditIcon} title='Sửa' />
-              )}
-
               <MenuItem
                 accessoryLeft={DeleteIcon}
                 title='Xóa'
                 onPress={() => {
-                  onPressDelete()
+                  onPressDelete(item.id)
                   toggleMenu()
                 }}
               />
+              <MenuItem accessoryLeft={EditIcon} title='Sản phẩm tương tự' />
 
               {/* <MenuItem title='Điện tử' /> */}
             </OverflowMenu>
@@ -109,13 +92,10 @@ const PostItems = ({ item, data, setData }) => {
         </View>
       </TouchableOpacity>
       <Divider style={styles.divider} />
-      <View style={styles.acceptButton}>
-        <Button size='small'>Đánh dấu là đã bán</Button>
-      </View>
     </Layout>
   )
 }
-export default PostItems
+export default OrderItems
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -133,9 +113,12 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   userName: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginLeft: 10,
+    fontWeight: 'bold'
   },
-  status: {
+  userInfo: {
+    flexDirection: 'row',
     marginLeft: 10,
     alignSelf: 'center',
     color: '#E26740',
@@ -155,11 +138,11 @@ const styles = StyleSheet.create({
     flex: 0.7
   },
   quantity: {
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     margin: 10
   },
   price: {
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     margin: 10
   },
   divider: {

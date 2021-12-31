@@ -53,8 +53,8 @@ const MapScreen = () => {
   })
   const [radius, setRadius] = useState(null)
   const [region, setRegion] = useState({
-    latitude: location?.latitude || 21.0541883,
-    longitude: location?.longitude || 105.8263367,
+    latitude: 21.0541883,
+    longitude: 105.8263367,
     latitudeDelta: (Math.PI * radius) / 111.045,
     longitudeDelta: 0.01
   })
@@ -113,9 +113,9 @@ const MapScreen = () => {
     handleLocationPermission()
   }, [])
 
-  useEffect(async () => {
-    setRadius(await get('save_radius'))
-  }, [])
+  // useEffect(async () => {
+  //   setRadius(await get('save_radius'))
+  // }, [])
 
   useEffect(() => {
     setRegion(prevState => ({
@@ -153,14 +153,15 @@ const MapScreen = () => {
 
   useEffect(async () => {
     const distance = (await get('save_radius')) || 1
+    setRadius(distance)
     dispatch(
       getViewProductMap({
-        lat: location?.latitude || 21.0541883,
-        lng: location?.longitude || 105.8263367,
+        lat: location.latitude,
+        lng: location.longitude,
         distance: distance
       })
     )
-  }, [location])
+  }, [])
 
   const dispatchSettingMap = useCallback(
     (getRadius, categoryId, lat, lng) =>
@@ -251,8 +252,8 @@ const MapScreen = () => {
                     })
                     setUser({
                       uid: host.uid,
-                      displayName: host.username,
-                      photoURL: host.avatar
+                      username: host.username,
+                      avatar: host.avatar
                     })
                     setModalVisible2(false)
                     setCoordinate({
@@ -281,11 +282,11 @@ const MapScreen = () => {
             />
           )}
           {coordinate.latitude !== null && <Marker coordinate={coordinate} />}
-          {radius && location && (
+          {region && (
             <MapView.Circle
               center={{
                 latitude: region.latitude,
-                longitude: location.longitude
+                longitude: region.longitude
               }}
               radius={radius * 1000}
               strokeWidth={2}
@@ -325,7 +326,7 @@ const MapScreen = () => {
         close={close_2}
         sliderValue={radius}
         setSliderValue={setRadius}
-        location={location}
+        location={region}
         setRegion={setRegion}
         settingMap={dispatchSettingMap}
       />

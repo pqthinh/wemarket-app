@@ -26,17 +26,15 @@ import {
 } from 'actions/bookmarkActions'
 // var screen = Dimensions.get('window');
 export default MapModal = props => {
+  const { product } = props
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const messageReducer = useSelector(state => {
     return state.manageChat
   })
-
   const userReducer = useSelector(state => {
     return state.userState
   })
-
-  let user = firebase.auth().currentUser
 
   const dispatchChat = useCallback(
     (me, friend) => {
@@ -56,6 +54,9 @@ export default MapModal = props => {
     },
     [dispatch]
   )
+  const handleNavigateToDetail = () => {
+    navigation.navigate('DETAIL_PRODUCT', { product })
+  }
   return (
     <Modal
       isVisible={props.modalVisible}
@@ -66,7 +67,10 @@ export default MapModal = props => {
       swipeDirection={['down']}
       onSwipeComplete={props.close}
     >
-      <View style={styles.Container}>
+      <TouchableOpacity
+        style={styles.Container}
+        onPress={handleNavigateToDetail}
+      >
         <View style={styles.iconRow}>
           <MaterialIcons name='horizontal-rule' size={50} color='silver' />
         </View>
@@ -125,7 +129,7 @@ export default MapModal = props => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.MessageButton}
-            onPress={() => dispatchChat(user, props.userChat)}
+            onPress={() => dispatchChat(userReducer.userInfo, props.userChat)}
           >
             <FeatherIcon name='message-square' size={18} color='white' />
             <Text style={styles.ButtonText}>Nhắn tin</Text>
@@ -140,7 +144,7 @@ export default MapModal = props => {
             <Text style={styles.ButtonText}>Lưu bài</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     </Modal>
   )
   // }

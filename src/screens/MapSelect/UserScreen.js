@@ -137,6 +137,8 @@ const UserScreen = () => {
 
   const onLocationSelect = () => {
     dispatch(getLocation(currentPlace))
+    dispatch(toggleBottom(false))
+    navigation.goBack()
   }
 
   if (loading) {
