@@ -3,6 +3,7 @@ import styled from 'styled-components/native'
 import IconAtoms from '../IconAtoms'
 import NumberFormatComponent from '../NumberFormatComponent'
 import { Dimensions } from 'react-native'
+import ImageComponent from '../Image'
 const WIDTH = Dimensions.get('screen').width
 
 export const Container = styled(Layout)`
@@ -18,7 +19,7 @@ export const WrapperContentProduct = styled.View`
   margin: 5px 10px;
 `
 
-export const ImageProduct = styled.Image`
+export const ImageProduct = styled(ImageComponent)`
   width: 100%;
   height: 150px;
   resize-mode: cover;
