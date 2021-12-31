@@ -285,8 +285,8 @@ const MapScreen = () => {
           {region && (
             <MapView.Circle
               center={{
-                latitude: region.latitude,
-                longitude: region.longitude
+                latitude: location.latitude,
+                longitude: location.longitude
               }}
               radius={radius * 1000}
               strokeWidth={2}

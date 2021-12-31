@@ -71,7 +71,7 @@ const NotifyScreen = () => {
           }}
         />
       </Layout>
-      {notifiesReducer.listNotify.length ? (
+      {notifiesReducer.listNotify == [] ? (
         <Layout>
           <FlatList
             data={notifiesReducer.listNotify}

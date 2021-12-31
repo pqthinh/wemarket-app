@@ -52,3 +52,8 @@ export const GET_LIST_ORDER_BY_BUYER = '/order/list-of-buyer'
 
 // delete order
 export const DELETE_ORDER = '/order/delete'
+
+// get list same product
+
+export const GET_LIST_SAME_PRODUCT = idProduct =>
+  `product/relative/${idProduct}`

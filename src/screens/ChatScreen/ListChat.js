@@ -3,21 +3,21 @@ import { FlatList, StyleSheet, View, Image } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Layout, Text } from '@ui-kitten/components'
 import ChatListItem from './ChatListItem'
-import { firebase } from 'configs/firebaseConfig'
 import { getChatList } from 'actions/chatActions'
 function ListChat() {
-  const dispatch = useDispatch()
-  const listChatReducer = useSelector(state => {
-    return state.manageChat
-  })
-
-  let user = firebase.auth().currentUser
+  const [chatList, setChatList] = useState([])
+  const user = useSelector(state => state.userState.userInfo)
 
   useEffect(() => {
-    dispatch(getChatList(user))
+    const getList = async () => {
+      if (user !== null) {
+        getChatList(user, setChatList)
+      }
+    }
+    getList()
   }, [])
 
-  if (!listChatReducer.chatList.length)
+  if (chatList == [])
     return (
       <Layout style={styles.container}>
         <Image
@@ -30,7 +30,7 @@ function ListChat() {
     return (
       <FlatList
         style={{ width: '100%' }}
-        data={listChatReducer.chatList}
+        data={chatList}
         renderItem={({ item, index }) => (
           <ChatListItem chatRoom={item} index={index} />
         )}

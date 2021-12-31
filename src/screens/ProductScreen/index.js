@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import {
   Divider,
   Icon,
@@ -32,7 +32,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { styles } from './styled'
 import { findRoom } from 'actions/chatActions'
 
-const ProductScreen = ({ route }) => {
+const ProductScreen = () => {
+  const route = useRoute()
   const dispatch = useDispatch()
   const navigation = useNavigation()
   const productState = useSelector(state => state.productDetail)
@@ -44,21 +45,14 @@ const ProductScreen = ({ route }) => {
   const [product, setProduct] = useState({})
   const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
-
-  const dispatchChat = useCallback(() => {
-    if (!userState) return
-    const friend = {
-      displayName: withEmpty('username', product),
-      photoURL: withEmpty('avatar', product),
-      uid: withEmpty('uid', product)
-    }
-    dispatch(findRoom(userState, friend))
-
-    return navigation.navigate('Chat', {
-      id: messageReducer.id,
-      name: messageReducer.name
-    })
-  }, [messageReducer, userState, product])
+  const friend = {
+    displayName: withEmpty('username', product),
+    photoURL: withEmpty('avatar', product),
+    uid: withEmpty('uid', product)
+  }
+  const dispatchChat = async () => {
+    await findRoom(userState, friend, navigation)
+  }
 
   useEffect(() => {
     const r = withNull('params.product', route)
@@ -238,7 +232,15 @@ const ProductScreen = ({ route }) => {
           </View>
         </Layout>
 
-        <View>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('UserScreen', {
+              avatar: withEmpty('avatar', product),
+              username: withEmpty('username', product),
+              uid: withEmpty('uid', product)
+            })
+          }
+        >
           <UserPreviewComponent
             user={{
               avatar: withEmpty('avatar', product),
@@ -247,7 +249,7 @@ const ProductScreen = ({ route }) => {
               star: withEmpty('star', product)
             }}
           />
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.description}>
           <Text

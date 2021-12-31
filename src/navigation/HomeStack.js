@@ -8,6 +8,8 @@ import ChatStack from './ChatStack'
 import ChatScreen from 'screens/ChatScreen/ChatScreen'
 import SearchScreen from 'screens/SearchScreen'
 import OrderScreen from 'screens/OrderScreen'
+import UserProfile from 'screens/UserProfile'
+import SameProduct from 'screens/SameProduct'
 const Stack = createStackNavigator()
 
 const HomeStack = () => (
@@ -44,11 +46,34 @@ const HomeStack = () => (
       options={{ headerShown: false }}
     />
     <Stack.Screen
+      name='SameProductScreen'
+      component={SameProduct}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
       name='Search'
       component={SearchScreen}
       options={{
         headerShown: false
       }}
+    />
+    <Stack.Screen
+      name='Chat'
+      component={ChatScreen}
+      options={({ route }) => ({
+        headerTitleAlign: 'center',
+        headerShown: true,
+        title: route.params.name
+      })}
+    />
+    <Stack.Screen
+      name='UserScreen'
+      component={UserProfile}
+      options={({ route }) => ({
+        headerTitleAlign: 'center',
+        headerShown: true,
+        title: `Trang cá nhân của ${route.params.username}`
+      })}
     />
   </Stack.Navigator>
 )

@@ -11,15 +11,15 @@ import {
 const manageChat = (state = {}, action) => {
   switch (action.type) {
     case FETCH_ROOM_SUCCESS:
-      return { ...state, loading: false, id: action.id, name: action.name }
+      return { ...state, id: action.id, name: action.name }
     case FETCH_ROOM_ERROR:
-      return { ...state, loading: false, error: action.error }
+      return { ...state, error: action.error }
     case REGISTER_ROOM:
-      return { ...state, loading: false, id: action.id, name: action.name }
+      return { ...state, id: action.id, name: action.name }
     case GET_LIST_CHAT_SUCCESS:
-      return { ...state, loading: false, chatList: action.chatList }
+      return { ...state, chatList: action.chatList }
     case GET_LIST_CHAT_FAILED:
-      return { ...state, loading: false, error: action.error }
+      return { ...state, error: action.error }
     case GET_CONTENT_CHAT:
       return {
         ...state,

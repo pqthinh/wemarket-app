@@ -35,18 +35,10 @@ export default MapModal = props => {
   const userReducer = useSelector(state => {
     return state.userState
   })
+  const dispatchChat = async () => {
+    await findRoom(userReducer.userInfo, props.userChat, navigation)
+  }
 
-  const dispatchChat = useCallback(
-    (me, friend) => {
-      dispatch(findRoom(me, friend)), props.close()
-
-      return navigation.navigate('Chat', {
-        id: messageReducer.id,
-        name: messageReducer.name
-      })
-    },
-    [dispatch]
-  )
   const handlePressCreate = useCallback(
     (uid, id) => {
       dispatch(createBookmark({ uid: uid, productId: id }))
@@ -129,7 +121,7 @@ export default MapModal = props => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.MessageButton}
-            onPress={() => dispatchChat(userReducer.userInfo, props.userChat)}
+            onPress={() => dispatchChat()}
           >
             <FeatherIcon name='message-square' size={18} color='white' />
             <Text style={styles.ButtonText}>Nhắn tin</Text>

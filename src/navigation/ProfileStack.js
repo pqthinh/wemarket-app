@@ -10,6 +10,7 @@ import BookmarkScreen from 'screens/ProfileScreen/BookMark'
 import SeenRecentScreen from 'screens/ProfileScreen/SeenRecent'
 import ProductScreen from 'screens/ProductScreen'
 import OrderScreen from 'screens/OrderScreen'
+import SameProduct from 'screens/SameProduct'
 const { Navigator, Screen } = createStackNavigator()
 
 const screenOptions = {
@@ -58,6 +59,11 @@ export default function ProfileStack() {
       <Screen
         name='OrderScreen'
         component={OrderScreen}
+        options={{ headerShown: false }}
+      />
+      <Screen
+        name='SameProductScreen'
+        component={SameProduct}
         options={{ headerShown: false }}
       />
     </Navigator>

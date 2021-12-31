@@ -38,10 +38,10 @@ const SeenRecentScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {seenRecentReducer.listSeenRecent.length ? (
+      {seenRecentReducer.listSeenRecent != [] ? (
         <Layout style={styles.container}>
           <FlatList
-            data={seenRecentReducer.listSeenRecent.reverse()}
+            data={seenRecentReducer.listSeenRecent}
             numColumns={2}
             //inverted={true}
             renderItem={({ item, key }) => (
