@@ -90,7 +90,7 @@ const OrderScreen = () => {
           }}
         />
       </Layout>
-      {!listOrderReducer.listOrder.length ? (
+      {listOrderReducer.listOrder == [] ? (
         <Layout style={styles.container}>
           <Image source={require('images/no-post.jpg')} style={styles.image} />
           <Text category='h6' style={styles.text}>

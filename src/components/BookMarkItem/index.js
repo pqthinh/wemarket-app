@@ -61,7 +61,9 @@ const BookMarkItem = ({
   const handleNavigateToDetail = () => {
     navigation.navigate('DETAIL_PRODUCT', { product })
   }
-
+  const handleNavigateToSameProduct = () => {
+    navigation.navigate('SameProductScreen', { product })
+  }
   return (
     <TouchableOpacity onPress={() => handleNavigateToDetail()}>
       <Container style={style}>
@@ -101,7 +103,12 @@ const BookMarkItem = ({
             >
               Bỏ lưu
             </Button>
-            <Button appearance='outline' size='small' style={{ width: 85 }}>
+            <Button
+              appearance='outline'
+              size='small'
+              style={{ width: 85 }}
+              onPress={() => handleNavigateToSameProduct()}
+            >
               <Text numberOfLines={1}>Tìm sản phẩm tương tự</Text>
             </Button>
           </WrapperIcon>

@@ -14,6 +14,7 @@ import { manageNotifies } from './NotifyReducers'
 import { manageBookmarks } from './BookmarkReducers'
 import { listProductSeenRecent } from './SeenRecentReducers'
 import { manageOrder } from './OrderReducers'
+import { fetchSameProduct } from './SameProductReducers'
 
 const appReducer = combineReducers({
   userState,
@@ -32,7 +33,8 @@ const appReducer = combineReducers({
   listBookmark,
   history,
   resSearchProduct,
-  manageOrder
+  manageOrder,
+  fetchSameProduct
 })
 
 const rootReducer = (state, action) => {
