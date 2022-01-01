@@ -44,37 +44,30 @@ export const checkUser = async me => {
     } else return false
   })
 }
-export const getChatList = me => async dispatch => {
-  let chatList = []
-  await db
-    .collection('users')
-    .doc(me.uid)
+
+export const getChatList = (user, setChatList) => {
+  // let chatList = []
+  db.collection('users')
+    .doc(user.uid)
     .onSnapshot(doc => {
       if (doc.exists) {
-        let list = doc.data().chats
-        if (list) {
-          chatList.push(list)
+        let data = doc.data()
+        if (data.chats) {
+          setChatList(data.chats)
         }
-        dispatch({
-          type: GET_LIST_CHAT_SUCCESS,
-          chatList: chatList[0]
-        })
-      } else {
-        dispatch({ type: GET_LIST_CHAT_FAILED, error: 'Có lỗi xuất hiện' })
       }
     })
 
   //return chatList;
 }
-export const findRoom = (me, friend) => async dispatch => {
+export const findRoom = async (me, friend, navigation) => {
   let u = await db.collection('users').doc(me.uid).get()
   let uData = u.data()
   if (uData.chats) {
     let chats = [...uData.chats]
     for (let e in chats) {
       if (chats[e].with == friend.uid) {
-        return dispatch({
-          type: FETCH_ROOM_SUCCESS,
+        return navigation.navigate('Chat', {
           id: chats[e].chatId,
           name: chats[e].title
         })
@@ -86,7 +79,8 @@ export const findRoom = (me, friend) => async dispatch => {
     users: [me.uid, friend.uid]
   })
 
-  db.collection('users')
+  await db
+    .collection('users')
     .doc(me.uid)
     .update({
       chats: firebase.firestore.FieldValue.arrayUnion({
@@ -97,7 +91,8 @@ export const findRoom = (me, friend) => async dispatch => {
       })
     })
 
-  db.collection('users')
+  await db
+    .collection('users')
     .doc(friend.uid)
     .update({
       chats: firebase.firestore.FieldValue.arrayUnion({
@@ -107,68 +102,60 @@ export const findRoom = (me, friend) => async dispatch => {
         with: me.uid
       })
     })
-  return dispatch({
-    type: REGISTER_ROOM,
+  await navigation.navigate('Chat', {
     id: newChat.id,
     name: friend.username
   })
 }
-export const onChatContent = chatId => async dispatch => {
+
+export const onChatContent = (chatId, setList, setUsers) => {
   return db
     .collection('chats')
     .doc(chatId)
     .onSnapshot(doc => {
       if (doc.exists) {
         let data = doc.data()
-
-        dispatch({
-          type: GET_CONTENT_CHAT,
-          messages: data.messages.reverse(),
-          users: data.users
-        })
+        setList(data.messages.reverse())
+        setUsers(data.users)
       }
     })
 }
 
-export const sendMessage =
-  (chatId, me, type, body, users) => async dispatch => {
-    let now = new Date().toJSON()
-    const tmp = await axios.post('/fcm/chat', {
-      title: 'Tin nhắn mới',
-      content: 'test'
-    })
-    console.log(tmp, 'result of push noti')
-    db.collection('chats')
-      .doc(chatId)
-      .update({
-        messages: firebase.firestore.FieldValue.arrayUnion({
-          type,
-          author: me.uid,
-          body,
-          date: now
-        })
-      })
-    // let users = onChatContent(chatId,dispatch)
-    for (let i in users) {
-      let u = await db.collection('users').doc(users[i]).get()
-      let uData = u.data()
-      if (uData.chats) {
-        let chats = [...uData.chats]
-        for (let e in chats) {
-          if (chats[e].chatId == chatId) {
-            chats[e].lastMessage = body
-            chats[e].lastMessageDate = now
-            chats[e].author = me.uid
-          }
-        }
+export const sendMessage = async (chatId, me, type, body, users) => {
+  let now = new Date().toJSON()
+  const tmp = await axios.post('/fcm/chat', {
+    title: 'Tin nhắn mới',
+    content: 'test'
+  })
+  console.log(tmp, 'result of push noti')
 
-        await db.collection('users').doc(users[i]).update({
-          chats
-        })
-      }
-    }
-    dispatch({
-      type: SEND_MESSAGE,
-      body: body
+  db.collection('chats')
+    .doc(chatId)
+    .update({
+      messages: firebase.firestore.FieldValue.arrayUnion({
+        type,
+        author: me.uid,
+        body,
+        date: now
+      })
     })
+
+  for (let i in users) {
+    let u = await db.collection('users').doc(users[i]).get()
+    let uData = u.data()
+    if (uData.chats) {
+      let chats = [...uData.chats]
+      for (let e in chats) {
+        if (chats[e].chatId == chatId) {
+          chats[e].lastMessage = body
+          chats[e].lastMessageDate = now
+          chats[e].author = me.uid
+        }
+      }
+
+      await db.collection('users').doc(users[i]).update({
+        chats
+      })
+    }
   }
+}

@@ -1,18 +1,14 @@
 import { Layout } from '@ui-kitten/components'
 import { getChatList } from 'actions/chatActions'
 import { toggleBottom } from 'actions/userActions'
-import { firebase } from 'configs/firebaseConfig'
-import { withNumber } from 'exp-value'
 import React, { useEffect } from 'react'
 import { FlatList, Image, StyleSheet } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import ChatListItem from './ChatListItem'
 
 function ListChat() {
-  const dispatch = useDispatch()
-  const listChatReducer = useSelector(state => {
-    return state.manageChat
-  })
+  const [chatList, setChatList] = useState([])
+  const user = useSelector(state => state.userState?.userInfo)
 
   useEffect(() => {
     dispatch(toggleBottom(true))
@@ -20,12 +16,15 @@ function ListChat() {
   }, [])
 
   useEffect(() => {
-    const user = firebase.auth().currentUser
-    if (!user) return
-    dispatch(getChatList(user))
+    const getList = async () => {
+      if (user !== null) {
+        getChatList(user, setChatList)
+      }
+    }
+    getList()
   }, [])
 
-  if (withNumber('chatList.length', listChatReducer) < 1)
+  if (chatList == [])
     return (
       <Layout style={styles.container}>
         <Image

@@ -49,11 +49,6 @@ const BookmarkScreen = () => {
     },
     [dispatch]
   )
-  useEffect(() => {
-    if (bookmarksReducer.listBookmark) {
-      console.log(bookmarksReducer.listBookmark.length, 'length list')
-    }
-  }, [bookmarksReducer])
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible)
@@ -155,7 +150,7 @@ const BookmarkScreen = () => {
         />
       </Layout>
 
-      {bookmarksReducer.listBookmark.length ? (
+      {bookmarksReducer.listBookmark != [] ? (
         <Layout style={styles.container}>
           <FlatList
             data={bookmarksReducer.listBookmark}
