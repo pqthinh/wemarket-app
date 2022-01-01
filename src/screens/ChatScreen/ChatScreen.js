@@ -1,20 +1,21 @@
 import { useRoute } from '@react-navigation/native'
 import { firebase } from 'configs/firebaseConfig'
-import { withArray } from 'exp-value'
 import React, { useRef } from 'react'
 import { FlatList, View } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 import ChatMessage from './ChatMessage'
 import InputBox from './InputBox'
-//const configuration = { "iceServers": [{ "url": "stun:stun.l.google.com:19302" }] };
+
 function ChatScreen({ navigation }) {
   const route = useRoute()
   const id = route.params.id
+  const [data, setData] = useState([])
+  const [users, setUsers] = useState([])
 
-  const dispatch = useDispatch()
-  const listMessageReducer = useSelector(state => {
-    return state.manageChat
-  })
+  useEffect(() => {
+    setData([])
+    let unsub = onChatContent(id, setData, setUsers)
+    return unsub
+  }, [id])
 
   let user = firebase.auth().currentUser
 
@@ -25,7 +26,7 @@ function ChatScreen({ navigation }) {
       <FlatList
         ref={yourRef}
         inverted={true}
-        data={withArray('messages', listMessageReducer)}
+        data={data}
         renderItem={({ item, key }) => (
           <ChatMessage myId={user.uid} message={item} index={key} />
         )}
