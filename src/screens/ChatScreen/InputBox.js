@@ -1,25 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { Text } from '@ui-kitten/components'
+import { onChatContent, sendMessage } from 'actions/chatActions'
+import { firebase } from 'configs/firebaseConfig'
+import React, { useEffect, useState } from 'react'
 import {
-  View,
-  TextInput,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  StyleSheet
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native'
-import { Text } from '@ui-kitten/components'
-import { useDispatch, useSelector } from 'react-redux'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { firebase } from 'configs/firebaseConfig'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { sendMessage, onChatContent } from 'actions/chatActions'
+import { useDispatch, useSelector } from 'react-redux'
 const InputBox = ({ chatRoomID }) => {
   const dispatch = useDispatch()
   const listMessageReducer = useSelector(state => {
     return state.manageChat
   })
+  const [messages, setMessages] = useState([])
+  const [users, setUsers] = useState([])
   // const { chatRoomID } = props
   const icon = '👍'
   const [message, setMessage] = useState('')
@@ -28,7 +29,9 @@ const InputBox = ({ chatRoomID }) => {
   let user = firebase.auth().currentUser
 
   useEffect(() => {
-    dispatch(onChatContent(chatRoomID))
+    setMessages([])
+    let unsub = onChatContent(chatRoomID, setMessages, setUsers)
+    return unsub
   }, [chatRoomID])
 
   const handleInputKeyUp = e => {
@@ -37,21 +40,15 @@ const InputBox = ({ chatRoomID }) => {
     }
   }
 
-  const handleSendClick = useCallback(
-    (chatRoomID, user, type, message, users) => {
-      if (message !== '') {
-        dispatch(sendMessage(chatRoomID, user, type, message, users))
-        setMessage('')
-      }
-    },
-    [dispatch]
-  )
-  const handleSendLike = useCallback(
-    (chatRoomID, user, type, icon, users) => {
-      dispatch(sendMessage(chatRoomID, user, type, icon, users))
-    },
-    [dispatch]
-  )
+  const handleSendClick = () => {
+    if (message !== '') {
+      sendMessage(chatRoomID, user, 'text', message, users)
+      setMessage('')
+    }
+  }
+  const handleSendLike = () => {
+    sendMessage(chatRoomID, user, 'text', icon, users)
+  }
 
   const launch_Camera = () => {
     let options = {
@@ -79,15 +76,9 @@ const InputBox = ({ chatRoomID }) => {
         let imageUri = pickerResult
           ? `data:image/jpg;base64,${pickerResult.assets[0].base64}`
           : null
-        dispatch(
-          sendMessage(
-            chatRoomID,
-            user,
-            'photo',
-            imageUri,
-            listMessageReducer.users
-          )
-        )
+
+        sendMessage(chatRoomID, user, 'photo', imageUri, users)
+
         setMessage('')
       } else if (pickerResult.didCancel) {
         console.log('User cancelled image picker')
@@ -140,33 +131,12 @@ const InputBox = ({ chatRoomID }) => {
           </TouchableOpacity>
         </View>
         {!message ? (
-          <TouchableOpacity
-            style={styles.likeButton}
-            onPress={() =>
-              handleSendLike(
-                chatRoomID,
-                user,
-                'text',
-                icon,
-                listMessageReducer.users
-              )
-            }
-          >
+          <TouchableOpacity style={styles.likeButton} onPress={handleSendLike}>
             <Text style={styles.textIcon}>👍</Text>
           </TouchableOpacity>
         ) : (
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              onPress={() =>
-                handleSendClick(
-                  chatRoomID,
-                  user,
-                  'text',
-                  message,
-                  listMessageReducer.users
-                )
-              }
-            >
+            <TouchableOpacity onPress={handleSendClick}>
               <MaterialIcons name='send' size={26} color='white' />
             </TouchableOpacity>
           </View>
