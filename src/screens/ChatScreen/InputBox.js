@@ -1,20 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { Text } from '@ui-kitten/components'
+import { onChatContent, sendMessage } from 'actions/chatActions'
+import { firebase } from 'configs/firebaseConfig'
+import React, { useEffect, useState } from 'react'
 import {
-  View,
-  TextInput,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  StyleSheet
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native'
-import { Text } from '@ui-kitten/components'
-import { useDispatch, useSelector } from 'react-redux'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { firebase } from 'configs/firebaseConfig'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { sendMessage, onChatContent } from 'actions/chatActions'
+import { useDispatch, useSelector } from 'react-redux'
 const InputBox = ({ chatRoomID }) => {
   const dispatch = useDispatch()
   const listMessageReducer = useSelector(state => {
