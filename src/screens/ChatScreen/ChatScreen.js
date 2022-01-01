@@ -1,9 +1,10 @@
 import { useRoute } from '@react-navigation/native'
 import { firebase } from 'configs/firebaseConfig'
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { FlatList, View } from 'react-native'
 import ChatMessage from './ChatMessage'
 import InputBox from './InputBox'
+import { onChatContent } from 'actions/chatActions'
 
 function ChatScreen({ navigation }) {
   const route = useRoute()

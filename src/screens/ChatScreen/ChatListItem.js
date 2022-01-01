@@ -1,13 +1,10 @@
 import { useNavigation } from '@react-navigation/native'
 import { Text } from '@ui-kitten/components'
-import { onChatContent } from 'actions/chatActions'
 import moment from 'moment'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
-import { useDispatch } from 'react-redux'
 
 const ChatListItem = ({ chatRoom }) => {
-  const dispatch = useDispatch()
   let message = chatRoom.lastMessage
   const navigation = useNavigation()
 
@@ -20,7 +17,7 @@ const ChatListItem = ({ chatRoom }) => {
     })
   }
 
-  if (!chatRoom.with) {
+  if (!chatRoom?.with) {
     return null
   }
 

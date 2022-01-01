@@ -1,13 +1,14 @@
 import { Layout } from '@ui-kitten/components'
 import { getChatList } from 'actions/chatActions'
 import { toggleBottom } from 'actions/userActions'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList, Image, StyleSheet } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ChatListItem from './ChatListItem'
 
 function ListChat() {
   const [chatList, setChatList] = useState([])
+  const dispatch = useDispatch()
   const user = useSelector(state => state.userState?.userInfo)
 
   useEffect(() => {
@@ -37,7 +38,7 @@ function ListChat() {
   return (
     <FlatList
       style={{ width: '100%' }}
-      data={listChatReducer.chatList}
+      data={chatList}
       renderItem={({ item, index }) => (
         <ChatListItem chatRoom={item} index={index} />
       )}
