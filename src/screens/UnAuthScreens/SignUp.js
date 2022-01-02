@@ -1,6 +1,8 @@
 import { Button, Input, Text } from '@ui-kitten/components'
-import { signup } from 'actions/userActions'
+import { signup, toggleBottom } from 'actions/userActions'
 import { IMAGES } from 'assets'
+import { Loading } from 'components'
+import { withBoolean } from 'exp-value'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import {
@@ -14,10 +16,8 @@ import {
 } from 'react-native'
 import Toast from 'react-native-toast-message'
 import { useDispatch, useSelector } from 'react-redux'
-import { SIGN_IN_SCREEN, HOME_SCREEN } from 'utils/ScreenName'
+import { HOME_SCREEN, SIGN_IN_SCREEN } from 'utils/ScreenName'
 import { Container } from './styled'
-import { Loading } from 'components'
-import { withBoolean } from 'exp-value'
 
 export default function SignUp({ navigation }) {
   const dispatch = useDispatch()
@@ -50,6 +50,11 @@ export default function SignUp({ navigation }) {
   }
 
   React.useEffect(() => {
+    dispatch(toggleBottom(true))
+    return () => dispatch(toggleBottom(false))
+  }, [dispatch])
+
+  React.useEffect(() => {
     if (error) {
       Toast.show({
         type: 'error',
@@ -67,8 +72,10 @@ export default function SignUp({ navigation }) {
   return (
     <Container>
       <Toast
+        position='top'
+        topOffset={50}
+        style={{ marginEnd: 50, marginLeft: 10, marginTop: -50 }}
         ref={ref => Toast.setRef(ref)}
-        style={!error ? { display: 'none' } : {}}
       />
       <Loading loading={userInfo.loading} />
       <KeyboardAvoidingView
@@ -93,7 +100,7 @@ export default function SignUp({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Họ và tên'
+                    label={() => <Text style={styles.label}>Họ và tên</Text>}
                     type='text'
                     placeholder='Họ và tên'
                     onBlur={onBlur}
@@ -123,7 +130,9 @@ export default function SignUp({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Số điện thoại'
+                    label={() => (
+                      <Text style={styles.label}>Số điện thoại</Text>
+                    )}
                     type='tel'
                     placeholder='Số điện thoại'
                     onBlur={onBlur}
@@ -150,7 +159,7 @@ export default function SignUp({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Địa chỉ'
+                    label={() => <Text style={styles.label}>Địa chỉ</Text>}
                     type='text'
                     placeholder='Địa chỉ'
                     onBlur={onBlur}
@@ -176,7 +185,7 @@ export default function SignUp({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Email'
+                    label={() => <Text style={styles.label}>Email</Text>}
                     type='email'
                     placeholder='test1@gmail'
                     onBlur={onBlur}
@@ -204,7 +213,7 @@ export default function SignUp({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Mật khẩu'
+                    label={() => <Text style={styles.label}>Mật khẩu</Text>}
                     type='text'
                     secureTextEntry={true}
                     placeholder='Mật khẩu'
@@ -236,7 +245,9 @@ export default function SignUp({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Nhập lại mật khẩu'
+                    label={() => (
+                      <Text style={styles.label}>Nhập lại mật khẩu</Text>
+                    )}
                     type='text'
                     secureTextEntry={true}
                     placeholder='Mật khẩu'
@@ -276,7 +287,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 60
+    marginTop: 10
   },
   scroll: {
     width: '90%',
@@ -312,9 +323,12 @@ const styles = StyleSheet.create({
   input: {
     position: 'relative',
     height: 40,
-    marginVertical: 20
+    marginVertical: 20,
+    paddingHorizontal: 5
   },
   button: {
-    marginVertical: 30
-  }
+    marginVertical: 30,
+    paddingHorizontal: 5
+  },
+  label: { fontSize: 14, fontWeight: '700' }
 })

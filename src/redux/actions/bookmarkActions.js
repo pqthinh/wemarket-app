@@ -39,7 +39,6 @@ export const createBookmark = params => async dispatch => {
   }
 }
 export const deleteBookmark = params => async dispatch => {
-  console.log(params)
   try {
     const res = await axios.post(DELETE_BOOKMARK, params)
 
@@ -49,5 +48,17 @@ export const deleteBookmark = params => async dispatch => {
       dispatch({ type: DELETE_BOOKMARK_FAILED, payload: 'Có lỗi xuất hiện' })
   } catch (error) {
     dispatch({ type: DELETE_BOOKMARK_FAILED, payload: error })
+  }
+}
+
+export const addToCard = params => async dispatch => {
+  try {
+    const res = await axios.post('/order/create', params)
+    if (res && res.data.status) {
+      dispatch({ type: CREATE_BOOKMARK_SUCCESS, payload: params.productId })
+    } else
+      dispatch({ type: CREATE_BOOKMARK_FAILED, payload: 'Có lỗi xuất hiện' })
+  } catch (error) {
+    dispatch({ type: CREATE_BOOKMARK_FAILED, payload: error })
   }
 }
