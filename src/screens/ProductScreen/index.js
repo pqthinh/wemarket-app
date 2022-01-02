@@ -8,9 +8,15 @@ import {
   TopNavigationAction
 } from '@ui-kitten/components'
 import {
-  getProductDetail,
+  createBookmark,
+  deleteBookmark,
+  addToCard
+} from 'actions/bookmarkActions'
+import { findRoom } from 'actions/chatActions'
+import {
+  addToBookmark,
   getListComment,
-  addToBookmark
+  getProductDetail
 } from 'actions/productActions'
 import { toggleBottom } from 'actions/userActions'
 import CommentInput from 'components/CommentComponent/CommentInput'
@@ -23,7 +29,8 @@ import {
   withEmpty,
   withNull,
   withNumber,
-  withObject
+  withObject,
+  withBoolean
 } from 'exp-value'
 import moment from 'moment'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -32,11 +39,12 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  View
+  View,
+  ActivityIndicator
 } from 'react-native'
+import Toast from 'react-native-toast-message'
 import { useDispatch, useSelector } from 'react-redux'
 import { styles } from './styled'
-import { findRoom } from 'actions/chatActions'
 
 const ProductScreen = () => {
   const route = useRoute()
@@ -46,8 +54,6 @@ const ProductScreen = () => {
   const setting = useSelector(state => state.settingState)
   const userState = useSelector(state => state.userState.userInfo)
   const bookmark = useSelector(state => state.listBookmark.bookmark)
-  const messageReducer = useSelector(state => state.manageChat)
-
   const [product, setProduct] = useState({})
   const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
@@ -60,6 +66,35 @@ const ProductScreen = () => {
     await findRoom(userState, friend, navigation)
   }
 
+  const _addToCard = useCallback(id => {
+    dispatch(addToCard({ uid: withEmpty('uid', userState), productId: id }))
+    Toast.show({
+      type: 'success',
+      text2: 'Bạn đã thêm sản phẩm vào giỏ hàng' + '  👋'
+    })
+  }, [])
+
+  const _saveProduct = useCallback(id => {
+    if (bookmark.includes(withEmpty('id', product))) {
+      dispatch(
+        createBookmark({ uid: withEmpty('uid', userState), productId: id })
+      )
+      Toast.show({
+        type: 'success',
+        text2: 'Bài viết đã được lưu' + '  👋'
+      })
+    } else {
+      dispatch(
+        deleteBookmark({ uid: withEmpty('uid', userState), productId: id })
+      )
+      Toast.show({
+        type: 'success',
+        text2: 'Bở lưu bài viết' + '  👋'
+      })
+    }
+    dispatch(addToBookmark(id))
+  }, [])
+
   useEffect(() => {
     const r = withNull('params.product', route)
     const params = {
@@ -70,7 +105,6 @@ const ProductScreen = () => {
     }
     dispatch(getProductDetail(params))
     dispatch(getListComment({ idProduct: r.id }))
-    dispatch(toggleBottom(true))
     return null
   }, [route, setting.location])
 
@@ -80,9 +114,27 @@ const ProductScreen = () => {
   }, [productState.product, productState.listComment])
 
   useEffect(() => {
+    dispatch(toggleBottom(true))
     return () => dispatch(toggleBottom(false))
   }, [])
 
+  if (
+    !withBoolean('product.uid', productState) ||
+    withBoolean('loading', productState)
+  )
+    return (
+      <View
+        style={{
+          padding: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'row',
+          flex: 1
+        }}
+      >
+        <ActivityIndicator color='#E26740' size={40} style={{ margin: 15 }} />
+      </View>
+    )
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
@@ -132,6 +184,17 @@ const ProductScreen = () => {
           />
         </Layout>
         <Divider />
+        <Toast
+          position='top'
+          topOffset={50}
+          style={{
+            marginEnd: 50,
+            marginLeft: 10,
+            marginTop: -50,
+            width: '100%'
+          }}
+          ref={ref => Toast.setRef(ref)}
+        />
         <SliderImage
           style={{ width: '100%', height: 250 }}
           images={[
@@ -231,7 +294,7 @@ const ProductScreen = () => {
                 }
                 size={24}
                 style={styles.iconSharing}
-                onPress={() => dispatch(addToBookmark(product.id))}
+                onPress={() => _saveProduct(product.id)}
               />
               <Text style={styles.rightIcon}>Lưu</Text>
             </View>
@@ -276,26 +339,31 @@ const ProductScreen = () => {
 
       <View style={styles.bottomScreen}>
         <TouchableOpacity
-          style={[styles.flexRow, styles.offline]}
+          style={[styles.flexRow, styles.offline, { width: 95 }]}
           onPress={() => Linking.openURL(`tel: ${product.phone}`)}
         >
-          <Text style={styles.titleBottomTab}>Gọi điện</Text>
+          <Text style={styles.titleBottomTab}>Gọi</Text>
           <Icon fill='#fff' name='phone-call' style={styles.iconBottom} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.flexRow} onPress={() => dispatchChat()}>
-          <Text style={{ fontWeight: '700', paddingHorizontal: 8 }}>
-            Chat online
-          </Text>
+        <TouchableOpacity
+          style={[styles.flexRow, { width: 95 }]}
+          onPress={() => dispatchChat()}
+        >
+          <Text style={{ fontWeight: '700', paddingHorizontal: 8 }}>Chat</Text>
           <Icon fill='#000' name='message-circle' style={styles.iconBottom} />
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.flexRow, styles.offline]}
-          onPress={() => Linking.openURL(`sms: ${product?.phone}`)}
+          style={[styles.flexRow, styles.offline, { flex: 3 }]}
+          onPress={() => _addToCard(product?.id)}
         >
-          <Text style={styles.titleBottomTab}>Nhắn tin</Text>
-          <Icon fill='#fff' name='message-square' style={styles.iconBottom} />
+          <Text style={styles.titleBottomTab}>Thêm vào giở hàng</Text>
+          <Icon
+            fill='#fff'
+            name='shopping-bag-outline'
+            style={styles.iconBottom}
+          />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
