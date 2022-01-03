@@ -1,37 +1,22 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Platform,
-  StyleSheet,
-  Dimensions,
-  Image
-} from 'react-native'
-import Modal from 'react-native-modal'
-import NumberFormat from 'react-number-format'
-import FeatherIcon from 'react-native-vector-icons/Feather'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Icon from 'react-native-vector-icons/FontAwesome5'
-import { useDispatch, useSelector } from 'react-redux'
-import { firebase } from 'configs/firebaseConfig'
-import { addNewChat, findRoom } from 'actions/chatActions'
-import Toast from 'react-native-toast-message'
 import { useNavigation } from '@react-navigation/native'
+import { createBookmark } from 'actions/bookmarkActions'
+import { findRoom } from 'actions/chatActions'
+import { withEmpty } from 'exp-value'
+import React, { useCallback } from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Modal from 'react-native-modal'
+import FeatherIcon from 'react-native-vector-icons/Feather'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import NumberFormat from 'react-number-format'
+import { useDispatch, useSelector } from 'react-redux'
+import ImageComponent from './Image'
 
-import {
-  getBookmarks,
-  createBookmark,
-  deleteBookmark
-} from 'actions/bookmarkActions'
-// var screen = Dimensions.get('window');
 export default MapModal = props => {
   const { product } = props
   const navigation = useNavigation()
   const dispatch = useDispatch()
-  const messageReducer = useSelector(state => {
-    return state.manageChat
-  })
+
   const userReducer = useSelector(state => {
     return state.userState
   })
@@ -68,20 +53,20 @@ export default MapModal = props => {
         </View>
         <View style={styles.Row}>
           <Text numberOfLines={1} style={styles.TextBold}>
-            {props.product.name}
+            {withEmpty('product.name', props)}
           </Text>
         </View>
         <View style={styles.Row}>
-          <Image
+          <ImageComponent
             style={styles.image_product}
-            source={{ uri: `${props.product.image}` }}
-          ></Image>
+            source={{ uri: `${withEmpty('product.image', props)}` }}
+          />
           <View style={styles.information}>
             <View style={styles.info_row}>
               <FeatherIcon name='dollar-sign' size={20} color='gray' />
               <Text style={styles.text_price}>
                 <NumberFormat
-                  value={props.product.price}
+                  value={withEmpty('product.price', props)}
                   displayType={'text'}
                   thousandSeparator={true}
                   suffix={' đ'}
@@ -92,18 +77,20 @@ export default MapModal = props => {
             <View style={styles.info_row}>
               <FeatherIcon name='map-pin' size={20} color='gray' />
               <Text numberOfLines={2} style={styles.text}>
-                {props.product.place}
+                {withEmpty('product.place', props)}
               </Text>
             </View>
             <View style={styles.info_row}>
               <FeatherIcon name='user' size={20} color='gray' />
               <Text numberOfLines={1} style={styles.text_name}>
-                {props.product.name_user}
+                {withEmpty('product.name_user', props)}
               </Text>
             </View>
             <View style={styles.info_row}>
               <FeatherIcon name='star' size={20} color='gray' />
-              <Text style={styles.text}>{props.product.star}</Text>
+              <Text style={styles.text}>
+                {withEmpty('product.star', props)}
+              </Text>
             </View>
           </View>
         </View>
@@ -129,7 +116,10 @@ export default MapModal = props => {
           <TouchableOpacity
             style={styles.SaveButton}
             onPress={() =>
-              handlePressCreate(userReducer.userInfo.uid, props.product.id)
+              handlePressCreate(
+                withEmpty('userInfo.uid', userReducer),
+                withEmpty('product.id', props)
+              )
             }
           >
             <FeatherIcon name='bookmark' size={18} color='white' />

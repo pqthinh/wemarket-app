@@ -1,9 +1,9 @@
-import React from 'react'
-import { SIGN_IN_SCREEN } from 'utils/ScreenName'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { TopNavigationAction, Layout } from '@ui-kitten/components'
 import { useNavigation } from '@react-navigation/native'
+import { TopNavigationAction } from '@ui-kitten/components'
+import React from 'react'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useSelector } from 'react-redux'
+import { SIGN_IN_SCREEN } from 'utils/ScreenName'
 
 const ChatIcon = props => (
   <AntDesign
@@ -17,9 +17,7 @@ const ChatIcon = props => (
 const CartIcon = props => (
   <AntDesign {...props} name='shoppingcart' size={26} color={'#E26740'} />
 )
-const signIn = () => {
-  navigation.navigate(SIGN_IN_SCREEN)
-}
+
 const renderRightActions = order => {
   const navigation = useNavigation()
   const userReducer = useSelector(state => {
@@ -31,14 +29,18 @@ const renderRightActions = order => {
         <TopNavigationAction
           icon={CartIcon}
           onPress={
-            userReducer?.uid ? () => navigation.navigate('OrderScreen') : signIn
+            userReducer?.uid
+              ? () => navigation.navigate('OrderScreen')
+              : navigation.navigate(SIGN_IN_SCREEN)
           }
         />
       )}
       <TopNavigationAction
         icon={ChatIcon}
         onPress={
-          userReducer?.uid ? () => navigation.navigate('ChatScreen') : signIn
+          userReducer?.uid
+            ? () => navigation.navigate('ChatScreen')
+            : navigation.navigate(SIGN_IN_SCREEN)
         }
       />
     </React.Fragment>
