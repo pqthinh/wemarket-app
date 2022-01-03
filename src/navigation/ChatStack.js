@@ -26,16 +26,6 @@ const ChatStack = ({ navigation }) => {
           title: route.params.name
         })}
       />
-      <Screen
-        name={SIGN_IN_SCREEN}
-        component={SignIn}
-        options={{ headerShown: true, title: 'Đăng nhập' }}
-      />
-      <Screen
-        name={SIGN_UP_SCREEN}
-        component={SignUp}
-        options={{ headerShown: true, title: 'Đăng ký' }}
-      />
     </Stack.Navigator>
   )
 }

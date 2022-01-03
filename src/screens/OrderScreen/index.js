@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native'
 import { renderRightActions } from 'components/Header'
 import { getOrderBuyer } from 'actions/orderActions'
 import OrderItems from './OrderItem'
+import { withEmpty } from 'exp-value'
 
 const OrderScreen = () => {
   const navigation = useNavigation()
@@ -37,7 +38,7 @@ const OrderScreen = () => {
   useEffect(() => {
     dispatch(
       getOrderBuyer({
-        uid: userReducer.userInfo.uid
+        uid: withEmpty('userInfo.uid', userReducer)
       })
     )
   }, [userReducer])

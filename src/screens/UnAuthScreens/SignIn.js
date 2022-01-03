@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   error: {
     position: 'absolute',
-    top: '100%',
+    top: '150%',
     color: '#EB5757',
     fontWeight: '500'
   },
