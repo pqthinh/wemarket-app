@@ -13,12 +13,8 @@ import {
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { useDispatch, useSelector } from 'react-redux'
+
 const InputBox = ({ chatRoomID }) => {
-  const dispatch = useDispatch()
-  const listMessageReducer = useSelector(state => {
-    return state.manageChat
-  })
   const [messages, setMessages] = useState([])
   const [users, setUsers] = useState([])
   // const { chatRoomID } = props

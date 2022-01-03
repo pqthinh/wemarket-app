@@ -31,7 +31,7 @@ const renderRightActions = order => {
           onPress={
             userReducer?.uid
               ? () => navigation.navigate('OrderScreen')
-              : navigation.navigate(SIGN_IN_SCREEN)
+              : () => navigation.navigate(SIGN_IN_SCREEN)
           }
         />
       )}
@@ -40,7 +40,7 @@ const renderRightActions = order => {
         onPress={
           userReducer?.uid
             ? () => navigation.navigate('ChatScreen')
-            : navigation.navigate(SIGN_IN_SCREEN)
+            : () => navigation.navigate(SIGN_IN_SCREEN)
         }
       />
     </React.Fragment>

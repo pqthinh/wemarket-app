@@ -1,32 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import {
-  Dimensions,
-  Image,
-  View,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity
-} from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import {
   Layout,
-  TopNavigation,
-  Text,
-  TopNavigationAction,
+  MenuItem,
   OverflowMenu,
-  MenuItem
+  Text,
+  TopNavigation,
+  TopNavigationAction
 } from '@ui-kitten/components'
-
-import { useDispatch, useSelector } from 'react-redux'
-import {
-  getBookmarks,
-  createBookmark,
-  deleteBookmark
-} from 'actions/bookmarkActions'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { useNavigation } from '@react-navigation/native'
+import { getBookmarks } from 'actions/bookmarkActions'
 import BookMarkItem from 'components/BookMarkItem'
+import { withEmpty } from 'exp-value'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from 'react-native'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { useDispatch, useSelector } from 'react-redux'
 import { category } from 'utils/map/category'
 
 const BookmarkScreen = () => {
@@ -41,11 +37,11 @@ const BookmarkScreen = () => {
     return state.manageBookmarks
   })
   useEffect(() => {
-    dispatch(getBookmarks(userReducer.userInfo.uid + '/all'))
+    dispatch(getBookmarks(withEmpty('userInfo.uid', userReducer) + '/all'))
   }, [])
   const onPressCategory = useCallback(
     id => {
-      dispatch(getBookmarks(userReducer.userInfo.uid + `/${id}`))
+      dispatch(getBookmarks(withEmpty('userInfo.uid', userReducer) + `/${id}`))
     },
     [dispatch]
   )
@@ -82,7 +78,9 @@ const BookmarkScreen = () => {
             title='Tất cả'
             onPress={() => {
               setChangeCategory('Tất cả')
-              dispatch(getBookmarks(userReducer.userInfo.uid + '/all'))
+              dispatch(
+                getBookmarks(withEmpty('userInfo.uid', userReducer) + '/all')
+              )
               toggleMenu()
             }}
           />
