@@ -31,7 +31,6 @@ const PostItems = ({ item, data, setData }) => {
   )
   const onPressDelete = async () => {
     try {
-      console.log(item.id, 'id')
       const res = await axios.post(DELETE_PRODUCT, { idProduct: item.id })
 
       if (res && res.data.status) {
@@ -49,6 +48,7 @@ const PostItems = ({ item, data, setData }) => {
   const handleNavigateToDetail = () => {
     navigation.navigate('DETAIL_PRODUCT', { product: item })
   }
+
   return (
     <Layout style={styles.container}>
       <TouchableOpacity onPress={handleNavigateToDetail}>

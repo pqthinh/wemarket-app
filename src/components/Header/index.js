@@ -1,9 +1,9 @@
-import React from 'react'
-import { SIGN_IN_SCREEN } from 'utils/ScreenName'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { TopNavigationAction, Layout } from '@ui-kitten/components'
 import { useNavigation } from '@react-navigation/native'
+import { TopNavigationAction } from '@ui-kitten/components'
+import React from 'react'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useSelector } from 'react-redux'
+import { SIGN_IN_SCREEN } from 'utils/ScreenName'
 
 const ChatIcon = props => (
   <AntDesign

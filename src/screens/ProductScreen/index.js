@@ -45,6 +45,7 @@ import {
 import Toast from 'react-native-toast-message'
 import { useDispatch, useSelector } from 'react-redux'
 import { styles } from './styled'
+import { SIGN_IN_SCREEN } from 'utils/ScreenName'
 
 const ProductScreen = () => {
   const route = useRoute()
@@ -66,34 +67,41 @@ const ProductScreen = () => {
     await findRoom(userState, friend, navigation)
   }
 
-  const _addToCard = useCallback(id => {
-    dispatch(addToCard({ uid: withEmpty('uid', userState), productId: id }))
-    Toast.show({
-      type: 'success',
-      text2: 'Bạn đã thêm sản phẩm vào giỏ hàng' + '  👋'
-    })
-  }, [])
+  const _addToCard = useCallback(
+    id => {
+      if (!withEmpty('uid', userState)) navigation.navigate(SIGN_IN_SCREEN)
+      dispatch(addToCard({ uid: withEmpty('uid', userState), productId: id }))
+      Toast.show({
+        type: 'success',
+        text2: 'Bạn đã thêm sản phẩm vào giỏ hàng' + '  👋'
+      })
+    },
+    [userState]
+  )
 
-  const _saveProduct = useCallback(id => {
-    if (bookmark.includes(withEmpty('id', product))) {
-      dispatch(
-        createBookmark({ uid: withEmpty('uid', userState), productId: id })
-      )
-      Toast.show({
-        type: 'success',
-        text2: 'Bài viết đã được lưu' + '  👋'
-      })
-    } else {
-      dispatch(
-        deleteBookmark({ uid: withEmpty('uid', userState), productId: id })
-      )
-      Toast.show({
-        type: 'success',
-        text2: 'Bở lưu bài viết' + '  👋'
-      })
-    }
-    dispatch(addToBookmark(id))
-  }, [])
+  const _saveProduct = useCallback(
+    id => {
+      if (bookmark.includes(id)) {
+        dispatch(
+          createBookmark({ uid: withEmpty('uid', userState), productId: id })
+        )
+        Toast.show({
+          type: 'success',
+          text2: 'Bài viết đã được lưu' + '  👋'
+        })
+      } else {
+        dispatch(
+          deleteBookmark({ uid: withEmpty('uid', userState), productId: id })
+        )
+        Toast.show({
+          type: 'success',
+          text2: 'Bỏ lưu bài viết' + '  👋'
+        })
+      }
+      dispatch(addToBookmark(id))
+    },
+    [bookmark, userState]
+  )
 
   useEffect(() => {
     const r = withNull('params.product', route)
@@ -118,25 +126,23 @@ const ProductScreen = () => {
     return () => dispatch(toggleBottom(false))
   }, [])
 
-  if (
-    !withBoolean('product.uid', productState) ||
-    withBoolean('loading', productState)
-  )
-    return (
-      <View
-        style={{
-          padding: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-          flex: 1
-        }}
-      >
-        <ActivityIndicator color='#E26740' size={40} style={{ margin: 15 }} />
-      </View>
-    )
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      {!withBoolean('product.uid', productState) ||
+      withBoolean('loading', productState) ? (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+            position: 'absolute',
+            width: '100%',
+            height: '100%'
+          }}
+        >
+          <ActivityIndicator color='#E26740' size={40} style={{ margin: 15 }} />
+        </View>
+      ) : null}
       <ScrollView>
         <Layout level={'3'}>
           <TopNavigation
@@ -162,9 +168,9 @@ const ProductScreen = () => {
                 <TopNavigationAction
                   icon={<Icon name='shopping-cart' size={24} />}
                   onPress={() => {
-                    Linking.openURL(
-                      `tel: ${withEmpty('phone', product) || '0866564502'}`
-                    )
+                    userState?.uid
+                      ? () => navigation.navigate('OrderScreen')
+                      : navigation.navigate(SIGN_IN_SCREEN)
                   }}
                 />
                 <TopNavigationAction

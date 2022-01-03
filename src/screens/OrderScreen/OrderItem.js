@@ -1,21 +1,20 @@
-import React, { useState, useCallback } from 'react'
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
-import {
-  Layout,
-  Avatar,
-  Icon,
-  Button,
-  Text,
-  Divider,
-  OverflowMenu,
-  MenuItem
-} from '@ui-kitten/components'
-import { useSelector, useDispatch } from 'react-redux'
-import NumberFormat from 'react-number-format'
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { deleteOrder } from 'actions/orderActions'
 import { useNavigation } from '@react-navigation/native'
+import {
+  Avatar,
+  Divider,
+  Layout,
+  MenuItem,
+  OverflowMenu,
+  Text
+} from '@ui-kitten/components'
+import { deleteOrder } from 'actions/orderActions'
+import React, { useCallback, useState } from 'react'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
+import NumberFormat from 'react-number-format'
+import { useDispatch } from 'react-redux'
+
 const OrderItems = ({ item }) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
