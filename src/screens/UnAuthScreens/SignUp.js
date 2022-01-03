@@ -62,7 +62,7 @@ export default function SignUp({ navigation }) {
         text2: userInfo?.message + '👋'
       })
     } else Toast.hide()
-    if (withBoolean('userInfo.userInfo', userInfo))
+    if (withBoolean('userInfo.userInfo.uid', userInfo))
       navigation.reset({
         index: 0,
         routes: [{ name: HOME_SCREEN }]
@@ -267,7 +267,7 @@ export default function SignUp({ navigation }) {
             </View>
 
             <View style={styles.button}>
-              <Button onPress={handleSubmit(signUp)}>Đăng ký</Button>
+              <Button onPress={() => handleSubmit(signUp)}>Đăng ký</Button>
             </View>
             <TouchableOpacity
               style={styles.back}
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   },
   error: {
     position: 'absolute',
-    top: '100%',
+    top: '150%',
     color: '#EB5757',
     fontWeight: '500'
   },

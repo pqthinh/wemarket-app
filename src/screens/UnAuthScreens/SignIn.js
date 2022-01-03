@@ -153,7 +153,7 @@ export default function SignIn({ navigation }) {
             </Text>
 
             <View style={{ paddingHorizontal: 5 }}>
-              <Button onPress={handleSubmit(signIn)}>Đăng nhập</Button>
+              <Button onPress={() => handleSubmit(signIn)}>Đăng nhập</Button>
             </View>
           </View>
         </ScrollView>
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   error: {
     position: 'absolute',
-    top: '100%',
+    top: '150%',
     color: '#EB5757',
     fontWeight: '500'
   },

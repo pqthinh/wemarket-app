@@ -28,10 +28,6 @@ const Profile = ({ navigation }) => {
   const [pickerResponse, setPickerResponse] = useState(null)
   const [isModalVisible, toggleImageModal] = useShowState()
 
-  // useEffect(() => {
-  //   dispatch(getUserDetail(userReducer.userInfo.uid))
-  // }, [])
-
   const onImageLibraryPress = useCallback(() => {
     const options = {
       selectionLimit: 1,
@@ -65,7 +61,6 @@ const Profile = ({ navigation }) => {
   }
 
   useEffect(() => {
-    // console.log(pickerResponse, 'uri')
     {
       pickerResponse &&
         navigation.navigate('Xem trước ảnh đại diện', {
@@ -74,31 +69,11 @@ const Profile = ({ navigation }) => {
     }
   }, [pickerResponse])
 
-  //const uri = pickerResponse?.assets && pickerResponse.assets[0].uri
   const { avatar, username, email, phone, address } = userReducer.userInfo
-  // if (uri) {
-  //   return (
-  //     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-  //       <View>
-  //         {uri && (
-  //           <Avatar source={{ uri }} style={{ width: 300, height: 300 }} />
-  //         )}
-  //       </View>
-  //       <View style={{ marginTop: 30 }}>
-  //         <Button
-  //           title='add post'
-  //           status='success'
-  //           onPress={() => onSubmitPress(image)}
-  //         />
-  //       </View>
-  //     </View>
-  //     // <EditAvatar uri={uri} />
-  //   )
-  // } else {
+
   return (
     <ScrollView style={styles.scroll}>
       <View style={styles.container}>
-        {/* <Card style={styles.cardContainer}> */}
         <View style={styles.headerContainer}>
           <ImageBackground
             style={styles.headerBackgroundImage}
@@ -132,20 +107,12 @@ const Profile = ({ navigation }) => {
           </ImageBackground>
         </View>
 
-        <Email
-          email={email}
-          //onPressEmail={onPressEmail}
-        />
+        <Email email={email} />
         {Separator()}
         <Address address={address} />
         {Separator()}
-        <Tel
-          phoneNumber={phone}
-          // onPressSms={onPressSms}
-          // onPressTel={onPressTel}
-        />
+        <Tel phoneNumber={phone} />
         {Separator()}
-        {/* </Card> */}
       </View>
       <EditModal
         isModalVisible={isModalVisible}

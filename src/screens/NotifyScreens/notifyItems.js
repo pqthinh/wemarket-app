@@ -46,7 +46,9 @@ const NotifyItems = ({ item }) => {
         <Animated.View style={{ flex: 1, transform: [{ translateX: scale }] }}>
           <RectButton
             style={styles.rightAction}
-            onPress={() => handlePressDelete(userReducer.userInfo.uid, item.id)}
+            onPress={() =>
+              handlePressDelete(withEmpty('userInfo.uid', userReducer), item.id)
+            }
           >
             {/* Change it to some icons */}
             <Text style={styles.actionText}>Xoá</Text>
