@@ -88,7 +88,10 @@ const BookMarkItem = ({
           <WrapperIcon style={{ fontSize: 15, marginTop: 10, marginLeft: 0 }}>
             <Button
               onPress={() =>
-                handlePressDelete(userReducer.userInfo.uid, product.productId)
+                handlePressDelete(
+                  withEmpty('userInfo.uid', userReducer),
+                  product.productId
+                )
               }
               appearance='outline'
               size='small'

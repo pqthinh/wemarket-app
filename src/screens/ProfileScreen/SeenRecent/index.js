@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import {
-  Dimensions,
-  Image,
-  View,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  ActivityIndicator
-} from 'react-native'
-import { Layout, TopNavigation, Text } from '@ui-kitten/components'
-import { renderRightActions } from 'components/Header'
-import { useDispatch, useSelector } from 'react-redux'
+import { Layout, Text } from '@ui-kitten/components'
 import { getSeenRecent } from 'actions/SeenRecentActions'
 import ProductItem from 'components/ProductItem'
+import { withEmpty } from 'exp-value'
+import React, { useEffect } from 'react'
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  View
+} from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SeenRecentScreen = () => {
   const dispatch = useDispatch()
@@ -23,7 +23,7 @@ const SeenRecentScreen = () => {
     return state.listProductSeenRecent
   })
   useEffect(() => {
-    dispatch(getSeenRecent(userReducer.userInfo.uid))
+    dispatch(getSeenRecent(withEmpty('userInfo.uid', userReducer)))
   }, [])
 
   if (seenRecentReducer.loading) {

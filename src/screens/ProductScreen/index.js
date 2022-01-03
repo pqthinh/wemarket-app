@@ -169,7 +169,7 @@ const ProductScreen = () => {
                   icon={<Icon name='shopping-cart' size={24} />}
                   onPress={() => {
                     userState?.uid
-                      ? () => navigation.navigate('OrderScreen')
+                      ? navigation.navigate('OrderScreen')
                       : navigation.navigate(SIGN_IN_SCREEN)
                   }}
                 />
