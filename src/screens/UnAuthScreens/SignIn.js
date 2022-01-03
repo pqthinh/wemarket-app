@@ -1,5 +1,5 @@
 import { Button, Input, Text } from '@ui-kitten/components'
-import { login } from 'actions/userActions'
+import { login, toggleBottom } from 'actions/userActions'
 import { IMAGES } from 'assets'
 import { withBoolean } from 'exp-value'
 import React, { useState } from 'react'
@@ -45,6 +45,11 @@ export default function SignIn({ navigation }) {
   }
 
   React.useEffect(() => {
+    dispatch(toggleBottom(true))
+    return () => dispatch(toggleBottom(false))
+  }, [dispatch])
+
+  React.useEffect(() => {
     if (error && userInfo?.message) {
       Toast.show({
         type: 'error',
@@ -65,7 +70,12 @@ export default function SignIn({ navigation }) {
 
   return (
     <Container>
-      <Toast ref={ref => Toast.setRef(ref)} />
+      <Toast
+        position='top'
+        topOffset={50}
+        style={{ marginEnd: 50, marginLeft: 10, marginTop: -50 }}
+        ref={ref => Toast.setRef(ref)}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
@@ -89,7 +99,7 @@ export default function SignIn({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Email'
+                    label={() => <Text style={styles.label}>Email</Text>}
                     type='email'
                     placeholder='test1@gmail'
                     onBlur={onBlur}
@@ -116,7 +126,7 @@ export default function SignIn({ navigation }) {
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    title='Mật khẩu'
+                    label={() => <Text style={styles.label}>Mật khẩu</Text>}
                     type='text'
                     secureTextEntry={true}
                     placeholder='Mật khẩu'
@@ -142,7 +152,7 @@ export default function SignIn({ navigation }) {
               </TouchableOpacity>
             </Text>
 
-            <View>
+            <View style={{ paddingHorizontal: 5 }}>
               <Button onPress={handleSubmit(signIn)}>Đăng nhập</Button>
             </View>
           </View>
@@ -195,6 +205,8 @@ const styles = StyleSheet.create({
   input: {
     position: 'relative',
     height: 40,
-    marginVertical: 20
-  }
+    marginVertical: 20,
+    paddingHorizontal: 5
+  },
+  label: { fontSize: 14, fontWeight: '700' }
 })

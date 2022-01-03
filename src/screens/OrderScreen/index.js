@@ -104,8 +104,6 @@ const OrderScreen = () => {
           renderItem={({ item, key }) => <OrderItems item={item} index={key} />}
           keyExtractor={(_, index) => index.toString()}
           initialNumToRender={7}
-          //onEndReached={handleLoadMorePost}
-          //ListFooterComponent={_renderFooter}
           onEndReachedThreshold={0.5}
           onScroll={onScroll}
         />
