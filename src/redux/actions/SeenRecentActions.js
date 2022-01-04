@@ -11,7 +11,10 @@ export const getSeenRecent = uid => async dispatch => {
     dispatch({ type: FETCH_SEEN_RECENT_REQUEST })
     const res = await axios.get(GET_LIST_SEEN_RECENT(uid))
     if (res && res.data.status) {
-      dispatch({ type: FETCH_SEEN_RECENT_SUCCESS, payload: res.data.data })
+      dispatch({
+        type: FETCH_SEEN_RECENT_SUCCESS,
+        payload: res.data.data.reverse()
+      })
     } else
       dispatch({ type: FETCH_SEEN_RECENT_FAILED, payload: 'Có lỗi xuất hiện' })
   } catch (error) {

@@ -22,7 +22,7 @@ export const getOrderBuyer = params => async dispatch => {
 }
 export const deleteOrder = params => async dispatch => {
   try {
-    const res = await axios.post(DELETE_ORDER, { params })
+    const res = await axios.post(DELETE_ORDER, params)
     console.log(res, 'res')
     if (res && res.data.status) {
       dispatch({ type: DELETE_ORDER_SUCCESS, payload: params.idOrder })
