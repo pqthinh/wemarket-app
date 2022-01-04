@@ -32,7 +32,7 @@ const SearchComponent = ({ init, onSearch, onChangeData, ...other }) => {
           name='search'
           fill='#E26740'
           style={styles.icon}
-          onPress={() => onSearch(value)}
+          // onPress={() => onSearch(value)}
         />
       )}
       style={styles.input}
