@@ -13,11 +13,12 @@ import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import NumberFormat from 'react-number-format'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const OrderItems = ({ item }) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const userState = useSelector(state => state.userState.userInfo)
   const [menuVisible, setMenuVisible] = useState(false)
   const toggleMenu = () => {
     setMenuVisible(!menuVisible)
@@ -26,7 +27,7 @@ const OrderItems = ({ item }) => {
     <AntDesign {...props} name='hearto' color='black' size={20} />
   )
   if (item.product_id) {
-    item = { ...item, id: item.product_id, productId: item.product_id }
+    item = { ...item, productId: item.product_id }
   }
 
   const DeleteIcon = props => (
@@ -34,7 +35,7 @@ const OrderItems = ({ item }) => {
   )
   const onPressDelete = useCallback(
     id => {
-      dispatch(deleteOrder({ idOrder: id }))
+      dispatch(deleteOrder({ idOrder: id, uid: userState.uid }))
     },
     [dispatch]
   )

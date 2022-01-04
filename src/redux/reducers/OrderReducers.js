@@ -17,7 +17,7 @@ const manageOrder = (state = {}, action) => {
     case DELETE_ORDER_SUCCESS:
       return {
         ...state,
-        listOrder: state.listOrder.reverse().filter(eachProduct => {
+        listOrder: state.listOrder.filter(eachProduct => {
           return eachProduct.id != action.payload
         })
       }

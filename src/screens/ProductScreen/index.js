@@ -100,7 +100,7 @@ const ProductScreen = () => {
       }
       dispatch(addToBookmark(id))
     },
-    [bookmark, userState]
+    [bookmark, dispatch]
   )
 
   useEffect(() => {
@@ -295,14 +295,16 @@ const ProductScreen = () => {
                 fill='#E26740'
                 name={
                   bookmark.includes(withEmpty('id', product))
-                    ? 'bookmark'
-                    : 'bookmark-outline'
+                    ? 'bookmark-outline'
+                    : 'bookmark'
                 }
                 size={24}
                 style={styles.iconSharing}
                 onPress={() => _saveProduct(product.id)}
               />
-              <Text style={styles.rightIcon}>Lưu</Text>
+              <Text style={styles.rightIcon}>
+                {bookmark.includes(withEmpty('id', product)) ? 'Lưu' : 'Bỏ lưu'}
+              </Text>
             </View>
           </View>
         </Layout>
