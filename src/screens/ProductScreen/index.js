@@ -104,6 +104,12 @@ const ProductScreen = () => {
   )
 
   useEffect(() => {
+    if (route.params.product.productId) {
+      route.params.product = {
+        ...route.params.product,
+        id: route.params.product.productId
+      }
+    }
     const r = withNull('params.product', route)
     const params = {
       idProduct: r.id,
