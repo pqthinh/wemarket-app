@@ -79,7 +79,7 @@ const BottomTabBar = ({ navigation, state }) => {
       <BottomNavigationTab
         icon={
           <IconPostNews
-            name={state.index == 2 ? 'add-circle-outline' : 'add-circle'}
+            name={state.index == 2 ? 'add-circle' : 'add-circle-outline'}
           />
         }
       />
