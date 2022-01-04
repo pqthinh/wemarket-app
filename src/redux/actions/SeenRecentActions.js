@@ -13,7 +13,7 @@ export const getSeenRecent = uid => async dispatch => {
     if (res && res.data.status) {
       dispatch({
         type: FETCH_SEEN_RECENT_SUCCESS,
-        payload: res.data.data.reverse()
+        payload: res.data.data
       })
     } else
       dispatch({ type: FETCH_SEEN_RECENT_FAILED, payload: 'Có lỗi xuất hiện' })
