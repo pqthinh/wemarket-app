@@ -46,7 +46,6 @@ export const checkUser = async me => {
 }
 
 export const getChatList = (user, setChatList) => {
-  // let chatList = []
   db.collection('users')
     .doc(user.uid)
     .onSnapshot(doc => {

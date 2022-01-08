@@ -16,6 +16,7 @@ import NumberFormat from 'react-number-format'
 import { useDispatch } from 'react-redux'
 
 const OrderItems = ({ item }) => {
+  console.log(item)
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const [menuVisible, setMenuVisible] = useState(false)
