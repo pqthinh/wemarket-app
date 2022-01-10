@@ -6,6 +6,9 @@ import ChatScreen from 'screens/ChatScreen/ChatScreen'
 import ProductScreen from 'screens/ProductScreen'
 import ChatStack from './ChatStack'
 import OrderScreen from 'screens/OrderScreen'
+import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
+import SignIn from 'screens/UnAuthScreens/SignIn'
+import SignUp from 'screens/UnAuthScreens/SignUp'
 const Stack = createStackNavigator()
 export default function MapStack() {
   return (
@@ -43,6 +46,16 @@ export default function MapStack() {
           name='DETAIL_PRODUCT'
           options={{ title: 'Chi tiết', headerShown: false }}
           component={ProductScreen}
+        />
+        <Stack.Screen
+          name={SIGN_IN_SCREEN}
+          component={SignIn}
+          options={{ headerShown: true, title: 'Đăng nhập' }}
+        />
+        <Stack.Screen
+          name={SIGN_UP_SCREEN}
+          component={SignUp}
+          options={{ headerShown: true, title: 'Đăng ký' }}
         />
       </Stack.Navigator>
     </PlaceProvider>

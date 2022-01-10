@@ -18,7 +18,7 @@ import Separator from './Separator'
 import Tel from './Tel'
 import Address from './Address'
 import EditModal from './EditModal'
-import { getUserDetail } from 'actions/profileActions'
+import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 
 const Profile = ({ navigation }) => {
   const userReducer = useSelector(state => {
@@ -28,25 +28,91 @@ const Profile = ({ navigation }) => {
   const [pickerResponse, setPickerResponse] = useState(null)
   const [isModalVisible, toggleImageModal] = useShowState()
 
-  const onImageLibraryPress = useCallback(() => {
-    const options = {
-      selectionLimit: 1,
-      mediaType: 'photo',
-      includeBase64: false
+  const handleCameraPermission = async () => {
+    let permissionCheck = ''
+    if (Platform.OS === 'ios') {
+      permissionCheck = await check(PERMISSIONS.IOS.CAMERA)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(PERMISSIONS.IOS.CAMERA)
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
     }
-    launchImageLibrary(options, response => {
-      _handleImagePicked(response)
+
+    if (Platform.OS === 'android') {
+      permissionCheck = await check(PERMISSIONS.ANDROID.CAMERA)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(PERMISSIONS.ANDROID.CAMERA)
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+  }
+  const handleLibraryPermission = async () => {
+    let permissionCheck = ''
+    if (Platform.OS === 'ios') {
+      permissionCheck = await check(PERMISSIONS.IOS.PHOTO_LIBRARY)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(PERMISSIONS.IOS.PHOTO_LIBRARY)
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+
+    if (Platform.OS === 'android') {
+      permissionCheck = await check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)
+
+      if (
+        permissionCheck === RESULTS.BLOCKED ||
+        permissionCheck === RESULTS.DENIED
+      ) {
+        const permissionRequest = await request(
+          PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
+        )
+        permissionRequest === RESULTS.GRANTED
+          ? console.warn('Location permission granted.')
+          : console.warn('location permission denied.')
+      }
+    }
+  }
+  const onImageLibraryPress = useCallback(() => {
+    handleLibraryPermission.then(() => {
+      const options = {
+        selectionLimit: 1,
+        mediaType: 'photo',
+        includeBase64: false
+      }
+      launchImageLibrary(options, response => {
+        _handleImagePicked(response)
+      })
     })
   }, [])
 
   const onCameraPress = useCallback(() => {
-    const options = {
-      saveToPhotos: false,
-      mediaType: 'photo',
-      includeBase64: false
-    }
-    launchCamera(options, response => {
-      _handleImagePicked(response)
+    handleCameraPermission.then(() => {
+      const options = {
+        saveToPhotos: false,
+        mediaType: 'photo',
+        includeBase64: false
+      }
+      launchCamera(options, response => {
+        _handleImagePicked(response)
+      })
     })
   }, [])
   const _handleImagePicked = pickerResult => {
