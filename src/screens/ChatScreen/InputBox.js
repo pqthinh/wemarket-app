@@ -1,6 +1,6 @@
 import { Text } from '@ui-kitten/components'
 import { onChatContent, sendMessage } from 'actions/chatActions'
-import { firebase } from 'configs/firebaseConfig'
+import { useSelector } from 'react-redux'
 import React, { useEffect, useState } from 'react'
 import {
   KeyboardAvoidingView,
@@ -14,6 +14,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { uploadImage } from 'utils/helper'
 
 const InputBox = ({ chatRoomID }) => {
   const [messages, setMessages] = useState([])
@@ -23,7 +24,7 @@ const InputBox = ({ chatRoomID }) => {
   const [message, setMessage] = useState('')
   const [uploading, setUploading] = useState(false)
 
-  let user = firebase.auth().currentUser
+  const user = useSelector(state => state.userState?.userInfo)
   const handleCameraPermission = async () => {
     let permissionCheck = ''
     if (Platform.OS === 'ios') {
@@ -35,8 +36,8 @@ const InputBox = ({ chatRoomID }) => {
       ) {
         const permissionRequest = await request(PERMISSIONS.IOS.CAMERA)
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Camera permission granted.')
+          : console.warn('Camera permission denied.')
       }
     }
 
@@ -49,8 +50,8 @@ const InputBox = ({ chatRoomID }) => {
       ) {
         const permissionRequest = await request(PERMISSIONS.ANDROID.CAMERA)
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Camera permission granted.')
+          : console.warn('Camera permission denied.')
       }
     }
   }
@@ -65,8 +66,8 @@ const InputBox = ({ chatRoomID }) => {
       ) {
         const permissionRequest = await request(PERMISSIONS.IOS.PHOTO_LIBRARY)
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Storage permission granted.')
+          : console.warn('Storage permission denied.')
       }
     }
 
@@ -81,8 +82,8 @@ const InputBox = ({ chatRoomID }) => {
           PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
         )
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Storage permission granted.')
+          : console.warn('Storage permission denied.')
       }
     }
   }
@@ -107,27 +108,38 @@ const InputBox = ({ chatRoomID }) => {
   const handleSendLike = () => {
     sendMessage(chatRoomID, user, 'text', icon, users)
   }
+  //upload image
+  const _uploadImage = async file => {
+    const response = await fetch(file.uri)
+    const blob = await response.blob()
+    const downloadURL = await uploadImage(
+      `images/${chatRoomID}/${file.fileName}`,
+      blob
+    )
 
+    return downloadURL
+  }
+  //send image
   const launch_Camera = () => {
-    handleCameraPermission.then(() => {
-      let options = {
-        includeBase64: true,
-        mediaType: 'photo'
-      }
-      launchCamera(options, response => {
-        _handleImagePicked(response)
-      })
+    handleCameraPermission()
+    let options = {
+      saveToPhotos: false,
+      mediaType: 'photo',
+      includeBase64: false
+    }
+    launchCamera(options, response => {
+      _handleImagePicked(response)
     })
   }
   const launch_ImageLibrary = () => {
-    handleLibraryPermission.then(() => {
-      let options = {
-        includeBase64: true,
-        mediaType: 'photo'
-      }
-      launchImageLibrary(options, response => {
-        _handleImagePicked(response)
-      })
+    handleLibraryPermission()
+    let options = {
+      electionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false
+    }
+    launchImageLibrary(options, response => {
+      _handleImagePicked(response)
     })
   }
   const _handleImagePicked = async pickerResult => {
@@ -135,11 +147,9 @@ const InputBox = ({ chatRoomID }) => {
       setUploading(true)
 
       if (pickerResult.assets) {
-        let imageUri = pickerResult
-          ? `data:image/jpg;base64,${pickerResult.assets[0].base64}`
-          : null
-
-        sendMessage(chatRoomID, user, 'photo', imageUri, users)
+        let image = pickerResult ? pickerResult.assets[0] : null
+        const uri = await _uploadImage(image)
+        sendMessage(chatRoomID, user, 'photo', uri, users)
 
         setMessage('')
       } else if (pickerResult.didCancel) {

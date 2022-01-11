@@ -9,7 +9,7 @@ import {
   SEND_MESSAGE
 } from '../actionTypes/chatActionType'
 import axios from 'configs/api/baseUrl'
-
+import moment from 'moment'
 const db = firebase.firestore()
 
 export const addUser = async user => {
@@ -45,20 +45,28 @@ export const checkUser = async me => {
   })
 }
 
-export const getChatList = (user, setChatList) => {
+export const getChatList = async (user, setChatList) => {
   // let chatList = []
-  db.collection('users')
+
+  await db
+    .collection('users')
     .doc(user.uid)
     .onSnapshot(doc => {
       if (doc.exists) {
         let data = doc.data()
         if (data.chats) {
-          setChatList(data.chats)
+          const byDate = data.chats.sort(function (a, b) {
+            return (
+              Date.parse(b?.lastMessageDate) - Date.parse(a?.lastMessageDate)
+            )
+          })
+          console.log(byDate, 'arrays chats')
+          setChatList(byDate)
         }
       }
     })
 
-  //return chatList;
+  // return byDate
 }
 export const findRoom = async (me, friend, navigation) => {
   let u = await db.collection('users').doc(me.uid).get()
@@ -127,7 +135,7 @@ export const sendMessage = async (chatId, me, type, body, users) => {
     title: 'Tin nhắn mới',
     content: 'test'
   })
-  console.log(tmp, 'result of push noti')
+  console.log(tmp, 'result of push notify')
 
   db.collection('chats')
     .doc(chatId)
@@ -150,6 +158,7 @@ export const sendMessage = async (chatId, me, type, body, users) => {
           chats[e].lastMessage = body
           chats[e].lastMessageDate = now
           chats[e].author = me.uid
+          chats[e].type = type
         }
       }
 

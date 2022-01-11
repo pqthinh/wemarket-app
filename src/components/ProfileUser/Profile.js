@@ -39,8 +39,8 @@ const Profile = ({ navigation }) => {
       ) {
         const permissionRequest = await request(PERMISSIONS.IOS.CAMERA)
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Camera permission granted.')
+          : console.warn('Camera permission denied.')
       }
     }
 
@@ -53,8 +53,8 @@ const Profile = ({ navigation }) => {
       ) {
         const permissionRequest = await request(PERMISSIONS.ANDROID.CAMERA)
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Camera permission granted.')
+          : console.warn('Camera permission denied.')
       }
     }
   }
@@ -69,8 +69,8 @@ const Profile = ({ navigation }) => {
       ) {
         const permissionRequest = await request(PERMISSIONS.IOS.PHOTO_LIBRARY)
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Storage permission granted.')
+          : console.warn('Storage permission denied.')
       }
     }
 
@@ -85,34 +85,32 @@ const Profile = ({ navigation }) => {
           PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
         )
         permissionRequest === RESULTS.GRANTED
-          ? console.warn('Location permission granted.')
-          : console.warn('location permission denied.')
+          ? console.warn('Storage permission granted.')
+          : console.warn('Storage permission denied.')
       }
     }
   }
   const onImageLibraryPress = useCallback(() => {
-    handleLibraryPermission.then(() => {
-      const options = {
-        selectionLimit: 1,
-        mediaType: 'photo',
-        includeBase64: false
-      }
-      launchImageLibrary(options, response => {
-        _handleImagePicked(response)
-      })
+    handleLibraryPermission()
+    const options = {
+      selectionLimit: 1,
+      mediaType: 'photo',
+      includeBase64: false
+    }
+    launchImageLibrary(options, response => {
+      _handleImagePicked(response)
     })
   }, [])
 
   const onCameraPress = useCallback(() => {
-    handleCameraPermission.then(() => {
-      const options = {
-        saveToPhotos: false,
-        mediaType: 'photo',
-        includeBase64: false
-      }
-      launchCamera(options, response => {
-        _handleImagePicked(response)
-      })
+    handleCameraPermission()
+    const options = {
+      saveToPhotos: false,
+      mediaType: 'photo',
+      includeBase64: false
+    }
+    launchCamera(options, response => {
+      _handleImagePicked(response)
     })
   }, [])
   const _handleImagePicked = pickerResult => {

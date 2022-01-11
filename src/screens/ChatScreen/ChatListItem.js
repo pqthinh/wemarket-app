@@ -1,11 +1,21 @@
 import { useNavigation } from '@react-navigation/native'
 import { Text } from '@ui-kitten/components'
 import moment from 'moment'
-import React from 'react'
-import { Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native'
+import React, { useRef } from 'react'
+import {
+  Animated,
+  Image,
+  I18nManager,
+  StyleSheet,
+  TouchableHighlight,
+  View
+} from 'react-native'
+import { RectButton, TouchableOpacity } from 'react-native-gesture-handler'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 const ChatListItem = ({ chatRoom }) => {
-  let message = chatRoom.lastMessage
+  const updateRef = useRef(Swipeable)
+  let type = chatRoom?.type
   const navigation = useNavigation()
 
   let authorName = chatRoom?.author == chatRoom.with ? chatRoom?.title : 'Bạn'
@@ -20,33 +30,68 @@ const ChatListItem = ({ chatRoom }) => {
   if (!chatRoom?.with) {
     return null
   }
-
-  return (
-    <TouchableWithoutFeedback onPress={onClick}>
-      <View style={styles.container}>
-        <View style={styles.lefContainer}>
-          <Image source={{ uri: chatRoom?.image }} style={styles.avatar} />
-
-          <View style={styles.midContainer}>
-            <Text style={styles.username}>{chatRoom?.title}</Text>
-            <Text numberOfLines={2} style={styles.lastMessage}>
-              {(() => {
-                if (String(message).includes('data:image/jpg')) {
-                  return `${authorName} sent a photo`
-                } else if (!message) return ' '
-                else {
-                  return `${authorName}: ${chatRoom?.lastMessage}`
-                }
-              })()}
-            </Text>
-          </View>
-        </View>
-
-        <Text style={styles.time}>
-          {moment(chatRoom.lastMessageDate).fromNow()}
-        </Text>
+  const renderRightActions = (progress, _dragAnimatedValue) => {
+    const scale = progress.interpolate({
+      inputRange: [0, 1],
+      outputRange: [64, 0],
+      extrapolate: 'clamp'
+    })
+    return (
+      <View
+        style={{
+          width: 64,
+          flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row'
+        }}
+      >
+        <Animated.View style={{ flex: 1, transform: [{ translateX: scale }] }}>
+          <RectButton style={styles.rightAction}>
+            {/* Change it to some icons */}
+            <Text style={styles.actionText}>Xoá</Text>
+          </RectButton>
+        </Animated.View>
       </View>
-    </TouchableWithoutFeedback>
+    )
+  }
+  return (
+    <Swipeable
+      ref={updateRef}
+      friction={2}
+      rightThreshold={40}
+      enableTrackpadTwoFingerGesture
+      rightThreshold={40}
+      renderRightActions={renderRightActions}
+    >
+      <TouchableHighlight
+        activeOpacity={0.6}
+        underlayColor='#DDDDDD'
+        onPress={onClick}
+      >
+        <View style={styles.container}>
+          <View style={styles.lefContainer}>
+            <Image source={{ uri: chatRoom?.image }} style={styles.avatar} />
+
+            <View style={styles.midContainer}>
+              <Text style={styles.username}>{chatRoom?.title}</Text>
+              <Text numberOfLines={2} style={styles.lastMessage}>
+                {(() => {
+                  if (type == 'photo') {
+                    return `${authorName} sent a photo`
+                  } else if (type == 'text') {
+                    return `${authorName}: ${chatRoom?.lastMessage}`
+                  }
+                })()}
+              </Text>
+            </View>
+          </View>
+
+          <Text style={styles.time}>
+            {chatRoom.lastMessageDate
+              ? moment(chatRoom.lastMessageDate).fromNow()
+              : null}
+          </Text>
+        </View>
+      </TouchableHighlight>
+    </Swipeable>
   )
 }
 
@@ -83,5 +128,19 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 14,
     color: 'grey'
+  },
+  rightAction: {
+    alignItems: 'center',
+
+    backgroundColor: '#EB5757',
+    flex: 1,
+    justifyContent: 'center',
+    width: 64
+  },
+  actionText: {
+    color: 'white',
+    fontSize: 16,
+    backgroundColor: 'transparent',
+    padding: 10
   }
 })
