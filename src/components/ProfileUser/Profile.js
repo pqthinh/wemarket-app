@@ -28,7 +28,6 @@ const Profile = ({ navigation }) => {
   const [pickerResponse, setPickerResponse] = useState(null)
   const [isModalVisible, toggleImageModal] = useShowState()
 
-<<<<<<< HEAD
   const handleCameraPermission = async () => {
     let permissionCheck = ''
     if (Platform.OS === 'ios') {
@@ -93,9 +92,10 @@ const Profile = ({ navigation }) => {
   }
   const onImageLibraryPress = useCallback(() => {
     handleLibraryPermission()
-=======
   const onImageLibraryPress = useCallback(() => {
->>>>>>> parent of 7da9de2 (update clean code)
+
+  const onImageLibraryPress = useCallback(() => {
+
     const options = {
       selectionLimit: 1,
       mediaType: 'photo',
@@ -107,10 +107,9 @@ const Profile = ({ navigation }) => {
   }, [])
 
   const onCameraPress = useCallback(() => {
-<<<<<<< HEAD
+
     handleCameraPermission()
-=======
->>>>>>> parent of 7da9de2 (update clean code)
+
     const options = {
       saveToPhotos: false,
       mediaType: 'photo',
