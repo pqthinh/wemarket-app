@@ -1,9 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import HomeScreen from 'screens/HomeScreen'
-import { SIGN_IN_SCREEN, SIGN_UP_SCREEN } from 'utils/ScreenName'
-import SignIn from 'screens/UnAuthScreens/SignIn'
-import SignUp from 'screens/UnAuthScreens/SignUp'
 import MapSelect from 'screens/MapSelect'
 import ProductScreen from 'screens/ProductScreen'
 import SettingMap from 'screens/HomeScreen/SettingMap'
@@ -77,16 +74,6 @@ const HomeStack = () => (
         headerShown: true,
         title: `Trang cá nhân của ${route.params.username}`
       })}
-    />
-    <Stack.Screen
-      name={SIGN_IN_SCREEN}
-      component={SignIn}
-      options={{ headerShown: true, title: 'Đăng nhập' }}
-    />
-    <Stack.Screen
-      name={SIGN_UP_SCREEN}
-      component={SignUp}
-      options={{ headerShown: true, title: 'Đăng ký' }}
     />
   </Stack.Navigator>
 )

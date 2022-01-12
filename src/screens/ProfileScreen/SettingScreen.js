@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux'
 import { SIGN_IN_SCREEN } from 'utils/ScreenName'
 
 const Setting = ({ user }) => {
-  console.log(user, 'user')
   const dispatch = useDispatch()
   const navigation = useNavigation()
   const [pushNotifications, setPushNotifications] = useState(true)
@@ -34,7 +33,7 @@ const Setting = ({ user }) => {
       <InfoText text='Mua hàng' />
       <View>
         <ListItem
-          onPress={user?.uid ? handleBookmark : signIn}
+          onPress={user ? handleBookmark : signIn}
           containerStyle={styles.listItemContainer}
         >
           <BaseIcon
@@ -50,7 +49,7 @@ const Setting = ({ user }) => {
           <Chevron />
         </ListItem>
         <ListItem
-          onPress={user?.uid ? handleSeenRecent : signIn}
+          onPress={user ? handleSeenRecent : signIn}
           containerStyle={styles.listItemContainer}
         >
           <BaseIcon
@@ -103,7 +102,7 @@ const Setting = ({ user }) => {
 
         <ListItem
           onPress={
-            user?.uid ? () => navigation.navigate('Sửa trang cá nhân') : signIn
+            user ? () => navigation.navigate('Sửa trang cá nhân') : signIn
           }
           containerStyle={styles.listItemContainer}
         >
@@ -210,7 +209,7 @@ const Setting = ({ user }) => {
         </ListItem>
       </View>
 
-      {user?.uid && (
+      {user && (
         <Button onPress={logOut} style={styles.logoutButton}>
           Đăng xuất
         </Button>

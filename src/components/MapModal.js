@@ -4,7 +4,6 @@ import { findRoom } from 'actions/chatActions'
 import { withEmpty } from 'exp-value'
 import React, { useCallback } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { SIGN_IN_SCREEN } from 'utils/ScreenName'
 import Modal from 'react-native-modal'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -19,10 +18,10 @@ export default MapModal = props => {
   const dispatch = useDispatch()
 
   const userReducer = useSelector(state => {
-    return state.userState.userInfo
+    return state.userState
   })
   const dispatchChat = async () => {
-    await findRoom(userReducer, props.userChat, navigation)
+    await findRoom(userReducer.userInfo, props.userChat, navigation)
   }
 
   const handlePressCreate = useCallback(
@@ -109,25 +108,19 @@ export default MapModal = props => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.MessageButton}
-            onPress={() => {
-              userReducer?.uid
-                ? dispatchChat()
-                : navigation.navigate(SIGN_IN_SCREEN)
-            }}
+            onPress={() => dispatchChat()}
           >
             <FeatherIcon name='message-square' size={18} color='white' />
             <Text style={styles.ButtonText}>Nhắn tin</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.SaveButton}
-            onPress={() => {
-              userReducer?.uid
-                ? handlePressCreate(
-                    withEmpty('uid', userReducer),
-                    withEmpty('product.id', props)
-                  )
-                : navigation.navigate(SIGN_IN_SCREEN)
-            }}
+            onPress={() =>
+              handlePressCreate(
+                withEmpty('userInfo.uid', userReducer),
+                withEmpty('product.id', props)
+              )
+            }
           >
             <FeatherIcon name='bookmark' size={18} color='white' />
             <Text style={styles.ButtonText}>Lưu bài</Text>

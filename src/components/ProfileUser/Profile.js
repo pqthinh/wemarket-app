@@ -18,7 +18,7 @@ import Separator from './Separator'
 import Tel from './Tel'
 import Address from './Address'
 import EditModal from './EditModal'
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
+import { getUserDetail } from 'actions/profileActions'
 
 const Profile = ({ navigation }) => {
   const userReducer = useSelector(state => {
@@ -28,6 +28,7 @@ const Profile = ({ navigation }) => {
   const [pickerResponse, setPickerResponse] = useState(null)
   const [isModalVisible, toggleImageModal] = useShowState()
 
+<<<<<<< HEAD
   const handleCameraPermission = async () => {
     let permissionCheck = ''
     if (Platform.OS === 'ios') {
@@ -92,6 +93,9 @@ const Profile = ({ navigation }) => {
   }
   const onImageLibraryPress = useCallback(() => {
     handleLibraryPermission()
+=======
+  const onImageLibraryPress = useCallback(() => {
+>>>>>>> parent of 7da9de2 (update clean code)
     const options = {
       selectionLimit: 1,
       mediaType: 'photo',
@@ -103,7 +107,10 @@ const Profile = ({ navigation }) => {
   }, [])
 
   const onCameraPress = useCallback(() => {
+<<<<<<< HEAD
     handleCameraPermission()
+=======
+>>>>>>> parent of 7da9de2 (update clean code)
     const options = {
       saveToPhotos: false,
       mediaType: 'photo',

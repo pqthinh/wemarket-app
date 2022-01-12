@@ -44,7 +44,29 @@ const ChatListItem = ({ chatRoom }) => {
         }}
       >
         <Animated.View style={{ flex: 1, transform: [{ translateX: scale }] }}>
-          <RectButton style={styles.rightAction}>
+          <RectButton
+            style={styles.rightAction}
+            onPress={() => {
+              Alert.alert(
+                'Alert',
+                'Are you sure you want to delete ?',
+                [
+                  {
+                    text: 'No',
+                    onPress: () => console.log('Cancel pressed'),
+                    style: 'cancel'
+                  },
+                  {
+                    text: 'Yes',
+                    onPress: () => {
+                      console.log('delete')
+                    }
+                  }
+                ],
+                { cancelable: true }
+              )
+            }}
+          >
             {/* Change it to some icons */}
             <Text style={styles.actionText}>Xoá</Text>
           </RectButton>

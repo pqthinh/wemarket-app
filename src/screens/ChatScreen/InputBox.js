@@ -11,7 +11,6 @@ import {
   View
 } from 'react-native'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { uploadImage } from 'utils/helper'
@@ -24,6 +23,7 @@ const InputBox = ({ chatRoomID }) => {
   const [message, setMessage] = useState('')
   const [uploading, setUploading] = useState(false)
 
+<<<<<<< HEAD
   const user = useSelector(state => state.userState?.userInfo)
   const handleCameraPermission = async () => {
     let permissionCheck = ''
@@ -87,6 +87,10 @@ const InputBox = ({ chatRoomID }) => {
       }
     }
   }
+=======
+  let user = firebase.auth().currentUser
+
+>>>>>>> parent of 7da9de2 (update clean code)
   useEffect(() => {
     setMessages([])
     let unsub = onChatContent(chatRoomID, setMessages, setUsers)
@@ -121,22 +125,34 @@ const InputBox = ({ chatRoomID }) => {
   }
   //send image
   const launch_Camera = () => {
+<<<<<<< HEAD
     handleCameraPermission()
     let options = {
       saveToPhotos: false,
       mediaType: 'photo',
       includeBase64: false
+=======
+    let options = {
+      includeBase64: true,
+      mediaType: 'photo'
+>>>>>>> parent of 7da9de2 (update clean code)
     }
     launchCamera(options, response => {
       _handleImagePicked(response)
     })
   }
   const launch_ImageLibrary = () => {
+<<<<<<< HEAD
     handleLibraryPermission()
     let options = {
       electionLimit: 1,
       mediaType: 'photo',
       includeBase64: false
+=======
+    let options = {
+      includeBase64: true,
+      mediaType: 'photo'
+>>>>>>> parent of 7da9de2 (update clean code)
     }
     launchImageLibrary(options, response => {
       _handleImagePicked(response)

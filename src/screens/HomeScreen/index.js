@@ -31,7 +31,6 @@ import { IMAGES } from 'assets'
 import { useNavigation } from '@react-navigation/native'
 import SearchComponent from 'components/SearchComponent'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 
 const HomeScreen = ({}) => {
   const dispatch = useDispatch()
