@@ -60,7 +60,9 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
+
 android/
 *.hprof
+
 #env
 .env

@@ -9,7 +9,7 @@ import {
   SEND_MESSAGE
 } from '../actionTypes/chatActionType'
 import axios from 'configs/api/baseUrl'
-import moment from 'moment'
+
 const db = firebase.firestore()
 
 export const addUser = async user => {
@@ -65,8 +65,6 @@ export const getChatList = async (user, setChatList) => {
         }
       }
     })
-
-  // return byDate
 }
 export const findRoom = async (me, friend, navigation) => {
   let u = await db.collection('users').doc(me.uid).get()
@@ -135,7 +133,6 @@ export const sendMessage = async (chatId, me, type, body, users) => {
     title: 'Tin nhắn mới',
     content: 'test'
   })
-  console.log(tmp, 'result of push notify')
 
   db.collection('chats')
     .doc(chatId)

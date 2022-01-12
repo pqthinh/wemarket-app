@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   image: {
     width: Dimensions.get('window').width / 2 + 20,
     height: 150,
+    resizeMode: 'contain',
     borderRadius: 10
   },
   time: {

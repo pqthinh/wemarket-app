@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { Text } from '@ui-kitten/components'
 import moment from 'moment'
+
 import React, { useRef } from 'react'
 import {
   Animated,
@@ -16,8 +17,6 @@ import Swipeable from 'react-native-gesture-handler/Swipeable'
 const ChatListItem = ({ chatRoom }) => {
   const updateRef = useRef(Swipeable)
   let type = chatRoom?.type
-  const navigation = useNavigation()
-
   let authorName = chatRoom?.author == chatRoom.with ? chatRoom?.title : 'Bạn'
 
   const onClick = () => {
@@ -30,6 +29,7 @@ const ChatListItem = ({ chatRoom }) => {
   if (!chatRoom?.with) {
     return null
   }
+
   const renderRightActions = (progress, _dragAnimatedValue) => {
     const scale = progress.interpolate({
       inputRange: [0, 1],

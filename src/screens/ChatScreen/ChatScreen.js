@@ -1,5 +1,9 @@
 import { useRoute } from '@react-navigation/native'
+
 import { useSelector } from 'react-redux'
+
+import { firebase } from 'configs/firebaseConfig'
+
 import React, { useRef, useState, useEffect } from 'react'
 import { FlatList, View } from 'react-native'
 import ChatMessage from './ChatMessage'
@@ -13,12 +17,14 @@ function ChatScreen({ navigation }) {
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    //setData([])
+    setData([])
     let unsub = onChatContent(id, setData, setUsers)
     return unsub
   }, [id])
 
   const user = useSelector(state => state.userState?.userInfo)
+
+  let user = firebase.auth().currentUser
 
   const yourRef = useRef()
 
@@ -28,7 +34,6 @@ function ChatScreen({ navigation }) {
         ref={yourRef}
         inverted={true}
         data={data}
-        initialNumToRender={5}
         renderItem={({ item, key }) => (
           <ChatMessage myId={user.uid} message={item} index={key} />
         )}

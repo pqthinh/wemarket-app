@@ -87,6 +87,7 @@ const InputBox = ({ chatRoomID }) => {
       }
     }
   }
+
   useEffect(() => {
     setMessages([])
     let unsub = onChatContent(chatRoomID, setMessages, setUsers)

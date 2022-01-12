@@ -10,12 +10,14 @@ import {
   ActivityIndicator,
   View
 } from 'react-native'
+
 import { useDispatch, useSelector } from 'react-redux'
 import ChatListItem from './ChatListItem'
 
 function ListChat() {
   const [chatList, setChatList] = useState([])
   const [loading, setLoading] = useState(true)
+
   const dispatch = useDispatch()
   const user = useSelector(state => state.userState?.userInfo)
 
@@ -30,15 +32,6 @@ function ListChat() {
     dispatch(toggleBottom(true))
     return () => dispatch(toggleBottom(false))
   }, [])
-
-  // useEffect(() => {
-  //   const getList = async () => {
-  //     if (user !== null) {
-  //       getChatList(user, setChatList)
-  //     }
-  //   }
-  //   getList()
-  // }, [])
 
   if (chatList == [])
     return (
@@ -71,7 +64,6 @@ function ListChat() {
     )
   }
 }
-
 export default ListChat
 const styles = StyleSheet.create({
   safeArea: {
@@ -82,6 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+
   container: {
     flex: 1,
     justifyContent: 'center',

@@ -27,7 +27,6 @@ const Profile = ({ navigation }) => {
   const dispatch = useDispatch()
   const [pickerResponse, setPickerResponse] = useState(null)
   const [isModalVisible, toggleImageModal] = useShowState()
-
   const handleCameraPermission = async () => {
     let permissionCheck = ''
     if (Platform.OS === 'ios') {
@@ -92,9 +91,6 @@ const Profile = ({ navigation }) => {
   }
   const onImageLibraryPress = useCallback(() => {
     handleLibraryPermission()
-  const onImageLibraryPress = useCallback(() => {
-
-  const onImageLibraryPress = useCallback(() => {
 
     const options = {
       selectionLimit: 1,
@@ -107,9 +103,7 @@ const Profile = ({ navigation }) => {
   }, [])
 
   const onCameraPress = useCallback(() => {
-
     handleCameraPermission()
-
     const options = {
       saveToPhotos: false,
       mediaType: 'photo',
