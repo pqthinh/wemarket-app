@@ -24,8 +24,6 @@ function ChatScreen({ navigation }) {
 
   const user = useSelector(state => state.userState?.userInfo)
 
-  let user = firebase.auth().currentUser
-
   const yourRef = useRef()
 
   return (

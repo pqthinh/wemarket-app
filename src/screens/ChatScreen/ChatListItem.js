@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import React, { useRef } from 'react'
 import {
+  Alert,
   Animated,
   Image,
   I18nManager,
@@ -11,10 +12,12 @@ import {
   TouchableHighlight,
   View
 } from 'react-native'
+
 import { RectButton, TouchableOpacity } from 'react-native-gesture-handler'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 const ChatListItem = ({ chatRoom }) => {
+  const navigation = useNavigation()
   const updateRef = useRef(Swipeable)
   let type = chatRoom?.type
   let authorName = chatRoom?.author == chatRoom.with ? chatRoom?.title : 'Bạn'
@@ -60,7 +63,8 @@ const ChatListItem = ({ chatRoom }) => {
                     text: 'Yes',
                     onPress: () => {
                       console.log('delete')
-                    }
+                    },
+                    style: 'destructive'
                   }
                 ],
                 { cancelable: true }
