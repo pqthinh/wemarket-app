@@ -41,3 +41,27 @@ start server: `yarn start`
 
 start emulator: `yarn run android`
 
+
+# Wemarket Admin
+### homepage
+![image](https://user-images.githubusercontent.com/50290559/149888077-38f69145-0a3b-453d-856d-040fdc5ef76a.png)
+
+### product management
+![image](https://user-images.githubusercontent.com/50290559/149888197-b72d4e80-8ecd-4db2-bcc6-babe376cf25a.png)
+![image](https://user-images.githubusercontent.com/50290559/149888249-f30e8f38-93dd-4188-8e8c-9e60dac5f2cc.png)
+
+### banner
+![image](https://user-images.githubusercontent.com/50290559/149888295-d6e117e1-c5b2-4624-b015-6bbaeb9fa150.png)
+![image](https://user-images.githubusercontent.com/50290559/149888326-a2c637b6-5652-478f-8a97-324e3ec4aec4.png)
+![image](https://user-images.githubusercontent.com/50290559/149888358-345b6156-855c-4f7c-8f26-bac813251167.png)
+
+### profile
+![image](https://user-images.githubusercontent.com/50290559/149888399-2f92e125-0b35-4529-81e7-b770773d7111.png)
+![image](https://user-images.githubusercontent.com/50290559/149888421-72386922-5423-4f99-bd6f-8529a704a7a6.png)
+
+
+
+
+
+
+
